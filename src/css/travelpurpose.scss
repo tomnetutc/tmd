@@ -1,0 +1,101 @@
+/* App layout styling */
+.app-layout {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Content wrapper styling */
+.content-wrapper {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* Main area styling */
+.main-area {
+    flex-grow: 1;
+    display: flex;
+}
+
+/* TopMenu styling */
+.topmenu {
+    background-color: #f1f1f1;
+    padding: 10px 20px;
+    border-bottom: 1px solid #ddd;
+    position: sticky;
+    top: 60px;
+    z-index: 4;
+}
+
+/* Main content styling */
+.main-content {
+    flex-grow: 1;
+    padding-top: 75px;
+    overflow-y: auto;
+    background-color: #eeeeee;
+}
+
+/* Home styling for grid components */
+.home {
+    .travel,
+    .betweenYearTravel,
+    .crossSegmentTravel {
+
+        /* Chart component styling with centered alignment */
+        .NumberTripsBtwYearChartComponent,
+        .DurationTripsBtwYearChartComponent {
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+    }
+}
+
+.chart-wrapper {
+    display: grid;
+    grid-template-columns: 1fr; /* 1 column */
+    grid-template-rows: repeat(1, 1fr); /* 2 equal rows */
+    grid-gap: 20px; /* Gap between charts */
+    width: 100%;
+    margin: auto;
+    padding: 20px 0;
+    align-items: start; /* Align items to the start of the grid cells */
+    justify-items: start;
+
+}
+
+/* Chart container styling */
+.chart-container-1 {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    margin: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .home {
+        .travel,
+        .betweenYearTravel,
+        .crossSegmentTravel {
+            grid-template-columns: 1fr; /* Stack elements vertically on small screens */
+
+            .NumberTripsBtwYearChartComponent,
+            .DurationTripsBtwYearChartComponent {
+                grid-column: span 1;
+            }
+        }
+    }
+
+    .chart-container, .SampleSizeTable {
+        padding: 15px;
+        width: 100%;
+    }
+}

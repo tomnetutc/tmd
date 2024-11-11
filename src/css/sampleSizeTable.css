@@ -1,0 +1,70 @@
+/* Container for the sample size table */
+.sample-size-table-container {
+    display: flex;
+    flex-direction: column;
+    padding: 0px 20px 20px 20px;
+    border-radius: 10px;
+    box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+    background-color: white;
+    width: 90%;
+    margin: auto;
+    margin-bottom: 20px;
+}
+
+/* Title Styling */
+.table-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    margin-top: 15px;
+    text-align: center;
+}
+
+/* Table styling */
+.sample-size-table {
+    width: 100%;
+    max-width: auto; /* Ensures it doesn't exceed the parent width */
+    margin-top: 10px;
+    table-layout: auto; /* Allows the table to resize according to its content */
+    border: none;
+}
+
+.sample-size-table th{
+    padding: 8px 8px; /* Adjust padding for better fit */
+    text-align: center;
+    white-space: nowrap; /* Prevent text wrapping in table cells */
+    font-size: calc(.7vw); /* This adjusts the font size based on viewport width */
+    border-top: none;
+}
+.sample-size-table td {
+    padding: 8px 8px; /* Adjust padding for better fit */
+    text-align: center;
+    white-space: nowrap; /* Prevent text wrapping in table cells */
+    font-size: calc(.7vw); /* This adjusts the font size based on viewport width */
+    border-top: none;
+
+}
+
+.sample-size-table th {
+    font-weight: bold;
+}
+
+.sample-size-table td {
+    font-weight: 400;
+    text-overflow: ellipsis; /* If content is too long, show ellipsis */
+    overflow: hidden;
+}
+
+/* Responsive styling for smaller screens */
+@media (max-width: 768px) {
+    .sample-size-table-container {
+        overflow-x: auto; /* Allow horizontal scrolling on smaller screens */
+        padding: 10px;
+    }
+
+    .sample-size-table th,
+    .sample-size-table td {
+        font-size: 12px; /* Slightly reduce font size for smaller screens */
+        padding: 6px; /* Smaller padding for mobile */
+    }
+}

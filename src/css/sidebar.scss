@@ -1,0 +1,57 @@
+/* Sidebar styling */
+.sidebar {
+    background-color: #c4c4c4; /* Light grey background */
+    padding: 20px;
+    width: 300px;
+    position: sticky;
+    top: 105px; /* Same height as the navbar */
+    flex-shrink: 0; /* Prevent the sidebar from shrinking */
+    overflow-y: auto; /* Add scrolling if content overflows */
+
+    .sideBarMenu {
+        display: flex;
+        flex-direction: column;
+        gap: 20px; /* Space between each form group */
+    }
+
+    .form-container {
+        background-color: white;
+        padding:20px 15px;
+        border-radius: 12px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        .year-option{
+            display: flex;
+            flex-direction: row;
+            align-items: center; 
+            gap: 10px;
+
+            .dropdown {
+                width: 60%;
+                font-size: 14px;
+            }
+    
+        }
+
+        label,p {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .dropdown {
+            font-size: 14px;
+        }
+
+        .toggle {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+        }    
+    }
+
+}

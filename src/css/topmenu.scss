@@ -1,0 +1,201 @@
+/* Top Menu styling */
+.menu-container {
+    background-color: #ffffff;
+    position: fixed;
+    left: 300px; /* Offset to account for the sidebar width */
+    border-top: 2px solid #ccc;
+    border-bottom: 2px solid #ccc;
+    right: 0; /* Extend to the right edge */
+    z-index: 15;
+    padding: 2px 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-height: 400px; /* Set a maximum height */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
+/* Menu header styling */
+.menu-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 10px;
+}
+
+/* Between menu header styling */
+.btw-menu-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+/* Title and buttons styling */
+.title-and-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 10px; /* Space below the title */
+}
+
+/* Title and select styling */
+.title-and-select {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+/* Adjust the parent container styling */
+.options-container {
+    display: flex;
+    align-items: center; /* Align items vertically */
+    gap: 5px; /* Control the gap between the label and the checkbox */
+}
+
+/* Segment label styling */
+.segment-label {
+    font-size: 14px;
+    padding-top: 3px;
+    align-items: center;
+    font-weight: 600;
+    color: #333;
+    padding-left: 30px;
+}
+
+/* Checkbox container styling */
+.all-select-checkbox {
+    display: flex;
+    align-items: center;
+    margin-right: 0; /* Ensure there is no right margin */
+    font-size: 14px;
+}
+
+/* Segment label styling */
+.segment-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+/* Options container styling */
+.options-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px; /* Increase gap for better spacing */
+    flex-wrap: wrap;
+}
+
+/* Buttons container styling */
+.buttons-container {
+    display: flex;
+    gap: 10px;
+}
+
+/* Dropdowns container styling */
+.dropdowns-menu-container {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 5px; /* Add some space above the dropdowns */
+    margin-bottom: 5px;
+}
+
+/* Dropdown select styling */
+.dropdown-select {
+    min-height: 36px;
+    min-width: 150px;
+    width: auto;
+    max-width: 100%;
+    border-radius: 4px;
+}
+
+/* Dropdown indicator styling */
+.dropdown-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* All select checkbox styling */
+.all-select-checkbox {
+    display: flex;
+    align-items: center;
+    margin-right: 1rem;
+    font-size: 14px;
+}
+
+/* All select label styling */
+.all-select-label {
+    margin-left: 0.5rem;
+    font-size: 14px;
+    color: #666;
+}
+
+/* Button container styling */
+.button-container {
+    display: flex;
+    gap: 10px;
+
+    .reset-button {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+        line-height: 1.4;
+        border-radius: 0.25rem;
+        color: #fff;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    
+    
+
+        &:hover {
+            opacity: 0.9;
+        }
+    }
+    .reset-button {
+        background-color: #dc3545; /* Red background */
+        border: none;
+    }
+
+    .submit-button {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+        line-height: 1.4;
+        border-radius: 0.25rem;
+        color: #fff;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    
+    
+
+        &:hover {
+            opacity: 0.9;
+        }
+    }
+    .submit-button {
+        background-color: #198754; /* Red background */
+        border: none;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .menu-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .options-container,
+    .dropdowns-container {
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .button-container {
+        justify-content: flex-start;
+    }
+}
