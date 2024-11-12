@@ -7,7 +7,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<TravelPurpose />} />
+        <Route path="/tmd" element={<TravelPurpose />} />
         {/* Add more routes here if you have other pages */}
       </Routes>
     </BrowserRouter>
