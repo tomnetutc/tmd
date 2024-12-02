@@ -30,7 +30,7 @@ const RechartsLineChart: React.FC<{ chartData: ChartDataProps, title: string, sh
             <div className="title-container">
                 <span className="title">{title}</span>
             </div>
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={400}>
                 <LineChart data={transformedData} margin={{ top: 10, right: 0, left: -15, bottom: -10 }}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="name" padding={{ left: 20, right: 20 }} tick={{ fontSize: 13, fontFamily: 'sans-serif' }} />

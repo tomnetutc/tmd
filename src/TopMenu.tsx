@@ -13,19 +13,25 @@ const TopMenu: React.FC<{ onOptionChange: (options: Option[]) => void; filterOpt
 
 
     const handleChange = (index: number, option: Option | null) => {
-        const updatedSelectedOptions = [...selectedOptions];
-        updatedSelectedOptions[index] = option;
-        setSelectedOptions(updatedSelectedOptions);
-        const hasSelectedOptions = isAllSelected || updatedSelectedOptions.some(opt => opt !== null);
-        setIsAnySelected(true);
-        if (hasSelectedOptions) {
-            setAppliedOptions(selectedOptions); // Only apply selected options on submit
-            onOptionChange(isAllSelected ? [] : selectedOptions.filter(Boolean) as Option[]);
-        } else {
-            alert("Please select an option or check 'All'");
-        }
+        setSelectedOptions((prevSelectedOptions) => {
+            const updatedSelectedOptions = [...prevSelectedOptions];
+            updatedSelectedOptions[index] = option;
+    
+            // Determine if any option is selected
+            const hasSelectedOptions = updatedSelectedOptions.some(opt => opt !== null);
+    
+            setIsAnySelected(hasSelectedOptions);
+            if (hasSelectedOptions) {
+                setAppliedOptions(updatedSelectedOptions); // Update applied options
+                onOptionChange(isAllSelected ? [] : updatedSelectedOptions.filter(Boolean) as Option[]);
+            } else {
+                alert("Please select an option or check 'All'");
+            }
+    
+            return updatedSelectedOptions; // Ensure state updates correctly
+        });
     };
-
+    
 
     // Filter out the "Work arrangement" and "Employment" options for the Telework Menu component
     const filteredGroupedOptions = filterOptionsForTelework ?

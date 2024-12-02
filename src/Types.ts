@@ -94,6 +94,20 @@ export interface ChartDataProps {
     }[];
 };
 
+export interface TripChartDataProps {
+    labels: (string | string[])[];
+    datasets: {
+        label: string;
+        data: number[];
+        totalNum: number;
+        backgroundColor: string;
+        borderColor: string;
+        borderWidth?: number;
+        barThickness: number | 'flex';
+    }[];
+};
+
+
 export interface CountObj {
     data: DSVRowString<string>[]
     count: [string | undefined, number][];

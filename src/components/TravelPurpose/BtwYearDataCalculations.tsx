@@ -1,16 +1,13 @@
 import { ChartDataProps, CountObj, DataRow, SampleSizeTableProps, TripPurposeOption } from "../../Types"
-import { TravelModeOptions, TripPurposeOptions } from "../../utils/Helpers";
 import { tripsColorsForBtwYears } from "../../Colors";
 
-export const prepareVerticalChartData = (filteredData: DataRow[], startYear: string, endYear: string, optionValues: TripPurposeOption[], activeOption: string): {
+export const prepareVerticalChartData = (filteredData: DataRow[], startYear: string, endYear: string,includeDecember: boolean | undefined, optionValues: TripPurposeOption[], activeOption: string): {
     tripsChartData: ChartDataProps,
     durationChartData: ChartDataProps,
     minYear: string,
     maxYear: string,
     sampleSizeTableData: SampleSizeTableProps
 } => {
-
-    console.log(optionValues);
 
     // Filter data by startYear and endYear
     const filteredByYearData = filteredData.filter(dataRow => {
@@ -28,8 +25,13 @@ export const prepareVerticalChartData = (filteredData: DataRow[], startYear: str
 
     // Count the number of rows for each year for the sample size table
     uniqueYears.forEach(year => {
-        countObj.count.push([year.toString(), countObj.data.filter(row => row.year === year).length]);
-    });
+        countObj.count.push([
+            year.toString(),
+            countObj.data.filter(row =>
+                row.year === year && (includeDecember || parseInt(row.month, 10) !== 12)
+            ).length
+        ]);
+            });
 
     // Assume optionValue is now an array of options
     let YearDataPerOption: any = {};
@@ -43,6 +45,9 @@ export const prepareVerticalChartData = (filteredData: DataRow[], startYear: str
     filteredByYearData.forEach(dataRow => {
         const year = dataRow['year'];
         optionValues.forEach(option => {
+            if (!includeDecember && parseInt(dataRow.month, 10) == 12) {
+                return;
+            }
             if (!YearDataPerOption[option.label][year]) {
                 YearDataPerOption[option.label][year] = { totalTrips: 0, totalDuration: 0, count: 0 };
             }

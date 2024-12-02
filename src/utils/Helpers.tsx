@@ -7,11 +7,12 @@ import {
     GroupedOption,
     analysisLevel,
     GroupedOptions,
-    TripPurposeOption
+    TripPurposeOption,
+    DataRow
 } from "../Types";
 import { DSVRowString } from "d3-dsv";
 import { useEffect } from "react";
-import { csv } from "d3";
+import { csv, csvParse } from "d3";
 
 export const GenderOptions: Option[] = [
     {
@@ -182,6 +183,116 @@ export const TripPurposeOptions: TripPurposeOption[] = [
         durationTrips: "tr_home_dur",
     },
 ];
+
+export const TripLevelTripPurposeOptions: TripPurposeOption[] = [
+    {
+        label: "All",
+        value: "All",
+        numberTrip: "tr_all",
+        durationTrips: "tr_all_dur",
+    },
+    {
+        label: "Work",
+        value: "Work",
+        numberTrip: "tr_work",
+        durationTrips: "tr_work_dur",
+    },
+    {
+        label: "Education",
+        value: "Education",
+        numberTrip: "tr_education",
+        durationTrips: "tr_education_dur",
+    },
+    {
+        label: "Shopping",
+        value: "Shopping",
+        numberTrip: "tr_shopping",
+        durationTrips: "tr_shopping_dur",
+    },
+    {
+        label: "Recreational",
+        value: "Recreational",
+        numberTrip: "tr_recreational",
+        durationTrips: "tr_recreational_dur",
+    },
+    {
+        label: "Social",
+        value: "Social",
+        numberTrip: "tr_social",
+        durationTrips: "tr_social_dur",
+    },
+    {
+        label: "Eating/Drinking",
+        value: "Eating/Drinking",
+        numberTrip: "tr_eat",
+        durationTrips: "tr_eat_dur",
+    },
+    {
+        label: "Adult or Child care",
+        value: "Adult or Child care",
+        numberTrip: "tr_ccare",
+        durationTrips: "tr_ccare_dur",
+    },
+    {
+        label: "Other",
+        value: "Other",
+        numberTrip: "tr_other",
+        durationTrips: "tr_other_dur",
+    },
+    {
+        label: "Return to home",
+        value: "Return to home",
+        numberTrip: "tr_return_home",
+        durationTrips: "tr_return_home_dur",
+    },
+];
+
+export const TripLevelTravelModeOptions: TravelModeOption[] = [
+
+    {
+        label: "SOV",
+        value: "SOV",
+        numberTrip: "sov_mode",
+        durationTrips: "sov_mode",
+    },
+    {
+        label: "HOV",
+        value: "HOV",
+        numberTrip: "hov_mode",
+        durationTrips: "hov_mode",
+    },
+    {
+        label: "Transit",
+        value: "Transit",
+        numberTrip: "transit_mode",
+        durationTrips: "transit_mode",
+    },
+    {
+        label: "Walk",
+        value: "Walk",
+        numberTrip: "walk_mode",
+        durationTrips: "walk_mode",
+    },
+    {
+        label: "Bike",
+        value: "Bike",
+        numberTrip: "bike_mode",
+        durationTrips: "bike_mode",
+    },
+    {
+        label: "Other",
+        value: "Other",
+        numberTrip: "other_mode",
+        durationTrips: "other_mode",
+    },
+    {
+        label: "Unknown",
+        value: "Unknown",
+        numberTrip: "unknown_mode",
+        durationTrips: "unknown_mode",
+    },
+];
+
 
 
 export const DayofWeek: DayofWeekOption[] = [
@@ -744,10 +855,54 @@ export class DataProvider {
     }
 }
 
+// Singleton class for data management
+export class TripLevelDataProvider {
+    private static instance: TripLevelDataProvider;
+    private data: DSVRowString<string>[] | null = null;
+    private loadingPromise: Promise<DSVRowString<string>[]> | null = null;
+
+    private constructor() { }
+
+    public static getInstance(): TripLevelDataProvider {
+        if (!TripLevelDataProvider.instance) {
+            TripLevelDataProvider.instance = new TripLevelDataProvider();
+        }
+        return TripLevelDataProvider.instance;
+    }
+
+    public async loadData(): Promise<DSVRowString<string>[]> {
+        if (this.data !== null) {
+            return this.data; // Return the data if it's already loaded
+        }
+        if (this.loadingPromise) {
+            return this.loadingPromise; // Return the existing loading promise if it's already loading
+        }
+
+        // Load data and handle async lock
+        this.loadingPromise = this.loadFromSource().finally(() => {
+            this.loadingPromise = null; // Clear the loading promise after it's done
+        });
+
+        return this.loadingPromise;
+    }
+
+    private async loadFromSource(): Promise<DSVRowString<string>[]> {
+        try {
+            // Use d3.csv to fetch and parse the CSV file
+            this.data = await csv('https://storage.googleapis.com/mobility-dashboard-434821.appspot.com/dataset/df_act.csv');
+        } catch (error) {
+            console.error('Error loading data:', error);
+            throw error;
+        }
+        return this.data;
+    }
+}
+
 export const fetchAndFilterData = async (dataProvider: { loadData: () => Promise<any[]> }, selectedOptions: Option[], year: string, weekOption: weekOption, toggleState: boolean, filterUnemployed: boolean = false) => {
     try {
         const data = await dataProvider.loadData();
-        return data.filter(filterCriteria(selectedOptions, year, weekOption, toggleState, filterUnemployed));
+        const filteredData=data.filter(filterCriteria(selectedOptions, year, weekOption, filterUnemployed));
+        return filteredData;
     } catch (error) {
         console.error('Error fetching and filtering data:', error);
         return [];
@@ -755,17 +910,29 @@ export const fetchAndFilterData = async (dataProvider: { loadData: () => Promise
     //Added a conditional argument filterunemployed to filter the data without the unemployed data for Telework dashboard. This is a conditional argument hence by default it is false and doesn't expect a value
 };
 
+export const getTotalRowsForYear = async (dataProvider: { loadData: () => Promise<any[]> }, year: string, filterUnemployed: boolean = false) => {
+    try {
+        const data = await dataProvider.loadData();
+        return data.filter(row => row.year === year);
+
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        return [];
+    }
+};
+
+
 export const fetchAndFilterDataForBtwYearAnalysis = async (dataProvider: { loadData: () => Promise<any[]> }, selectedOptions: Option[], weekOption: weekOption, toggleState: boolean, filterUnemployed: boolean = false) => {
     try {
         const data = await dataProvider.loadData();
-        return data.filter(filterCriteria(selectedOptions, "", weekOption, toggleState, filterUnemployed));
+        return data.filter(filterCriteria(selectedOptions, "", weekOption, filterUnemployed));
     } catch (error) {
         console.error('Error fetching and filtering data for between year analysis:', error);
         return [];
     }
 }
 
-export function filterCriteria(selectedOptions: Option[], year: string, weekOption: weekOption, toggleState: boolean, filterUnemployed: boolean = false) {
+export function filterCriteria(selectedOptions: Option[], year: string, weekOption: weekOption, filterUnemployed: boolean = false) {
     return function (row: DSVRowString<string>) {
         if (year && row['year'] !== year) return false;
 
@@ -775,8 +942,6 @@ export function filterCriteria(selectedOptions: Option[], year: string, weekOpti
 
         //Filter the data without the unemployed data for Telework dashboard. This is a conditional argument hence by default it is false and doesn't expect a value
         if (filterUnemployed && row['unemployed'] === "1.0") return false;
-
-        if (!toggleState && row['month'] === "12.0") return false;
 
         const groupedOptions = selectedOptions.reduce((acc: GroupedOptions, option) => {
             const groupId = option.groupId;
@@ -847,9 +1012,6 @@ export const CrossSegmentDataFilter = async (dataProvider: { loadData: () => Pro
 
             if (!(startYear && yearNum >= startYearNum && endYear && yearNum <= endYearNum)) return false;
 
-            // Toggle state and month filter
-            if (!toggleState && month === "12.0") return false;
-
             if (filterUnemployed && row['unemployed'] === "1.0") return false;
 
             if (weekOption.value !== "All") {
@@ -868,6 +1030,97 @@ export const CrossSegmentDataFilter = async (dataProvider: { loadData: () => Pro
 
 };
 
+export const TripLevelDataFilter = async (
+    dataProvider: { loadData: () => Promise<DSVRowString<string>[]> },
+    selectedOptions: Option[],
+    analysisYear: string,
+    weekOption: weekOption,
+    filterUnemployed: boolean = false
+): Promise<DSVRowString<string>[]> => {
+
+
+    try {
+        // Load data from the provider
+        const data = await dataProvider.loadData();
+        const analysisYearFilter = parseInt(analysisYear, 10);
+    
+        // Add the row to the filtered results
+        const filteredData = data.filter((row) => {
+            // Filter by year
+            const year = row['year'];
+    
+            // Check if year exists and is valid
+            if (!year || isNaN(parseInt(year, 10))) {
+                return false; // Exclude invalid rows
+            }
+    
+            const yearNum = parseInt(year, 10);
+    
+            // Filter by analysisYear
+            if (yearNum !== analysisYearFilter) {
+                return false; // Exclude rows not matching the analysis year
+            }
+    
+            // Validate week option and filter by it
+            if (weekOption.value !== "All") {
+                const weekColumnValue = row[weekOption.id];
+                if (!weekColumnValue) {
+                    return false; // Exclude rows with missing week option column
+                }
+                if (weekColumnValue !== weekOption.val) {
+                    return false; // Exclude rows that don't match week option
+                }
+            }
+    
+            // Filter unemployed rows if the flag is set
+            if (filterUnemployed) {
+                const unemployedValue = row['unemployed'];
+                if (!unemployedValue) {
+                    return false; // Exclude rows with missing unemployed column
+                }
+                if (unemployedValue === "1.0") {
+                    return false; // Exclude unemployed rows
+                }
+            }
+    
+            // Group and apply filters based on selected options
+            const groupedOptions = selectedOptions.reduce((acc: GroupedOptions, option) => {
+                const groupId = option.groupId;
+                acc[groupId] = acc[groupId] || [];
+                acc[groupId].push(option);
+                return acc;
+            }, {});
+    
+            // Ensure all groups have at least one matching option
+            const groupCheck = Object.values(groupedOptions).every((group: Option[]) => {
+                return group.some((option) => {
+                    const column = option.id;
+                    const value = option.val;
+    
+                    // Validate column existence
+                    const columnValue = row[column];
+                    if (!columnValue) {
+                        return false; // Exclude rows with missing grouped option column
+                    }
+    
+                    // Check if the column value matches the expected value
+                    return columnValue === value;
+                });
+            });
+    
+            if (!groupCheck) {
+                return false; // Exclude rows that fail grouped option checks
+            }
+    
+            // If all conditions pass, include the row
+            return true;
+        });        
+        return filteredData;
+    } catch (error) {
+        console.error('Error fetching and filtering data for trip level analysis:', error);
+        return [];
+    }
+};
 
 
 

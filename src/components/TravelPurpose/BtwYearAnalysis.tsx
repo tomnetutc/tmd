@@ -13,7 +13,7 @@ import { relative } from "path";
 interface BtwYearAnalysisProps {
     menuSelectedOptions: Option[];
     toggleState: boolean;
-    selections: { week?: weekOption; startYear?: string; endYear?: string };  // Receive selections as prop
+    selections: { week?: weekOption; startYear?: string; endYear?: string, includeDecember?:boolean};  // Receive selections as prop
     setIsBtwYearLoading: (isLoading: boolean) => void;
 }
 
@@ -110,6 +110,7 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
                     btwYearFilteredData,
                     startYear,
                     endYear,
+                    selections.includeDecember,
                     optionValue,
                     "Trip purpose"
                 );

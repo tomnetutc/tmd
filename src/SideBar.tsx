@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Select, { SingleValue } from 'react-select';
 import { styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
@@ -22,6 +22,7 @@ interface SidebarProps {
     yearOptions: YearOption[];  // Corrected type
 }
 
+
 const IOSSwitch = styled(Switch)(({ theme }) => ({
     width: 62,
     height: 34,
@@ -30,13 +31,22 @@ const IOSSwitch = styled(Switch)(({ theme }) => ({
         margin: 1,
         padding: 3,
         transform: 'translateX(6px)',
+        transition: theme.transitions.create(['transform', 'color'], {
+            duration: 300,
+        }),
         '&.Mui-checked': {
             color: '#fff',
             transform: 'translateX(22px)',
+            transition: theme.transitions.create(['transform', 'color'], {
+                duration: 300,
+            }),
             '& + .MuiSwitch-track': {
                 backgroundColor: '#65C466',
                 opacity: 1,
                 border: 'none',
+                transition: theme.transitions.create(['background-color', 'opacity'], {
+                    duration: 300,
+                }),
             },
         },
     },
@@ -44,13 +54,16 @@ const IOSSwitch = styled(Switch)(({ theme }) => ({
         width: 26,
         height: 26,
         boxShadow: 'none',
+        transition: theme.transitions.create(['width', 'height'], {
+            duration: 300,
+        }),
     },
     '& .MuiSwitch-track': {
         borderRadius: 26 / 2,
         backgroundColor: '#E9E9EA',
         opacity: 1,
-        transition: theme.transitions.create(['background-color'], {
-            duration: 500,
+        transition: theme.transitions.create(['background-color', 'opacity'], {
+            duration: 300,
         }),
     },
 }));
@@ -116,8 +129,8 @@ const Sidebar: React.FC<SidebarProps> = ({
                             />
                         </div>
 
-                        <div className='year-option'>
-                            <p style={{ fontWeight: 'normal', marginRight: '4px' }}>End Year</p>
+                        <div className='year-option-2'>
+                            <p style={{ fontWeight: 'normal', marginRight: '4px' }}>End Year </p>
                             <Select
                                 options={yearOptions}
                                 onChange={(option: SingleValue<YearOption>) => option && onEndYearChange((option.value))}

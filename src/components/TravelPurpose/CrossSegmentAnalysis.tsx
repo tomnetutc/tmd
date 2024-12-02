@@ -14,7 +14,7 @@ import { travel_crossSegmentColors } from "../../Colors";
 interface CrossSegmentAnalysisProps {
     menuSelectedOptions: Option[][];
     toggleState: boolean;
-    selections: { week?: weekOption; startYear?: string; endYear?: string };  // Receive selections as prop
+    selections: { week?: weekOption; startYear?: string; endYear?: string, includeDecember?: boolean };  // Receive selections as prop
     setIsCrossSegmentLoading: (isLoading: boolean) => void;
     onProfileRemove: (index: number) => void ;
 }
@@ -104,7 +104,7 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
             CrossSegmentDataFilter(TravelDataProvider.getInstance(),startYear, endYear, week, toggleState)
         ]).then(([FilteredData]) => {
             setCrossSegmentFilteredData(FilteredData);
-            const { chartData, sampleSizeTableData } = prepareChartData(FilteredData, menuSelectedOptions, optionValue, analysisType, startYear, endYear);
+            const { chartData, sampleSizeTableData } = prepareChartData(FilteredData, menuSelectedOptions, optionValue, analysisType, startYear, endYear, selections.includeDecember);
             setChartData(chartData);
             setSampleSizeTableData(sampleSizeTableData);
 
@@ -197,7 +197,7 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
     )
 }
 
-const prepareChartData = (filteredData: DataRow[], menuSelectedOptions: Option[][], optionValue: TripPurposeOption, analysisType: AnalysisTypeOption, startYear: string, endYear: string): {
+const prepareChartData = (filteredData: DataRow[], menuSelectedOptions: Option[][], optionValue: TripPurposeOption, analysisType: AnalysisTypeOption, startYear: string, endYear: string, includeDecember: boolean | undefined): {
     chartData: ChartDataProps,
     sampleSizeTableData: SampleSizeTableProps
 } => {
@@ -216,7 +216,15 @@ const prepareChartData = (filteredData: DataRow[], menuSelectedOptions: Option[]
 
         let optionFilteredData = [...filteredData];
 
-        optionFilteredData = optionFilteredData.filter(row => {
+        const filteredDataWithConditions = optionFilteredData.filter(row => {
+            const isValidYear = row.year >= startYear && row.year <= endYear;
+            const isValidMonth = includeDecember || parseInt(row.month, 10) !== 12;
+            console.log(isValidMonth);
+            return isValidYear && isValidMonth;
+        });
+        
+
+        optionFilteredData = filteredDataWithConditions.filter(row => {
             // Group options by groupId
             const groupedOptions = optionsGroup.reduce((acc: GroupedOptions, option) => {
                 const groupId = option.groupId;
@@ -238,7 +246,6 @@ const prepareChartData = (filteredData: DataRow[], menuSelectedOptions: Option[]
         labels.forEach(year => {
             const yearData = optionFilteredData.filter(row => row.year === year);
             let meanValue;
-
             if (analysisType.value == "NumberTrips") {
                 meanValue = mean(yearData, row => +row[optionValue.numberTrip]);
             }

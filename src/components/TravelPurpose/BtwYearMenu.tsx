@@ -5,6 +5,7 @@ import { WeekOptions, DataProvider, AnalysisLevels, AnalysisTypes,TripPurposeOpt
 import { weekOption, YearOption, analysisLevel, analysisType,TripPurposeOption } from '../../Types';
 import Sidebar from '../../SideBar';
 import "../../css/dropdowns.css";
+import { start } from 'repl';
 
 const BtwYearMenu: React.FC<{ onSelectionChange: (selections: { week: weekOption, analysisLevelValue: analysisLevel, analysisTypeValue: analysisType, includeDecember: boolean, startYear: string, endYear: string}) => void,}> = ({ onSelectionChange }) => {
     const [weekValue, setWeekValue] = useState<weekOption>(WeekOptions[0]); // Defaulting to first option for demonstration
@@ -53,7 +54,7 @@ const BtwYearMenu: React.FC<{ onSelectionChange: (selections: { week: weekOption
         setEndYear(maxYear.toString());
     }, []);
 
-    // Trigger onSelectionChange whenever the year options or any of the other fields change
+    //Trigger onSelectionChange whenever the year options or any of the other fields change
     useEffect(() => {
         if (yearOptions.length) {  // Ensure options are loaded
             onSelectionChange({
@@ -64,8 +65,9 @@ const BtwYearMenu: React.FC<{ onSelectionChange: (selections: { week: weekOption
                 startYear: startYear.toString(),
                 endYear: endYear.toString(),
             });
+
         }
-    }, [weekValue, startYear, endYear, analysisLevelValue, analysisTypeValue, includeDecember, yearOptions.length, onSelectionChange]);
+    }, [weekValue, startYear, endYear, analysisLevelValue, analysisTypeValue, includeDecember, yearOptions.length]);
 
     return (
         <div style={{display:"flex", position:"relative"}}>
