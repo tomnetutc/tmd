@@ -10,11 +10,11 @@ export const Navbar: React.FC = () => {
     // Derive active option from the current pathname
     const getActiveOption = (): string => {
         switch (location.pathname) {
-            case '/travelpurpose':
+            case '/tmd/travelpurpose':
                 return 'Travel Purpose';
-            case '/travelmode':
+            case '/tmd/travelmode':
                 return 'Travel Mode';
-            case '/zerotripmaking':
+            case '/tmd/zerotripmaking':
                 return 'Zero-trip Making';
             case '/home':
             case '/about':
@@ -27,10 +27,10 @@ export const Navbar: React.FC = () => {
     const handleOptionClick = (option: string) => {
         switch (option) {
             case 'Travel Purpose':
-                navigate('/travelpurpose');
+                navigate('/tmd/travelpurpose');
                 break;
             case 'Travel Mode':
-                navigate('/travelmode');
+                navigate('/tmd/travelmode');
                 break;
             default:
                 navigate('/tmd');
@@ -48,8 +48,8 @@ export const Navbar: React.FC = () => {
             <div className="nav-container d-flex ms-auto">
                 <div className="nav-links">
                     <Link to="/tmd" className="nav-link">Home</Link>
-                    <Link to="/about" className="nav-link">About</Link>
-                    <Link to="/travelpurpose" className="nav-link">Dashboard</Link>
+                    <Link to="/tmd/about" className="nav-link">About</Link>
+                    <Link to="/tmd/travelpurpose" className="nav-link">Dashboard</Link>
                 </div>
                 <div className="nav-options d-flex">
                     {['Travel Purpose', 'Travel Mode', 'Zero-trip Making', 'Day Pattern'].map(option => (

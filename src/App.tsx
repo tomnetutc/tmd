@@ -13,9 +13,9 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/tmd" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/travelpurpose" element={<TravelPurpose />} />
-        <Route path="/travelmode" element={<TravelMode />} />
+        <Route path="/tmd/about" element={<About />} />
+        <Route path="/tmd/travelpurpose" element={<TravelPurpose />} />
+        <Route path="/tmd/travelmode" element={<TravelMode />} />
       </Routes>
     </BrowserRouter>
   );
