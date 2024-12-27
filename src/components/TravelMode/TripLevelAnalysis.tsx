@@ -183,7 +183,7 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
 <div className="chart-container-1">
     <HistogramChart
         chartData={tripModeDistributionChartData}
-        title="Travel Mode by Purpose"
+        title="Trip Purpose by Mode"
         showLegend={true}
         yAxisLabel="%"
     />
