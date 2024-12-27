@@ -33,8 +33,8 @@ interface TripSelections {
 }
 
 export default function TravelPurpose(): JSX.Element {
-    useDocumentTitle('Telework');
-    const [currAnalysisLevel, setCurrAnalaysisLevel]= useState<analysisLevel>(AnalysisLevels[0]);
+    useDocumentTitle('travelpurpose');
+    const [currAnalysisLevel, setCurrAnalaysisLevel] = useState<analysisLevel>(AnalysisLevels[0]);
     const [menuSelectedOptions, setMenuSelectedOptions] = useState<Option[]>([]);
     const [crossSegmentSelectedOptions, setCrossSegmentSelectedOptions] = useState<Option[][]>([[]]);
 
@@ -80,17 +80,17 @@ export default function TravelPurpose(): JSX.Element {
         }));
         setCurrAnalaysisLevel(prev => {
             console.log(newSelections);
-            if(newSelections.analysisLevelValue != undefined)
+            if (newSelections.analysisLevelValue != undefined)
                 return newSelections.analysisLevelValue;
             else return prev;
         });
-        }, []);
+    }, []);
 
     // Callback to update trip selections
     const handleTripSelectionChange = useCallback((newSelections: TripSelections) => {
         setCurrAnalaysisLevel(prev => {
             console.log(newSelections.analysisLevelValue);
-            if(newSelections.analysisLevelValue != undefined)
+            if (newSelections.analysisLevelValue != undefined)
                 return newSelections.analysisLevelValue;
             else return prev;
         });
@@ -116,78 +116,66 @@ export default function TravelPurpose(): JSX.Element {
         });
     }, []);
 
-    useEffect(() => {
-        // setTripSelections(prev => ({
-        //     ...prev,                    // Spread the previous state
-        //     analysisLevelValue: currAnalysisLevel // Update analysisLevelValue with currAnalysisLevel
-        // }));
-
-        // setSelections(prev => ({
-        //     ...prev,                    // Spread the previous state
-        //     analysisLevelValue: currAnalysisLevel // Update analysisLevelValue with currAnalysisLevel
-        // }));
-    
-    
-        console.log(currAnalysisLevel?.value);
-    }, [currAnalysisLevel]);
-    
     return (
         <div className="app-layout">
-            <NavBar onMenuOptionChange={handleMenuOptionChange} isTeleworkPage={false} />
+            <NavBar/>
             <div className="content-wrapper">
-            {(currAnalysisLevel?.value === 'person') ? (
-    <div className="content-wrapper">
-        {selections.analysisTypeValue?.value === 'betweenyear' ? (
-            <TopMenu onOptionChange={handleMenuOptionChange} />
-        ) : (
-            <CrossSegmentTopMenu
-                filterOptionsForTelework={false}
-                onSubmit={handleCrossSegmentOptionSubmit}
-                crossSegmentSelections={crossSegmentSelectedOptions}
-            />
-        )}
-        <div className="main-area">
-            {selections.analysisTypeValue?.value === 'betweenyear' ? (
-                <BtwYearMenu onSelectionChange={handleSelectionChange} />
-            ) : (
-                <CrossSegmentMenu onSelectionChange={handleSelectionChange} />
-            )}
-            <div className="main-content">
-                {selections.analysisTypeValue?.value === 'betweenyear' ? (
-                    <BtwYearAnalysis
-                        menuSelectedOptions={menuSelectedOptions}
-                        toggleState={false}
-                        selections={selections}
-                        setIsBtwYearLoading={(isLoading: boolean) => true}
-                    />
+                {(currAnalysisLevel?.value === 'person') ? (
+                    <div className="content-wrapper">
+                        {selections.analysisTypeValue?.value === 'crosssegment' ? (
+                            <CrossSegmentTopMenu
+                                filterOptionsForTelework={false}
+                                onSubmit={handleCrossSegmentOptionSubmit}
+                                crossSegmentSelections={crossSegmentSelectedOptions}
+                            />
+
+                        ) : (
+                            <TopMenu onOptionChange={handleMenuOptionChange} />
+                        )}
+                        <div className="main-area">
+                            {selections.analysisTypeValue?.value === 'crosssegment' ? (
+                                <CrossSegmentMenu onSelectionChange={handleSelectionChange} />
+
+                            ) : (
+                                <BtwYearMenu onSelectionChange={handleSelectionChange} />
+
+                            )}
+                            <div className="main-content">
+                                {selections.analysisTypeValue?.value === 'crosssegment' ? (
+                                    <CrossSegmentAnalysis
+                                        menuSelectedOptions={crossSegmentSelectedOptions}
+                                        toggleState={false}
+                                        selections={selections}
+                                        setIsCrossSegmentLoading={(isLoading: boolean) => true}
+                                        onProfileRemove={handleProfileRemove}
+                                    />
+                                ) : (
+                                    <BtwYearAnalysis
+                                        menuSelectedOptions={menuSelectedOptions}
+                                        toggleState={false}
+                                        selections={selections}
+                                        setIsBtwYearLoading={(isLoading: boolean) => true}
+                                    />
+                                )}
+                            </div>
+                        </div>
+                    </div>
                 ) : (
-                    <CrossSegmentAnalysis
-                        menuSelectedOptions={crossSegmentSelectedOptions}
-                        toggleState={false}
-                        selections={selections}
-                        setIsCrossSegmentLoading={(isLoading: boolean) => true}
-                        onProfileRemove={handleProfileRemove}
-                    />
+                    <div className="content-wrapper">
+                        <div className="main-area">
+                            <TopMenu onOptionChange={handleMenuOptionChange} />
+                            <TripLevelMenu onSelectionChange={handleTripSelectionChange} />
+                            <div className="main-content">
+                                <TripLevelAnalysis
+                                    menuSelectedOptions={menuSelectedOptions}
+                                    toggleState={false}
+                                    selections={tripSelections}
+                                    setIsTripLevelAnalysisLoading={(isLoading: boolean) => true}
+                                />
+                            </div>
+                        </div>
+                    </div>
                 )}
-            </div>
-        </div>
-    </div>
-) : (
-    <div className="content-wrapper">
-        <div className="main-area">
-            <TopMenu onOptionChange={handleMenuOptionChange} />
-            <TripLevelMenu onSelectionChange={handleTripSelectionChange} />
-            <div className="main-content">
-                <TripLevelAnalysis
-                    menuSelectedOptions={menuSelectedOptions}
-                    toggleState={false}
-                    selections={tripSelections}
-                    setIsTripLevelAnalysisLoading={(isLoading: boolean) => true}
-                />
-            </div>
-        </div>
-    </div>
-)}
             </div>
         </div>
     );

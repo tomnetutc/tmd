@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { ChartDataProps, weekOption, Option, SampleSizeTableProps, DataRow, TripPurposeOption, AnalysisTypeOption, GroupedOptions, CountObj} from "../../Types";
-import { TravelDataProvider, CrossSegmentDataFilter, TripPurposeOptions} from "../../utils/Helpers";
+import { ChartDataProps, weekOption, Option, SampleSizeTableProps, DataRow, TravelModeOption, AnalysisTypeOption, GroupedOptions, CountObj} from "../../Types";
+import { TravelDataProvider, CrossSegmentDataFilter, TravelModeOptions} from "../../utils/Helpers";
 import "../../css/travelpurpose.scss";
 import "../../css/dropdowns.css";
 import ProfileCards from "../ProfileCard/ProfileCards";
@@ -29,17 +29,17 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
     const [crossSegmentFilteredData, setCrossSegmentFilteredData] = useState<DataRow[]>([]);
     const [ChartData, setChartData] = useState<ChartDataProps>({ labels: [], datasets: [] });
     const [sampleSizeTableData, setSampleSizeTableData] = useState<SampleSizeTableProps>({ years: [], counts: [] });
-    const [dropdownOptions, setDropdownOptions] = useState<TripPurposeOption[]>(TripPurposeOptions);
+    const [dropdownOptions, setDropdownOptions] = useState<TravelModeOption[]>(TravelModeOptions);
     const [dropdownLabel, setDropdownLabel] = useState<string>("Trip purpose");
-    const [optionValue, setOptionValue] = useState<TripPurposeOption>();
-    const [tripPurposeDropdownOptions, setTripPurposeDropdownOptions] = useState<TripPurposeOption[]>();
+    const [optionValue, setOptionValue] = useState<TravelModeOption>();
+    const [tripPurposeDropdownOptions, setTripPurposeDropdownOptions] = useState<TravelModeOption[]>();
     const [activityLocationDropdownOptions, setActivityLocationDropdownOptions] = useState<AnalysisTypeOption[]>([]);
     const [analysisType, setAnalysisType] = useState<AnalysisTypeOption>({ label: "", value: "" });
     const [chartTitle, setChartTitle] = useState<string>("Average number of trips per person");
 
         // Handle dropdown value change based on selected options
-        const handleDropdownValueChange = (selectedOption: SingleValue<TripPurposeOption>) => {
-                setOptionValue(selectedOption as TripPurposeOption);
+        const handleDropdownValueChange = (selectedOption: SingleValue<TravelModeOption>) => {
+                setOptionValue(selectedOption as TravelModeOption);
         
         };
 
@@ -68,9 +68,9 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
     
 
         useEffect(() => {
-            const allTripPurposeOption = TripPurposeOptions.find(option => option.label === "All");
+            const allTripPurposeOption = TravelModeOptions.find(option => option.label === "All");
     
-            const sortedTripPurposeOptions = TripPurposeOptions
+            const sortedTripPurposeOptions = TravelModeOptions
                 .filter(option => option.label !== "All")
                 .sort((a, b) => a.label.localeCompare(b.label));
     
@@ -85,7 +85,7 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
             setActivityLocationDropdownOptions(analysisTypeDropdownOptions);
             setAnalysisType(analysisTypeDropdownOptions[0]); //Default to "Number of trips" option for Analysis Type
             setTripPurposeDropdownOptions(tripPurposeDropdownOptions);
-            setOptionValue(TripPurposeOptions[0]);
+            setOptionValue(TravelModeOptions[0]);
     
         }, []);
     
@@ -135,7 +135,7 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
         <div style={{position: "relative"}}>
         <div className="parent-dropdown-holder"> 
         <div className="dropdown-container">
-                    <label className="segment-label">Trip purpose:</label>
+                    <label className="segment-label">Travel mode:</label>
                     <Select
                         className="dropdown-select"
                         classNamePrefix="dropdown-select"
@@ -197,7 +197,7 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
     )
 }
 
-const prepareChartData = (filteredData: DataRow[], menuSelectedOptions: Option[][], optionValue: TripPurposeOption, analysisType: AnalysisTypeOption, startYear: string, endYear: string, includeDecember: boolean | undefined): {
+const prepareChartData = (filteredData: DataRow[], menuSelectedOptions: Option[][], optionValue: TravelModeOption, analysisType: AnalysisTypeOption, startYear: string, endYear: string, includeDecember: boolean | undefined): {
     chartData: ChartDataProps,
     sampleSizeTableData: SampleSizeTableProps
 } => {

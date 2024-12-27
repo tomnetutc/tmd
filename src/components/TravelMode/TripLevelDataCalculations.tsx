@@ -1,9 +1,9 @@
-import {TripChartDataProps, DataRow, TripPurposeOption } from "../../Types"
-import {TripLevelTravelModeOptions } from "../../utils/Helpers";
+import {TripChartDataProps, DataRow, TravelModeOption } from "../../Types"
+import {TripLevelTripPurposeOptions } from "../../utils/Helpers";
 import { tripsColorsForBtwYears } from "../../Colors";
 import * as d3 from 'd3';
 
-export const prepareVerticalChartData = (filteredData: DataRow[], analysisYear: string, optionValues: TripPurposeOption[], includeDecember: boolean | undefined, activeOption: string): {
+export const prepareVerticalChartData = (filteredData: DataRow[], analysisYear: string, optionValues: TravelModeOption[], includeDecember: boolean | undefined, activeOption: string): {
     tripsDurationChartData: TripChartDataProps,
     tripStartTimeChartData: TripChartDataProps,
     tripModeDistributionChartData: TripChartDataProps,
@@ -29,22 +29,21 @@ export const prepareVerticalChartData = (filteredData: DataRow[], analysisYear: 
 
     const lablesStartTime = Array.from({ length: 24 }, (_, i) => i).map(hour => `${hour}`);
 
-    const labelModeDistribution = TripLevelTravelModeOptions
+    const labelPurposeDistribution = TripLevelTripPurposeOptions
     .filter(option => option.label !== "All") 
     .map(option => `${option.label}`);
-
-    const mapModeToIndex = TripLevelTravelModeOptions
+    const mapModeToIndex = TripLevelTripPurposeOptions
     .filter(option => option.label !== "All") 
     .reduce((labelModeDistribution, option, index) => {
         labelModeDistribution[option.numberTrip] = index;
         return labelModeDistribution;
     }, {} as Record<string, number>);
 
-    console.log(mapModeToIndex);
+    console.log(optionValues);
 
     let TripDurationPerOption: any = {};
     let TripStartTimePerOption: any = {};
-    let TripModeDistributionPerOption: any = {};
+    let TripPurposeDistributionPerOption: any = {};
     let segmentSize= 0;
     let uniqueTUCASE = new Set();
 
@@ -52,18 +51,18 @@ export const prepareVerticalChartData = (filteredData: DataRow[], analysisYear: 
     filteredData.forEach(dataRow => {
         const duration = parseInt(dataRow.duration, 10);
         const start_hour = parseInt(dataRow.start_hour, 10);
-        const mode = dataRow.tr_mode;
+        const purpose = dataRow.trip_purpose;
         optionValues.forEach(option => {
             if (!includeDecember && parseInt(dataRow.month, 10) == 12) {
                 return;
             }
 
-            if (dataRow.trip_purpose === option.numberTrip || option.numberTrip === "tr_all") {
+            if (dataRow.tr_mode === option.numberTrip || option.numberTrip === "tr_all") {
                 uniqueTUCASE.add(dataRow.TUCASEID);
                 if (!TripDurationPerOption[option.numberTrip]) {
                     TripDurationPerOption[option.numberTrip] = new Array(labels.length).fill(0);
                     TripStartTimePerOption[option.numberTrip] = new Array(lablesStartTime.length).fill(0);
-                    TripModeDistributionPerOption[option.numberTrip] = new Array(labelModeDistribution.length).fill(0);
+                    TripPurposeDistributionPerOption[option.numberTrip] = new Array(labelPurposeDistribution.length).fill(0);
                 }
                 const binIndex = bins.findIndex(bin =>
                     bin.x0 !== undefined && bin.x1 !== undefined && duration >= bin.x0 && duration < bin.x1
@@ -72,7 +71,7 @@ export const prepareVerticalChartData = (filteredData: DataRow[], analysisYear: 
                     TripDurationPerOption[option.numberTrip][binIndex] += 1;
                 }
                 TripStartTimePerOption[option.numberTrip][start_hour] += 1;
-                TripModeDistributionPerOption[option.numberTrip][mapModeToIndex[mode]] += 1;
+                TripPurposeDistributionPerOption[option.numberTrip][mapModeToIndex[purpose]] += 1;
             }
         });
     });
@@ -81,12 +80,12 @@ export const prepareVerticalChartData = (filteredData: DataRow[], analysisYear: 
 
     const totalDurationRows: { [key: string]: number } = {};
     const totalStartTimeRows: { [key: string]: number } = {};
-    const totalModeDistributionRows: { [key: string]: number } = {};
+    const totalPurposeDistributionRows: { [key: string]: number } = {};
 
     Object.keys(TripDurationPerOption).forEach((key: string) => {
         totalDurationRows[key] = TripDurationPerOption[key].reduce((sum: number, value: number) => sum + value, 0);
         totalStartTimeRows[key] = TripStartTimePerOption[key].reduce((sum: number, value: number) => sum + value, 0);
-        totalModeDistributionRows[key] = TripModeDistributionPerOption[key].reduce((sum: number, value: number) => sum + value, 0);
+        totalPurposeDistributionRows[key] = TripPurposeDistributionPerOption[key].reduce((sum: number, value: number) => sum + value, 0);
     });
 
     Object.keys(TripDurationPerOption).forEach((key: string) => {
@@ -96,8 +95,8 @@ export const prepareVerticalChartData = (filteredData: DataRow[], analysisYear: 
         if (totalStartTimeRows[key] > 0) {
             TripStartTimePerOption[key] = TripStartTimePerOption[key].map((value: number) => (value / totalStartTimeRows[key]) * 100);
         }
-        if (totalModeDistributionRows[key] > 0) {
-            TripModeDistributionPerOption[key] = TripModeDistributionPerOption[key].map((value: number) => (value / totalModeDistributionRows[key]) * 100);
+        if (totalPurposeDistributionRows[key] > 0) {
+            TripPurposeDistributionPerOption[key] = TripPurposeDistributionPerOption[key].map((value: number) => (value / totalPurposeDistributionRows[key]) * 100);
         }
     });
 
@@ -130,8 +129,8 @@ export const prepareVerticalChartData = (filteredData: DataRow[], analysisYear: 
 
         tripModeDistributionChartDataSets.push({
             label: option.label,
-            data: TripModeDistributionPerOption[option.numberTrip],
-            totalNum: totalModeDistributionRows[option.numberTrip],
+            data: TripPurposeDistributionPerOption[option.numberTrip],
+            totalNum: totalPurposeDistributionRows[option.numberTrip],
             borderColor: tripBackgroundColor,
             backgroundColor: tripBackgroundColor,
             barThickness: 'flex',
@@ -148,7 +147,7 @@ export const prepareVerticalChartData = (filteredData: DataRow[], analysisYear: 
         datasets: tripStartTimeHistogramChartDataSets,
     };
     const tripModeDistributionChartData: TripChartDataProps = {
-        labels: labelModeDistribution,
+        labels: labelPurposeDistribution,
         datasets: tripModeDistributionChartDataSets,
     };
     console.log(tripStartTimeChartData);

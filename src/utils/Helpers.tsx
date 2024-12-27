@@ -78,10 +78,22 @@ export const AnalysisTypes: analysisType[]=[
 
 export const TravelModeOptions: TravelModeOption[] = [
     {
-        label: "Auto",
-        value: "Auto",
-        numberTrip: "mode_car",
-        durationTrips: "mode_car_dur",
+        label: "All",
+        value: "All",
+        numberTrip: "tr_all",
+        durationTrips: "tr_all_dur",
+    },
+    {
+        label: "SOV",
+        value: "SOV",
+        numberTrip: "mode_sov",
+        durationTrips: "mode_sov",
+    },
+    {
+        label: "HOV",
+        value: "HOV",
+        numberTrip: "mode_hov",
+        durationTrips: "mode_hov",
     },
     {
         label: "Transit",
@@ -112,12 +124,6 @@ export const TravelModeOptions: TravelModeOption[] = [
         value: "Unknown",
         numberTrip: "mode_unknown",
         durationTrips: "mode_unknown_dur",
-    },
-    {
-        label: "All",
-        value: "All",
-        numberTrip: "tr_all",
-        durationTrips: "tr_all_dur",
     },
 ];
 
@@ -165,6 +171,18 @@ export const TripPurposeOptions: TripPurposeOption[] = [
         durationTrips: "tr_eat_dur",
     },
     {
+        label: "Religious",
+        value: "Religious",
+        numberTrip: "tr_religious",
+        durationTrips: "tr_religious_dur",
+    },
+    {
+        label: "Volunteering",
+        value: "Volunteering",
+        numberTrip: "tr_volunteer",
+        durationTrips: "tr_volunteer",
+    },
+    {
         label: "Adult or Child care",
         value: "Adult or Child care",
         numberTrip: "tr_ccare",
@@ -204,16 +222,22 @@ export const TripLevelTripPurposeOptions: TripPurposeOption[] = [
         durationTrips: "tr_education_dur",
     },
     {
+        label: "Recreational",
+        value: "Recreational",
+        numberTrip: "tr_recreational",
+        durationTrips: "tr_recreational_dur",
+    },
+    {
         label: "Shopping",
         value: "Shopping",
         numberTrip: "tr_shopping",
         durationTrips: "tr_shopping_dur",
     },
     {
-        label: "Recreational",
-        value: "Recreational",
-        numberTrip: "tr_recreational",
-        durationTrips: "tr_recreational_dur",
+        label: "Adult or Child care",
+        value: "Adult or Child care",
+        numberTrip: "tr_ccare",
+        durationTrips: "tr_ccare_dur",
     },
     {
         label: "Social",
@@ -228,10 +252,16 @@ export const TripLevelTripPurposeOptions: TripPurposeOption[] = [
         durationTrips: "tr_eat_dur",
     },
     {
-        label: "Adult or Child care",
-        value: "Adult or Child care",
-        numberTrip: "tr_ccare",
-        durationTrips: "tr_ccare_dur",
+        label: "Religious",
+        value: "Religious",
+        numberTrip: "tr_religious",
+        durationTrips: "tr_religious_dur",
+    },
+    {
+        label: "Volunteering",
+        value: "Volunteering",
+        numberTrip: "tr_volunteer",
+        durationTrips: "tr_volunteer",
     },
     {
         label: "Other",
@@ -248,7 +278,12 @@ export const TripLevelTripPurposeOptions: TripPurposeOption[] = [
 ];
 
 export const TripLevelTravelModeOptions: TravelModeOption[] = [
-
+    {
+        label: "All",
+        value: "All",
+        numberTrip: "tr_all",
+        durationTrips: "tr_all_dur",
+    },
     {
         label: "SOV",
         value: "SOV",
@@ -989,7 +1024,7 @@ export class TravelDataProvider {
 
     private async loadFromSource(): Promise<DSVRowString<string>[]> {
         try {
-            this.data = await csv('https://raw.githubusercontent.com/tomnetutc/t3d/main/public/df_travel.csv');
+            this.data = await csv('https://storage.googleapis.com/mobility-dashboard-434821.appspot.com/dataset/df_travel.csv');
         } catch (error) {
             console.error('Error loading data:', error);
             throw error;

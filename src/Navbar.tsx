@@ -1,32 +1,58 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './css/navbar.css';
-import { NavbarProps } from './Types';
 import { Navbar as NavbarBs } from "react-bootstrap";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
-export const Navbar: React.FC<NavbarProps> = ({ onMenuOptionChange, isTeleworkPage }) => {
-    const [activeOption, setActiveOption] = useState<string>('Travel Purpose');
+export const Navbar: React.FC = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    // Derive active option from the current pathname
+    const getActiveOption = (): string => {
+        switch (location.pathname) {
+            case '/travelpurpose':
+                return 'Travel Purpose';
+            case '/travelmode':
+                return 'Travel Mode';
+            case '/zerotripmaking':
+                return 'Zero-trip Making';
+            case '/home':
+            case '/about':
+                return ''; // No active option for Home or About
+            default:
+                return '';
+        }
+    };
 
     const handleOptionClick = (option: string) => {
-        setActiveOption(option);
+        switch (option) {
+            case 'Travel Purpose':
+                navigate('/travelpurpose');
+                break;
+            case 'Travel Mode':
+                navigate('/travelmode');
+                break;
+            default:
+                navigate('/tmd');
+                break;
+        }
     };
+
+    const activeOption = getActiveOption();
 
     return (
         <NavbarBs sticky="top" expand="lg" className="my-navbar shadow-sm">
             <div className="navbar-brand d-flex align-items-center" style={{ padding: '2px 20px' }}>
-                <h4 className="fw-bold mb-0 ml-2"><img src="path-to-your-icon.png" alt="Icon" style={{ width: '30px', marginRight: '10px' }} />TMD Dasboard</h4>
+                <h4 style={{ width: '30px', marginRight: '10px' }}>The Mobility Dashboard</h4>
             </div>
-            {/* Combined container for nav links and options */}
             <div className="nav-container d-flex ms-auto">
-            <div className="nav-options d-flex">
-            <div className="nav-links">
-                    <Link to="/" className="nav-link">Home</Link>
+                <div className="nav-links">
+                    <Link to="/tmd" className="nav-link">Home</Link>
                     <Link to="/about" className="nav-link">About</Link>
-                    <Link to="/dashboard" className="nav-link">Dashboard</Link>
+                    <Link to="/travelpurpose" className="nav-link">Dashboard</Link>
                 </div>
-            </div>
                 <div className="nav-options d-flex">
-                    {['Travel Purpose', 'Travel Mode', 'Trip Chaining', 'Zero-trip Making'].map(option => (
+                    {['Travel Purpose', 'Travel Mode', 'Zero-trip Making', 'Day Pattern'].map(option => (
                         <div
                             key={option}
                             className={`nav-option ${activeOption === option ? 'active' : ''}`}

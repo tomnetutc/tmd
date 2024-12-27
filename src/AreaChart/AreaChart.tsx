@@ -1,29 +1,28 @@
 import React, { useState } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { TripChartDataProps } from "../Types";
+import Slider from '@mui/material/Slider';  // Importing Slider component
+import { styled } from '@mui/material/styles';
 
 interface AreaChartProps {
-    chartData: TripChartDataProps; // Accepting TripChartDataProps as input
+    chartData: TripChartDataProps;
     title: string;
-    showLegend?: boolean; // Option to show or hide legend
+    xAxisLabel?: string; // Optional x-axis label
+    yAxisLabel?: string; // Optional y-axis label
+    showLegend?: boolean;
 }
 
-// Custom Legend Component
 const CustomLegend: React.FC<{ payload?: any[]; chartData: TripChartDataProps }> = ({ payload, chartData }) => {
     if (!payload || !Array.isArray(payload)) return null;
-
-    const formatter = new Intl.NumberFormat('en-US'); // Formatter for thousands separator
-
+    const formatter = new Intl.NumberFormat('en-US');
     return (
         <ul className="custom-legend" style={{ textAlign: 'center', margin: '10px 0' }}>
             {payload.map((entry, index) => {
-                // Find the matching dataset by label
                 const dataset = chartData.datasets.find(ds => ds.label === entry.value);
-                const totalNum: number = dataset?.totalNum || 0; // Extract totalNum
-
+                const totalNum: number = dataset?.totalNum || 0;
                 return (
                     <li key={`item-${index}`} style={{ color: entry.color, display: 'inline', marginRight: '20px' }}>
-                        {entry.value} (n={formatter.format(totalNum)}) {/* Display label and totalNum with commas */}
+                        {entry.value} (n={formatter.format(totalNum)})
                     </li>
                 );
             })}
@@ -31,14 +30,22 @@ const CustomLegend: React.FC<{ payload?: any[]; chartData: TripChartDataProps }>
     );
 };
 
-const AreaChartComponent: React.FC<AreaChartProps> = ({ chartData, title, showLegend = true }) => {
-    const [activeIndex, setActiveIndex] = useState<number | null>(null); // Track the currently hovered area
+const StyledSlider = styled(Slider)({
+    width: 100,
+    color: 'primary',
+});
 
-    // Transform chartData to the format required by Recharts
+const AreaChartComponent: React.FC<AreaChartProps> = ({ chartData, title, xAxisLabel = '', yAxisLabel = '', showLegend = true }) => {
+    const [showFill, setShowFill] = useState(0);  // Use range 0 to 100 for the slider
+
+    const handleSliderChange = (event: Event, newValue: number | number[]) => {
+        setShowFill(newValue as number);
+    };
+
     const transformedData = chartData.labels.map((label, index) => {
         const obj: { [key: string]: string | number } = { name: Array.isArray(label) ? label.join(', ') : label };
         chartData.datasets.forEach(dataset => {
-            obj[dataset.label] = parseFloat(dataset.data[index].toFixed(1)); // Round to one decimal place
+            obj[dataset.label] = parseFloat(dataset.data[index].toFixed(1));
         });
         return obj;
     });
@@ -46,14 +53,21 @@ const AreaChartComponent: React.FC<AreaChartProps> = ({ chartData, title, showLe
     return (
         <div className="chart-container">
             <div className="title-container">
-                <span className="title">{title}</span>
+                <span className="title" style={{display: "flex", flexDirection:"row", justifyContent:'space-between', alignItems:'center'}}>{title}
+                <StyledSlider
+                    value={showFill}
+                    onChange={handleSliderChange}
+                    valueLabelDisplay="auto"
+                    aria-label="show fill"
+                />
+                </span>
             </div>
             <ResponsiveContainer width="100%" height={400}>
                 <AreaChart data={transformedData} margin={{ top: 10, right: 30, left: 0, bottom: 30 }}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" tick={{ fontSize: 12 }} />
-                    <YAxis tick={{ fontSize: 12 }} />
-                    <Tooltip formatter={(value: any) => parseFloat(value.toFixed(1))} /> {/* Round in Tooltip */}
+                    <XAxis dataKey="name" label={{ value: xAxisLabel, position: 'insideBottom', offset: -10 }} tick={{ fontSize: 12 }} />
+                    <YAxis label={{ value: yAxisLabel, angle: -90, position: 'insideLeft', offset: 10 }} tick={{ fontSize: 12 }} />
+                    <Tooltip formatter={(value: any) => parseFloat(value.toFixed(1))} />
                     {showLegend && (
                         <Legend
                             content={(props) => <CustomLegend {...props} chartData={chartData} />}
@@ -65,15 +79,13 @@ const AreaChartComponent: React.FC<AreaChartProps> = ({ chartData, title, showLe
                     {chartData.datasets.map((dataset, index) => (
                         <Area
                             key={dataset.label}
-                            type="monotone" // Smooth line between points
-                            dataKey={dataset.label} // Use dataset label as key
-                            fill={dataset.backgroundColor} // Use backgroundColor from dataset
-                            stroke={dataset.borderColor} // Use borderColor from dataset
+                            type="monotone"
+                            dataKey={dataset.label}
+                            fill={dataset.backgroundColor}
+                            stroke={dataset.borderColor}
                             strokeWidth={3}
-                            name={dataset.label} // Use dataset label for legend
-                            opacity={activeIndex === null || activeIndex === index ? 1 : 0.3} // Highlight or fade other areas
-                            onMouseEnter={() => setActiveIndex(index)} // Set active index on hover
-                            onMouseLeave={() => setActiveIndex(null)} // Reset active index on leave
+                            name={dataset.label}
+                            fillOpacity= {Number(showFill) / 100 }
                         />
                     ))}
                 </AreaChart>

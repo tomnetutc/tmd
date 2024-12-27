@@ -1,0 +1,44 @@
+.trip-parent-dropdown-holder {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    margin: auto;
+    padding: 0;
+}
+.trip-dropdown-container {
+    display: flex;
+    justify-content: flex-end; /* Align to the right */
+    width: fit-content;
+    align-items: center;
+    margin: 0px;
+    gap: 10px;
+}
+
+.trip-parent-dropdown-holder :last-child {
+    margin-right: 0px;
+}
+
+.trip-parent-dropdown-holder :first-child {
+    margin-left: 0px;
+}
+
+
+.trip-dropdown-select {
+    min-height: 36px;
+    min-width: 150px;
+    width: auto;
+    max-width: 100%;
+}
+
+.trip-dropdown-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.trip-segment-label {
+    font-size: 13.5px;
+    font-weight: 500;
+}

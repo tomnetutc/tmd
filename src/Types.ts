@@ -50,6 +50,13 @@ export type TravelModeOption = {
     durationTrips: string;
 };
 
+export type TravelPurpose = {
+    label: string;
+    value: string;
+    numberTrip: string;
+    durationTrips: string;
+};
+
 export type DayofWeekOption = {
     label: string;
     value: string;

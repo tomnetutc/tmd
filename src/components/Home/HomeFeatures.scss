@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+.HomeFeaturesDiv {
+  display: flex;
+  flex-direction: column;
+  /* Stacks children vertically */
+  padding: 5px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 30px;
+
+  .FeaturesTitleHolder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+}
+
+  .FeatureHolder{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    padding: 20px;
+    background-color: #F8F2FE;
+    padding-bottom: 20px;
+    height: 200px;
+
+      .FeatureText{
+        width: 65%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        .SpanContent {
+          font-family: 'Poppins', fallback-font, sans-serif;
+          color: #657383;
+          text-align: left; 
+        }
+        
+        .SpanHeader {
+          font-family: 'Roboto', fallback-font, sans-serif;
+          color: #2E2E2E;
+          text-align: center; /* This centers the text inside the <p> element */
+          font-weight: bold;
+        }
+      }
+
+      .FeatureLogo{
+        width: 150px;
+        height: 150px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+  }
+
+  
+
+  
+  .dashboardButton{
+    font-family: 'Roboto', fallback-font, sans-serif;
+    border: none;
+    color: white;
+    padding: 5px 20px; // Adjust padding to change the shape
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 30px ;// This creates the oval shape
+  }

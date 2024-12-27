@@ -4,7 +4,8 @@
     justify-content: flex-end;
     align-items: center;
     width: 90%;
-    margin: auto
+    margin: auto;
+    height: 41px
 }
 .dropdown-container {
     display: flex;

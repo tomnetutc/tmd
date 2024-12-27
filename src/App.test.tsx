@@ -1,9 +1,24 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import App from './App';
+import TravelPurpose  from "./Pages/TravelPurpose";
+import { Routes, Route, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
-});
+
+
+function App(): JSX.Element {
+
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+
+  return (
+    <>
+      <Routes>
+        <Route path="/travelpurpose" element={<TravelPurpose />} />
+      </Routes>
+    </>
+  );
+}
+
+export default App;

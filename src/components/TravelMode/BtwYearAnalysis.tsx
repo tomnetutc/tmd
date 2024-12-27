@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { ChartDataProps, weekOption, Option, SampleSizeTableProps, DataRow, TripPurposeOption } from "../../Types";
-import { TravelDataProvider, fetchAndFilterDataForBtwYearAnalysis, TripPurposeOptions } from "../../utils/Helpers";
+import { ChartDataProps, weekOption, Option, SampleSizeTableProps, DataRow, TravelModeOption } from "../../Types";
+import { TravelDataProvider, fetchAndFilterDataForBtwYearAnalysis, TravelModeOptions } from "../../utils/Helpers";
 import "../../css/travelpurpose.scss";
 import "../../css/dropdowns.css";
 import { prepareVerticalChartData } from "./BtwYearDataCalculations";
@@ -27,18 +27,18 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
     const [sampleSizeTableData, setSampleSizeTableData] = useState<SampleSizeTableProps>({ years: [], counts: [] });
     const [minYear, setMinYear] = useState('');
     const [maxYear, setMaxYear] = useState('');
-    const [dropdownOptions, setDropdownOptions] = useState<TripPurposeOption[]>(TripPurposeOptions);
+    const [dropdownOptions, setDropdownOptions] = useState<TravelModeOption[]>(TravelModeOptions);
     const [dropdownLabel, setDropdownLabel] = useState<string>("Trip purpose");
-    const [optionValue, setOptionValue] = useState<TripPurposeOption[]>(TripPurposeOptions.length > 0 ? [TripPurposeOptions[0]] : []);
+    const [optionValue, setOptionValue] = useState<TravelModeOption[]>(TravelModeOptions.length > 0 ? [TravelModeOptions[0]] : []);
     const [isOptionDisabled, setIsOptionDisabled] = useState(false);
-    const [tripPurposeDropdownOptions, setTripPurposeDropdownOptions] = useState<TripPurposeOption[]>([]);
+    const [tripPurposeDropdownOptions, setTripPurposeDropdownOptions] = useState<TravelModeOption[]>([]);
 
         // Handle dropdown value change based on selected options
-        const handleDropdownValueChange = (selectedOption: MultiValue<TripPurposeOption>) => {
+        const handleDropdownValueChange = (selectedOption: MultiValue<TravelModeOption>) => {
             if (selectedOption.length === 0 && tripPurposeDropdownOptions.length > 0) {
                 setOptionValue([tripPurposeDropdownOptions[0]]);
             } else if (selectedOption) {
-                setOptionValue(selectedOption as TripPurposeOption[]);
+                setOptionValue(selectedOption as TravelModeOption[]);
             }
     
             console.log(optionValue);
@@ -65,7 +65,7 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
             </div>
         );
     
-        const getOptionDisabledState = (option: TripPurposeOption) => {
+        const getOptionDisabledState = (option: TravelModeOption) => {
             const isSelected = optionValue.some((selectedOption) => selectedOption.value === option.value);
             return isOptionDisabled && !isSelected;
         };
@@ -76,14 +76,14 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
         }));
 
         useEffect(() => {
-            const allTripPurposeOption = TripPurposeOptions.find(option => option.label === "All");
+            const allTripModeOption = TravelModeOptions.find(option => option.label === "All");
     
-            const sortedTripPurposeOptions = TripPurposeOptions
+            const sortedTripModeOptions = TravelModeOptions
                 .filter(option => option.label !== "All")
                 .sort((a, b) => a.label.localeCompare(b.label));
     
             // Trip Purpose Dropdown Options
-            const tripPurposeDropdownOptions = allTripPurposeOption ? [allTripPurposeOption, ...sortedTripPurposeOptions] : sortedTripPurposeOptions;
+            const tripPurposeDropdownOptions = allTripModeOption ? [allTripModeOption, ...sortedTripModeOptions] : sortedTripModeOptions;
             setTripPurposeDropdownOptions(tripPurposeDropdownOptions);
     
         }, []);
@@ -110,7 +110,7 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
                     endYear,
                     selections.includeDecember,
                     optionValue,
-                    "Trip purpose"
+                    "Travel mode"
                 );
                 setBtwYearFilteredData(btwYearFilteredData);
                 setTripChartData(tripsChartData);
@@ -133,7 +133,7 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
         <div style={{position: "relative"}}>
         <div className="parent-dropdown-holder">
         <div className="dropdown-container">
-        <label className="segment-label">Trip purpose:</label>
+        <label className="segment-label">Travel mode:</label>
         <Select
                         className="dropdown-select"
                         classNamePrefix="dropdown-select"
