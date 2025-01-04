@@ -21,7 +21,7 @@ export function HeaderContent(): JSX.Element {
               <span className="title" style={{ fontSize: 60, color: "#2B2F88" }}>TMD</span>
             </div>
             <div className="textContainer">
-              <span className="title">The Mobility Dashboard Dashboard</span>
+              <span className="title">The Mobility Dashboard</span>
               <span className="subtitle"><em>-- by TOMNET and TBD University Transportation Centers</em></span>
             </div>
           </div>

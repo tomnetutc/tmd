@@ -1,7 +1,7 @@
 import { HeaderContent } from "../components/Home/HeaderContent";
 import "../css/App.css";
 import { Container } from "react-bootstrap";
-import { Navbar } from "../Navbar";
+import { HomepageNavbar } from "../HomepageNavbar";
 import { DataProvider, TravelDataProvider,TripLevelDataProvider, useDocumentTitle } from "../utils/Helpers";
 import { useEffect } from "react";
 import { HomeIcons } from "../components/Home/HomeIcons";
@@ -21,12 +21,10 @@ export function Home(): JSX.Element {
 
     return (
         <>
-            <Navbar />
+            <HomepageNavbar />
             <HeaderContent />
-            <Container>
                 <HomeFeatures />
                 <HomeIcons />
-            </Container>
         </>
     );
 }

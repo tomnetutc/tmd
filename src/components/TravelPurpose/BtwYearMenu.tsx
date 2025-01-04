@@ -83,6 +83,7 @@ const BtwYearMenu: React.FC<{ onSelectionChange: (selections: { week: weekOption
                 onAnalysisDayChange={setWeekValue}
                 onIncludeDecemberChange={setIncludeDecember}
                 yearOptions={yearOptions} // Pass the year dropdown options 
+                hideAnalysisLevels={false}
             />
          </div>
     

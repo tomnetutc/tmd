@@ -881,7 +881,7 @@ export class DataProvider {
 
     private async loadFromSource(): Promise<DSVRowString<string>[]> {
         try {
-            this.data = await csv('https://raw.githubusercontent.com/tomnetutc/t3d/main/public/df_time_use.csv');
+            this.data = await csv('https://storage.googleapis.com/mobility-dashboard-434821.appspot.com/dataset/df_time_use.csv');
         } catch (error) {
             console.error('Error loading data:', error);
             throw error;

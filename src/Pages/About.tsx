@@ -1,8 +1,7 @@
 import { Content } from "../components/About/Content";
-import { Sidebar } from "../components/About/Sidebar";
 import "../App.css";
 import { Container, Nav } from "react-bootstrap";
-import { Navbar } from "../Navbar";
+import { HomepageNavbar } from "../HomepageNavbar";
 import { DataProvider, TravelDataProvider, useDocumentTitle } from "../utils/Helpers";
 import { useEffect } from "react";
 
@@ -19,10 +18,8 @@ export function About(): JSX.Element {
 
     return (
         <>
-            <Navbar/>
-            <Container>
+            <HomepageNavbar/>
                 <Content />
-            </Container>
         </>
     );
 }

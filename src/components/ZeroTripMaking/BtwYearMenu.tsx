@@ -1,9 +1,17 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { max } from 'd3';
-import { WeekOptions, DataProvider, AnalysisLevels, AnalysisTypes } from '../../utils/Helpers';
+import { WeekOptions, DataProvider, AnalysisTypes } from '../../utils/Helpers';
 import { weekOption, YearOption, analysisLevel, analysisType } from '../../Types';
 import Sidebar from '../../SideBar';
 import "../../css/dropdowns.css";
+
+export const AnalysisLevels: analysisLevel[]=[
+    {
+        label: "Person",
+        value: "person",
+    }
+]
+
 
 const BtwYearMenu: React.FC<{ onSelectionChange: (selections: { week: weekOption, analysisLevelValue: analysisLevel, analysisTypeValue: analysisType, includeDecember: boolean, startYear: string, endYear: string}) => void,}> = ({ onSelectionChange }) => {
     const [weekValue, setWeekValue] = useState<weekOption>(WeekOptions[0]); // Defaulting to first option for demonstration
@@ -83,7 +91,7 @@ const BtwYearMenu: React.FC<{ onSelectionChange: (selections: { week: weekOption
                 onAnalysisDayChange={setWeekValue}
                 onIncludeDecemberChange={setIncludeDecember}
                 yearOptions={yearOptions} // Pass the year dropdown options 
-                hideAnalysisLevels={false}
+                hideAnalysisLevels={true}
             />
          </div>
     

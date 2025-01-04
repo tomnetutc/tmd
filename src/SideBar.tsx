@@ -6,6 +6,7 @@ import './css/sidebar.scss';
 import { analysisLevel, analysisType, weekOption, YearOption } from './Types';
 import { AnalysisLevels, AnalysisTypes, WeekOptions } from './utils/Helpers';
 
+
 interface SidebarProps {
     analysisLevel: analysisLevel;
     analysisType: analysisType;
@@ -20,6 +21,7 @@ interface SidebarProps {
     onAnalysisDayChange: (day: weekOption) => void;
     onIncludeDecemberChange: (include: boolean) => void;
     yearOptions: YearOption[];  // Corrected type
+    hideAnalysisLevels: boolean;
 }
 
 
@@ -68,6 +70,7 @@ const IOSSwitch = styled(Switch)(({ theme }) => ({
     },
 }));
 
+
 const Sidebar: React.FC<SidebarProps> = ({
     analysisLevel,
     analysisType,
@@ -81,26 +84,29 @@ const Sidebar: React.FC<SidebarProps> = ({
     onEndYearChange,
     onAnalysisDayChange,
     onIncludeDecemberChange,
-    yearOptions  // Corrected use of yearOptions
+    yearOptions, 
+    hideAnalysisLevels
 }) => {
     return (
         <div className="sidebar">
             <div className="sideBarMenu">
-                {/* Analysis Level */}
-                <div className='form-container'>
-                    <div className="form-group">
-                        <label>Analysis Level</label>
-                        <Select<analysisLevel>
-                            options={AnalysisLevels}
-                            onChange={(option: SingleValue<analysisLevel>) => option && onAnalysisLevelChange(option)}
-                            value={AnalysisLevels.find(option => option === analysisLevel)}
-                            className="dropdown"
-                            placeholder="Select Analysis Level"
-                        />
-                    </div>
-                </div>
+            {hideAnalysisLevels === false ? (
+    <div className='form-container'>
+        <div className="form-group">
+            <label>Analysis Level</label>
+            <Select<analysisLevel>
+                options={AnalysisLevels}
+                onChange={(option: SingleValue<analysisLevel>) => option && onAnalysisLevelChange(option)}
+                value={AnalysisLevels.find(option => option.value === analysisLevel.value)}
+                className="dropdown"
+                placeholder="Select Analysis Level"
+            />
+        </div>
+    </div>
+) : null}
 
                 {/* Analysis Type */}
+                {hideAnalysisLevels === false ? (
                 <div className='form-container'>
                     <div className="form-group">
                         <label>Analysis Type</label>
@@ -113,6 +119,8 @@ const Sidebar: React.FC<SidebarProps> = ({
                         />
                     </div>
                 </div>
+                ) : null}
+
 
                 {/* Analysis Period */}
                 <div className='form-container'>

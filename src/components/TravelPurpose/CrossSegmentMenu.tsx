@@ -82,6 +82,7 @@ const CrossSegmentMenu: React.FC<{ onSelectionChange: (selections: { week: weekO
                 onAnalysisDayChange={setWeekValue}
                 onIncludeDecemberChange={setIncludeDecember}
                 yearOptions={yearOptions} // Pass the year dropdown options 
+                hideAnalysisLevels={false}
             />
          </div>
     

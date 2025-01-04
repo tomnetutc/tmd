@@ -41,6 +41,7 @@
     padding: 8px 16px;
     border-radius: 20px;
     transition: background-color 0.3s;
+    margin-right: 30px; /* Add margin to avoid crowding */
 }
 
 /* Container for the navigation options */

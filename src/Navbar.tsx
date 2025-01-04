@@ -10,12 +10,15 @@ export const Navbar: React.FC = () => {
     // Derive active option from the current pathname
     const getActiveOption = (): string => {
         switch (location.pathname) {
-            case '/tmd/travelpurpose':
+            case '/travelpurpose':
                 return 'Travel Purpose';
-            case '/tmd/travelmode':
+            case '/travelmode':
                 return 'Travel Mode';
-            case '/tmd/zerotripmaking':
+            case '/zerotripmaking':
                 return 'Zero-trip Making';
+            case '/daypattern':
+                    return 'Day Pattern';
+    
             case '/home':
             case '/about':
                 return ''; // No active option for Home or About
@@ -27,13 +30,20 @@ export const Navbar: React.FC = () => {
     const handleOptionClick = (option: string) => {
         switch (option) {
             case 'Travel Purpose':
-                navigate('/tmd/travelpurpose');
+                navigate('/travelpurpose');
                 break;
             case 'Travel Mode':
-                navigate('/tmd/travelmode');
+                navigate('/travelmode');
                 break;
+            case 'Zero-trip Making':
+                navigate('/zerotripmaking');
+                break;
+            case 'Day Pattern':
+                navigate('/daypattern');
+                break;    
+    
             default:
-                navigate('/tmd');
+                navigate('/');
                 break;
         }
     };
@@ -47,9 +57,9 @@ export const Navbar: React.FC = () => {
             </div>
             <div className="nav-container d-flex ms-auto">
                 <div className="nav-links">
-                    <Link to="/tmd" className="nav-link">Home</Link>
-                    <Link to="/tmd/about" className="nav-link">About</Link>
-                    <Link to="/tmd/travelpurpose" className="nav-link">Dashboard</Link>
+                    <Link to="/" className="nav-link">Home</Link>
+                    <Link to="/about" className="nav-link">About</Link>
+                    <Link to="/travelpurpose" className="nav-link">Dashboard</Link>
                 </div>
                 <div className="nav-options d-flex">
                     {['Travel Purpose', 'Travel Mode', 'Zero-trip Making', 'Day Pattern'].map(option => (

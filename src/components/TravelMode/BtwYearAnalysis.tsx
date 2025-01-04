@@ -31,7 +31,7 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
     const [dropdownLabel, setDropdownLabel] = useState<string>("Trip purpose");
     const [optionValue, setOptionValue] = useState<TravelModeOption[]>(TravelModeOptions.length > 0 ? [TravelModeOptions[0]] : []);
     const [isOptionDisabled, setIsOptionDisabled] = useState(false);
-    const [tripPurposeDropdownOptions, setTripPurposeDropdownOptions] = useState<TravelModeOption[]>([]);
+    const [tripPurposeDropdownOptions, setTravelModeDropdownOptions] = useState<TravelModeOption[]>([]);
 
         // Handle dropdown value change based on selected options
         const handleDropdownValueChange = (selectedOption: MultiValue<TravelModeOption>) => {
@@ -83,9 +83,8 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
                 .sort((a, b) => a.label.localeCompare(b.label));
     
             // Trip Purpose Dropdown Options
-            const tripPurposeDropdownOptions = allTripModeOption ? [allTripModeOption, ...sortedTripModeOptions] : sortedTripModeOptions;
-            setTripPurposeDropdownOptions(tripPurposeDropdownOptions);
-    
+            const travelModeDropdownOptions = allTripModeOption ? [allTripModeOption, ...sortedTripModeOptions] : sortedTripModeOptions;
+            setTravelModeDropdownOptions(travelModeDropdownOptions);
         }, []);
     
     
