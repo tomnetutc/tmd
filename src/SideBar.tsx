@@ -106,7 +106,6 @@ const Sidebar: React.FC<SidebarProps> = ({
 ) : null}
 
                 {/* Analysis Type */}
-                {hideAnalysisLevels === false ? (
                 <div className='form-container'>
                     <div className="form-group">
                         <label>Analysis Type</label>
@@ -119,8 +118,6 @@ const Sidebar: React.FC<SidebarProps> = ({
                         />
                     </div>
                 </div>
-                ) : null}
-
 
                 {/* Analysis Period */}
                 <div className='form-container'>

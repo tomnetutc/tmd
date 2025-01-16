@@ -25,7 +25,6 @@ const CrossSegmentTopMenu: React.FC<{
     };
 
     const handleSubmit = () => {
-        console.log(crossSegmentSelections.length);
         // Only allow submission if options are selected and the limit of 5 segments isn't exceeded
         if (selectedOptions.some(option => option !== null) && (crossSegmentSelections.length < 5 || crossSegmentSelections.length==undefined)) {
             // setSubmissions(prevOptions =>{

@@ -154,7 +154,7 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
             });
 
 
-    }, [menuSelectedOptions, selections, toggleState]);  // Added optionValue as dependency
+    }, [menuSelectedOptions, selections, toggleState]);
 
     return (
         <>
