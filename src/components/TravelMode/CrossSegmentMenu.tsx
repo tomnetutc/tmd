@@ -17,7 +17,7 @@ const CrossSegmentMenu: React.FC<{ onSelectionChange: (selections: { week: weekO
 
     // Load year options from cache or fetch data
     useEffect(() => {
-        const cacheKey = "YearDataCache";
+        const cacheKey = "2023YearDataCache";
         const cachedData = localStorage.getItem(cacheKey);
         const handleDataLoad = async () => {
             const data = await DataProvider.getInstance().loadData();

@@ -130,7 +130,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                                 onChange={(option: SingleValue<YearOption>) => option && onStartYearChange((option.value))}
                                 value={yearOptions.find(option => (option.value) === startYear)}
                                 className="dropdown"
-                                placeholder="Select Start Year"
+                                placeholder="Select Year"
                             />
                         </div>
 
@@ -141,7 +141,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                                 onChange={(option: SingleValue<YearOption>) => option && onEndYearChange((option.value))}
                                 value={yearOptions.find(option => (option.value) === endYear)}
                                 className="dropdown"
-                                placeholder="Select End Year"
+                                placeholder="Select Year"
                             />
                         </div>
                     </div>

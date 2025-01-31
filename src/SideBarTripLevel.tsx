@@ -91,7 +91,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                                 onChange={(option: SingleValue<YearOption>) => option && onAnalysisYearChange((option.value))}
                                 value={yearOptions.find(option => (option.value) === analysisYear)}
                                 className="dropdown"
-                                placeholder="Select Start Year"
+                                placeholder="Select Year"
                             />
                         </div>
                     </div>

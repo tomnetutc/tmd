@@ -116,6 +116,7 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
                 setDurationChartData(durationChartData);
                 setMinYear(minYear);
                 setMaxYear(maxYear);
+                setIsBtwYearLoading(false);
                 setSampleSizeTableData(sampleSizeTableData);
             })
             .catch((error) => {

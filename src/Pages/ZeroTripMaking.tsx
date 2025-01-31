@@ -12,6 +12,7 @@ import CrossSegmentMenu from '../components/ZeroTripMaking/CrossSegmentMenu';
 import BtwYearAnalysis from '../components/ZeroTripMaking/BtwYearAnalysis';
 import CrossSegmentAnalysis from '../components/ZeroTripMaking/CrossSegmentAnalysis';
 import CrossSegmentTopMenu from '../components/CrossSegmentTopMenu';
+import LoadingOverlay from '../components/LoadingOverlay';
 
 export const AnalysisLevels: analysisLevel[]=[
     {
@@ -35,6 +36,8 @@ export default function ZeroTripMaking(): JSX.Element {
     const [currAnalysisLevel, setCurrAnalaysisLevel] = useState<analysisLevel>(AnalysisLevels[0]);
     const [menuSelectedOptions, setMenuSelectedOptions] = useState<Option[]>([]);
     const [crossSegmentSelectedOptions, setCrossSegmentSelectedOptions] = useState<Option[][]>([[]]);
+    const [isBtwYearLoading, setIsBtwYearLoading] = useState(true);
+    const [isCrossSegmentLoading, setIsCrossSegmentLoading] = useState(true);
 
     // Initialize selections state
     const [selections, setSelections] = useState<Selections>({
@@ -95,6 +98,12 @@ export default function ZeroTripMaking(): JSX.Element {
     return (
         <div className="app-layout">
             <NavBar/>
+            {
+                (selections.analysisTypeValue?.value === 'crosssegment' && isCrossSegmentLoading) ||
+                (selections.analysisTypeValue?.value === 'betweenyear' && isBtwYearLoading)
+                && <LoadingOverlay />
+            }
+
             <div className="content-wrapper">
                     <div className="content-wrapper">
                         {selections.analysisTypeValue?.value === 'crosssegment' ? (
@@ -121,7 +130,7 @@ export default function ZeroTripMaking(): JSX.Element {
                                         menuSelectedOptions={crossSegmentSelectedOptions}
                                         toggleState={false}
                                         selections={selections}
-                                        setIsCrossSegmentLoading={(isLoading: boolean) => true}
+                                        setIsCrossSegmentLoading={setIsCrossSegmentLoading}
                                         onProfileRemove={handleProfileRemove}
                                     />
                                 ) : (
@@ -129,7 +138,7 @@ export default function ZeroTripMaking(): JSX.Element {
                                         menuSelectedOptions={menuSelectedOptions}
                                         toggleState={false}
                                         selections={selections}
-                                        setIsBtwYearLoading={(isLoading: boolean) => true}
+                                        setIsBtwYearLoading={setIsBtwYearLoading}
                                     />
                                 )}
                             </div>

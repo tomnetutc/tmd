@@ -15,6 +15,7 @@ import CrossSegmentAnalysis from '../components/TravelPurpose/CrossSegmentAnalys
 import CrossSegmentTopMenu from '../components/CrossSegmentTopMenu';
 import TripLevelMenu from '../components/TravelPurpose/TripLevelMenu';
 import TripLevelAnalysis from '../components/TravelPurpose/TripLevelAnalysis';
+import LoadingOverlay from '../components/LoadingOverlay';
 
 interface Selections {
     week?: weekOption;
@@ -37,6 +38,9 @@ export default function TravelPurpose(): JSX.Element {
     const [currAnalysisLevel, setCurrAnalaysisLevel] = useState<analysisLevel>(AnalysisLevels[0]);
     const [menuSelectedOptions, setMenuSelectedOptions] = useState<Option[]>([]);
     const [crossSegmentSelectedOptions, setCrossSegmentSelectedOptions] = useState<Option[][]>([[]]);
+    const [isBtwYearLoading, setIsBtwYearLoading] = useState(true);
+    const [isCrossSegmentLoading, setIsCrossSegmentLoading] = useState(true);
+    const [istripLevelAnalysisLoading, setIsTripLevelAnalysisLoading] = useState(true);
 
     // Initialize selections state
     const [selections, setSelections] = useState<Selections>({
@@ -119,6 +123,13 @@ export default function TravelPurpose(): JSX.Element {
     return (
         <div className="app-layout">
             <NavBar/>
+            {
+                ((currAnalysisLevel?.value === 'person' && 
+                  ((selections.analysisTypeValue?.value === 'crosssegment' && isCrossSegmentLoading) || 
+                   (selections.analysisTypeValue?.value === 'betweenyear' && isBtwYearLoading))) || 
+                 (currAnalysisLevel?.value === 'trip' && istripLevelAnalysisLoading)) && <LoadingOverlay />
+            }
+
             <div className="content-wrapper">
                 {(currAnalysisLevel?.value === 'person') ? (
                     <div className="content-wrapper">
@@ -146,7 +157,7 @@ export default function TravelPurpose(): JSX.Element {
                                         menuSelectedOptions={crossSegmentSelectedOptions}
                                         toggleState={false}
                                         selections={selections}
-                                        setIsCrossSegmentLoading={(isLoading: boolean) => true}
+                                        setIsCrossSegmentLoading={setIsCrossSegmentLoading}
                                         onProfileRemove={handleProfileRemove}
                                     />
                                 ) : (
@@ -154,7 +165,7 @@ export default function TravelPurpose(): JSX.Element {
                                         menuSelectedOptions={menuSelectedOptions}
                                         toggleState={false}
                                         selections={selections}
-                                        setIsBtwYearLoading={(isLoading: boolean) => true}
+                                        setIsBtwYearLoading={setIsBtwYearLoading}
                                     />
                                 )}
                             </div>
@@ -170,7 +181,7 @@ export default function TravelPurpose(): JSX.Element {
                                     menuSelectedOptions={menuSelectedOptions}
                                     toggleState={false}
                                     selections={tripSelections}
-                                    setIsTripLevelAnalysisLoading={(isLoading: boolean) => true}
+                                    setIsTripLevelAnalysisLoading={setIsTripLevelAnalysisLoading}
                                 />
                             </div>
                         </div>
