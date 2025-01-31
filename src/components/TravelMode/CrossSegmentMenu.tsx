@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { max, selection } from 'd3';
-import { WeekOptions, DataProvider, AnalysisLevels, AnalysisTypes } from '../../utils/Helpers';
+import { WeekOptions, TravelDataProvider, AnalysisLevels, AnalysisTypes } from '../../utils/Helpers';
 import { weekOption, YearOption, analysisLevel, analysisType } from '../../Types';
 import Sidebar from '../../SideBar';
 import "../../css/dropdowns.css";
@@ -20,7 +20,7 @@ const CrossSegmentMenu: React.FC<{ onSelectionChange: (selections: { week: weekO
         const cacheKey = "2023YearDataCache";
         const cachedData = localStorage.getItem(cacheKey);
         const handleDataLoad = async () => {
-            const data = await DataProvider.getInstance().loadData();
+            const data = await TravelDataProvider.getInstance().loadData();
             const maxYear = max(data, (d) => d.year);
             if (maxYear) {
                 const expiry = new Date().getTime() + 24 * 60 * 60 * 1000; // 24 hours in milliseconds
