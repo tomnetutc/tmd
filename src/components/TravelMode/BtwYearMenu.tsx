@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { max } from 'd3';
-import { WeekOptions, DataProvider, AnalysisLevels, AnalysisTypes } from '../../utils/Helpers';
+import { WeekOptions, TravelDataProvider, AnalysisLevels, AnalysisTypes } from '../../utils/Helpers';
 import { weekOption, YearOption, analysisLevel, analysisType } from '../../Types';
 import Sidebar from '../../SideBar';
 import "../../css/dropdowns.css";
@@ -17,10 +17,10 @@ const BtwYearMenu: React.FC<{ onSelectionChange: (selections: { week: weekOption
 
     // Load year options from cache or fetch data
     useEffect(() => {
-        const cacheKey = "YearDataCache";
+        const cacheKey = "2023UpdatedYearDataCache";
         const cachedData = localStorage.getItem(cacheKey);
         const handleDataLoad = async () => {
-            const data = await DataProvider.getInstance().loadData();
+            const data = await TravelDataProvider.getInstance().loadData();
             const maxYear = max(data, (d) => d.year);
             if (maxYear) {
                 const expiry = new Date().getTime() + 24 * 60 * 60 * 1000; // 24 hours in milliseconds

@@ -17,7 +17,7 @@ const BtwYearMenu: React.FC<{ onSelectionChange: (selections: { week: weekOption
 
     // Load year options from cache or fetch data
     useEffect(() => {
-        const cacheKey = "2023YearDataCache";
+        const cacheKey = "2023UpdatedYearDataCache";
         const cachedData = localStorage.getItem(cacheKey);
         const handleDataLoad = async () => {
             const data = await TravelDataProvider.getInstance().loadData();
