@@ -4,6 +4,10 @@ import { Container, Nav } from "react-bootstrap";
 import { HomepageNavbar } from "../HomepageNavbar";
 import { DataProvider, TravelDataProvider, useDocumentTitle } from "../utils/Helpers";
 import { useEffect } from "react";
+import { Sidebar } from "../components/About/Sidebar"
+import Footer from "../components/Footer"
+
+
 
 export function About(): JSX.Element {
 
@@ -18,8 +22,13 @@ export function About(): JSX.Element {
 
     return (
         <>
-            <HomepageNavbar/>
+            <HomepageNavbar />
+            <div className="custom-container">
+                <Sidebar />
                 <Content />
+            </div>
+            <Footer />
+            
         </>
     );
 }

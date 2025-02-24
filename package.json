@@ -61,6 +61,7 @@
   },
   "devDependencies": {
     "@types/d3-dsv": "^3.0.7",
+    "@types/react-router-hash-link": "^2.4.9",
     "gh-pages": "^6.2.0",
     "sass": "^1.79.4"
   }

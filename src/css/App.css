@@ -38,8 +38,9 @@
   height: 100vh;
   /* width: 10.6vw; */
   /* background-color: #060b26; */
-  background-color: #F8F2FE;
+  background-color: #f5f9ff;
   position: fixed;
+  left: 140px;
 }
 
 .sidenavbarlist {
@@ -69,4 +70,16 @@
   height: 80px;
   visibility: hidden;
   pointer-events: none;
+}
+
+.custom-container {
+  display: flex;
+  flex-direction: column; 
+  justify-content: center; 
+  align-items: center; 
+  width: 85%; 
+  height: auto; 
+  padding: 16 px; 
+  margin: 0 auto; 
+  margin-bottom: -60px;
 }
