@@ -1,6 +1,6 @@
 import {TripChartDataProps, DataRow, TripPurposeOption } from "../../Types"
 import {TripLevelTravelModeOptions } from "../../utils/Helpers";
-import { tripsColorsForBtwYears } from "../../Colors";
+import { Colors } from "../../Colors";
 import * as d3 from 'd3';
 
 export const prepareVerticalChartData = (filteredData: DataRow[], analysisYear: string, optionValues: TripPurposeOption[], includeDecember: boolean | undefined, activeOption: string): {
@@ -107,8 +107,8 @@ export const prepareVerticalChartData = (filteredData: DataRow[], analysisYear: 
     let tripModeDistributionChartDataSets: TripChartDataSet[] = [];
 
     optionValues.forEach((option, index) => {
-        const colorIndex = index % tripsColorsForBtwYears.length;
-        const tripBackgroundColor = tripsColorsForBtwYears[colorIndex];
+        const colorIndex = index % Colors.length;
+        const tripBackgroundColor = Colors[colorIndex];
 
         tripsDurationHistogramChartDataSets.push({
             label: option.label,

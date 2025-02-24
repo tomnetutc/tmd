@@ -7,7 +7,8 @@ import { prepareVerticalChartData } from "./TripLevelDataCalculations";
 import HistogramChart from "../../Histogram/Histogram";
 import Select, { MultiValue } from 'react-select';
 import AreaChartComponent from "../../AreaChart/AreaChart";
-import TripLevelSampleSizeSegment from '../../TripLevelSampleSizeSegment';
+import CustomSegment from '../../CustomSegment';
+import { union } from "d3";
 
 
 interface TripLevelAnalysisProp {
@@ -126,7 +127,7 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
         <>
             <div style={{ position: "relative" }}>
                 <div className="trip-parent-dropdown-holder">
-                <TripLevelSampleSizeSegment segmentSize={formatter.format(segmentSize)} />
+                <CustomSegment title="Segment Size : " segmentSize={formatter.format(segmentSize)} unit="people"/>
                     <div className="trip-dropdown-container">
                         <label className="trip-segment-label">Trip purpose:</label>
                         <Select

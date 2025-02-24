@@ -35,7 +35,7 @@ export const Navbar: React.FC = () => {
             case 'Travel Mode':
                 navigate('/travelmode');
                 break;
-            case 'Zero-trip Making':
+            case 'Zero-Trip Making':
                 navigate('/zerotripmaking');
                 break;
             case 'Day Pattern':
@@ -62,7 +62,7 @@ export const Navbar: React.FC = () => {
                     <Link to="/travelpurpose" className="nav-link">Dashboard</Link>
                 </div>
                 <div className="nav-options d-flex">
-                    {['Travel Purpose', 'Travel Mode', 'Zero-trip Making', 'Day Pattern'].map(option => (
+                    {['Travel Purpose', 'Travel Mode', 'Zero-Trip Making', 'Day Pattern'].map(option => (
                         <div
                             key={option}
                             className={`nav-option ${activeOption === option ? 'active' : ''}`}

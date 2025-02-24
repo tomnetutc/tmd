@@ -50,6 +50,12 @@ export type TravelModeOption = {
     durationTrips: string;
 };
 
+export type DayPatternOption = {
+    label: string;
+    value: string;
+    numberTrip: string;
+};
+
 export type TravelPurpose = {
     label: string;
     value: string;
@@ -114,6 +120,31 @@ export interface TripChartDataProps {
     }[];
 };
 
+export interface DayPatternChartDataProps {
+    labels: (string | string[])[];
+    datasets: {
+        label: string[];
+        data: number[];
+        totalNum: number;
+        backgroundColor: string;
+        borderColor: string;
+        borderWidth?: number;
+        barThickness: number | 'flex';
+    }[];
+};
+
+export interface PieChartDataProps {
+    datasets: {
+        label: string;
+        data: number;
+        totalNum: number;
+        backgroundColor: string;
+        borderColor: string;
+        borderWidth?: number;
+        barThickness: number | 'flex';
+    }[];
+};
+
 
 export interface CountObj {
     data: DSVRowString<string>[]
@@ -154,5 +185,12 @@ export interface ProfileCardProps {
     profileList: ProfileObj[];
     removeProfile: IRemoveProfile;
     title: string;
+};
+
+export interface SegmentProps {
+    title: string;
+    counter: string;
+    icon: React.ElementType;
+
 };
 

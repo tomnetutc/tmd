@@ -1,26 +1,25 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { max, selection } from 'd3';
-import { WeekOptions, TravelDataProvider, AnalysisLevels, AnalysisTypes } from '../../utils/Helpers';
+import { max } from 'd3';
+import { WeekOptions, TripLevelDataProvider, DayPatternAnalysisTypes, AnalysisLevels } from '../../utils/Helpers';
 import { weekOption, YearOption, analysisLevel, analysisType } from '../../Types';
-import Sidebar from '../../SideBar';
+import Sidebar from '../../SideBarDayPattern';
 import "../../css/dropdowns.css";
 
-const CrossSegmentMenu: React.FC<{ onSelectionChange: (selections: { week: weekOption, analysisLevelValue: analysisLevel, analysisTypeValue: analysisType, includeDecember: boolean, startYear: string, endYear: string}) => void,}> = ({ onSelectionChange }) => {
+const TripLevelMenu: React.FC<{ onSelectionChange: (tripSelections: { week: weekOption, analysisLevelValue: analysisLevel, analysisTypeValue: analysisType, includeDecember: boolean, analysisYear: string}) => void,}> = ({ onSelectionChange }) => {
     const [weekValue, setWeekValue] = useState<weekOption>(WeekOptions[0]); // Defaulting to first option for demonstration
     const [analysisLevelValue, setAnalysisLevelValue] = useState<analysisLevel>(AnalysisLevels[0]); // Default analysis level
-    const [analysisTypeValue, setAnalysisTypeValue] = useState<analysisType>(AnalysisTypes[1]); // Default analysis type
+    const [analysisTypeValue, setAnalysisTypeValue] = useState<analysisType>(DayPatternAnalysisTypes[0]); // Default analysis type
     const [includeDecember, setIncludeDecember] = useState<boolean>(true); // Default toggle state
-    const [startYear, setStartYear] = useState<string>(new Date().getFullYear().toString());
-    const [endYear, setEndYear] = useState<string>(new Date().getFullYear().toString());
+    const [analysisYear, setAnalysisYear] = useState<string>(new Date().getFullYear().toString());
     const [yearOptions, setYearOptions] = useState<YearOption[]>([]);
 
 
     // Load year options from cache or fetch data
     useEffect(() => {
-        const cacheKey = "2023UpdatedYearDataCacheKey";
+        const cacheKey = "TripLevelYearDataCache2023";
         const cachedData = localStorage.getItem(cacheKey);
         const handleDataLoad = async () => {
-            const data = await TravelDataProvider.getInstance().loadData();
+            const data = await TripLevelDataProvider.getInstance().loadData();
             const maxYear = max(data, (d) => d.year);
             if (maxYear) {
                 const expiry = new Date().getTime() + 24 * 60 * 60 * 1000; // 24 hours in milliseconds
@@ -48,8 +47,7 @@ const CrossSegmentMenu: React.FC<{ onSelectionChange: (selections: { week: weekO
         }));
 
         setYearOptions(years);
-        setStartYear("2003");
-        setEndYear(maxYear.toString());
+        setAnalysisYear(maxYear.toString());
     }, []);
 
     // Trigger onSelectionChange whenever the year options or any of the other fields change
@@ -60,33 +58,33 @@ const CrossSegmentMenu: React.FC<{ onSelectionChange: (selections: { week: weekO
                 analysisLevelValue: analysisLevelValue,
                 analysisTypeValue: analysisTypeValue,
                 includeDecember: includeDecember,
-                startYear: startYear.toString(),
-                endYear: endYear.toString(),
+                analysisYear: analysisYear.toString(),
             });
         }
-    }, [weekValue, startYear, endYear, analysisLevelValue, analysisTypeValue, includeDecember, yearOptions.length, onSelectionChange]);
+    }, [weekValue, analysisYear, analysisLevelValue, analysisTypeValue, includeDecember, yearOptions.length, onSelectionChange]);
 
     return (
         <div style={{display:"flex", position:"relative"}}>
             <Sidebar 
-                analysisLevel={analysisLevelValue}
                 analysisType={analysisTypeValue}
-                startYear={startYear.toString()}
-                endYear={endYear.toString()}
+                startYear=''
+                endYear=''
                 analysisDay={weekValue}
+                analysisYear={analysisYear.toString()}
                 includeDecember={includeDecember}
-                onAnalysisLevelChange={setAnalysisLevelValue}
                 onAnalysisTypeChange={setAnalysisTypeValue}
-                onStartYearChange={setStartYear}
-                onEndYearChange={setEndYear}
+                onStartYearChange={setAnalysisYear}
+                onAnalysisYearChange={setAnalysisYear}
+                onEndYearChange={setAnalysisYear}
                 onAnalysisDayChange={setWeekValue}
                 onIncludeDecemberChange={setIncludeDecember}
                 yearOptions={yearOptions} // Pass the year dropdown options 
-                hideAnalysisLevels={true}
+                hideAnalysisYear={false}
+                hideStartEndYear={true}
             />
          </div>
     
     );
 };
 
-export default CrossSegmentMenu;
+export default TripLevelMenu;

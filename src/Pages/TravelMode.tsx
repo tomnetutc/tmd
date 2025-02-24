@@ -107,7 +107,6 @@ export default function TravelMode(): JSX.Element {
 
     // Removes the ith entry from the cross segment selections
     const handleProfileRemove = useCallback((IRemoveIndex: number) => {
-        console.log(IRemoveIndex);
         setCrossSegmentSelectedOptions(prevOptions => {
             const updatedOptions = prevOptions.filter((_, index) => index !== IRemoveIndex + 1);
             return updatedOptions;

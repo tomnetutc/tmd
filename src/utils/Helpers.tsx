@@ -8,6 +8,7 @@ import {
     analysisLevel,
     GroupedOptions,
     TripPurposeOption,
+    DayPatternOption,
     DataRow
 } from "../Types";
 import { DSVRowString } from "d3-dsv";
@@ -76,6 +77,22 @@ export const AnalysisTypes: analysisType[]=[
     }
 ]
 
+export const DayPatternAnalysisTypes: analysisType[]=[
+    {
+        label: "Within Year",
+        value: "withinyear",
+    },
+    {
+        label: "Between Year",
+        value: "betweenyear",
+    },
+    {
+        label: "Cross Segment",
+        value: "crosssegment",
+    }
+]
+
+
 export const TravelModeOptions: TravelModeOption[] = [
     {
         label: "All",
@@ -126,6 +143,44 @@ export const TravelModeOptions: TravelModeOption[] = [
         durationTrips: "mode_unknown_dur",
     },
 ];
+
+export const DayPatternOptions: DayPatternOption[] = [
+    { label: "H-W-H", value: "Home > Work > Home", numberTrip: "dp_H_W_H" },
+    { label: "H-Sh-H", value: "Home > Shopping > Home", numberTrip: "dp_H_Sh_H" },
+    { label: "H-SR-H", value: "Home > Social/Recreation > Home", numberTrip: "dp_H_SR_H" },
+    { label: "H-RV-H", value: "Home > Religious/Volunteer/Civic > Home", numberTrip: "dp_H_RV_H" },
+    { label: "H-D-H", value: "Home > Dining > Home", numberTrip: "dp_H_D_H" },
+    { label: "H-E-H", value: "Home > Errands > Home", numberTrip: "dp_H_E_H" },
+    { label: "H-C-H", value: "Home > Care > Home", numberTrip: "dp_H_C_H" },
+    { label: "H-Sh-Sh-H", value: "Home > Shopping > Shopping > Home", numberTrip: "dp_H_Sh_Sh_H" },
+    { label: "H-W-Sh-H", value: "Home > Work > Shopping > Home", numberTrip: "dp_H_W_Sh_H" },
+    { label: "H-SR-Sh-H", value: "Home > Social/Recreation > Shopping > Home", numberTrip: "dp_H_SR_Sh_H" },
+    { label: "H-Sh-H-SR-H", value: "Home > Shopping > Home > Social/Recreation > Home", numberTrip: "dp_H_Sh_H_SR_H" },
+    { label: "H-H", value: "Home > Home", numberTrip: "dp_H_H" },
+    { label: "H-W-H-SR-H", value: "Home > Work > Home > Social/Recreation > Home", numberTrip: "dp_H_W_H_SR_H" },
+    { label: "H-H-H", value: "Home > Home > Home", numberTrip: "dp_H_H_H" },
+    { label: "H-E-Sh-H", value: "Home > Errands > Shopping > Home", numberTrip: "dp_H_E_Sh_H" },
+    { label: "H-W-H-W-H", value: "Home > Work > Home > Work > Home", numberTrip: "dp_H_W_H_W_H" },
+    { label: "H-Sh-H-Sh-H", value: "Home > Shopping > Home > Shopping > Home", numberTrip: "dp_H_Sh_H_Sh_H" },
+    { label: "H-W-H-Sh-H", value: "Home > Work > Home > Shopping > Home", numberTrip: "dp_H_W_H_Sh_H" },
+    { label: "H-W-D-W-H", value: "Home > Work > Dining > Work > Home", numberTrip: "dp_H_W_D_W_H" },
+    { label: "H-W-W-H", value: "Home > Work > Work > Home", numberTrip: "dp_H_W_W_H" },
+    { label: "H-S-H", value: "Home > Education > Home", numberTrip: "dp_H_S_H" },
+    { label: "H-SR-H-SR-H", value: "Home > Social/Recreation > Home > Social/Recreation > Home", numberTrip: "dp_H_SR_H_SR_H" },
+    { label: "H-SR-SR-H", value: "Home > Social/Recreation > Social/Recreation > Home", numberTrip: "dp_H_SR_SR_H" },
+    { label: "H-RV-Sh-H", value: "Home > Religious/Volunteer/Civic > Shopping > Home", numberTrip: "dp_H_RV_Sh_H" },
+    { label: "H-Sh-Sh-Sh-H", value: "Home > Shopping > Shopping > Shopping > Home", numberTrip: "dp_H_Sh_Sh_Sh_H" },
+    { label: "H-C-H-C-H", value: "Home > Care > Home > Care > Home", numberTrip: "dp_H_C_H_C_H" },
+    { label: "H-Sh-SR-H", value: "Home > Shopping > Social/Recreation > Home", numberTrip: "dp_H_Sh_SR_H" },
+    { label: "H-D-Sh-H", value: "Home > Dining > Shopping > Home", numberTrip: "dp_H_D_Sh_H" },
+    { label: "H-W-SR-H", value: "Home > Work > Social/Recreation > Home", numberTrip: "dp_H_W_SR_H" },
+    { label: "H-RV-D-H", value: "Home > Religious/Volunteer/Civic > Dining > Home", numberTrip: "dp_H_RV_D_H" },
+    { label: "0", value: "No Travel", numberTrip: "dp_0" }
+];
+
+export const DayPatternMap: Record<string, string> = Object.fromEntries(
+    DayPatternOptions.map(option => [option.label, option.value])
+);
 
 export const TripPurposeOptions: TripPurposeOption[] = [
     {
@@ -933,6 +988,65 @@ export class TripLevelDataProvider {
     }
 }
 
+// Singleton class for data management
+export class DayPatternDataProvider {
+    private static instance: DayPatternDataProvider;
+    private data: DSVRowString<string>[] | null = null;
+    private loadingPromise: Promise<DSVRowString<string>[]> | null = null;
+
+    private constructor() { }
+
+    public static getInstance(): DayPatternDataProvider {
+        if (!DayPatternDataProvider.instance) {
+            DayPatternDataProvider.instance = new DayPatternDataProvider();
+        }
+        return DayPatternDataProvider.instance;
+    }
+    public static async getLength(): Promise<number> {
+        const instance = DayPatternDataProvider.getInstance();
+        
+        if (instance.data) {
+            return instance.data.length;
+        }
+        
+        try {
+            const data = await instance.loadData();
+            return data.length;
+        } catch (error) {
+            console.error("Error fetching data length:", error);
+            return 0;
+        }
+    }
+
+
+    public async loadData(): Promise<DSVRowString<string>[]> {
+        if (this.data !== null) {
+            return this.data; // Return the data if it's already loaded
+        }
+        if (this.loadingPromise) {
+            return this.loadingPromise; // Return the existing loading promise if it's already loading
+        }
+
+        // Load data and handle async lock
+        this.loadingPromise = this.loadFromSource().finally(() => {
+            this.loadingPromise = null; // Clear the loading promise after it's done
+        });
+
+        return this.loadingPromise;
+    }
+
+    private async loadFromSource(): Promise<DSVRowString<string>[]> {
+        try {
+            // Use d3.csv to fetch and parse the CSV file
+            this.data = await csv('https://storage.googleapis.com/mobility-dashboard-434821.appspot.com/dataset/day_pattern.csv');
+        } catch (error) {
+            console.error('Error loading data:', error);
+            throw error;
+        }
+        return this.data;
+    }
+}
+
 export const fetchAndFilterData = async (dataProvider: { loadData: () => Promise<any[]> }, selectedOptions: Option[], year: string, weekOption: weekOption, toggleState: boolean, filterUnemployed: boolean = false) => {
     try {
         const data = await dataProvider.loadData();
@@ -945,14 +1059,14 @@ export const fetchAndFilterData = async (dataProvider: { loadData: () => Promise
     //Added a conditional argument filterunemployed to filter the data without the unemployed data for Telework dashboard. This is a conditional argument hence by default it is false and doesn't expect a value
 };
 
-export const getTotalRowsForYear = async (dataProvider: { loadData: () => Promise<any[]> }, year: string, filterUnemployed: boolean = false) => {
+export const getTotalRowsForYear = async (dataProvider: { loadData: () => Promise<any[]> }, year: string) => {
     try {
         const data = await dataProvider.loadData();
-        return data.filter(row => row.year === year);
+        return data.filter(row => parseInt(row.year).toString() === year).length;
 
     } catch (error) {
         console.error('Error fetching data:', error);
-        return [];
+        return 0;
     }
 };
 

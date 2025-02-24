@@ -8,7 +8,7 @@ import { mean } from "d3";
 import SampleSizeTable from "../../SampleSizeTable";
 import RechartsLineChart from "../../LineChart/LineChart";
 import Select, { SingleValue } from 'react-select';
-import { travel_crossSegmentColors } from "../../Colors";
+import { Colors } from "../../Colors";
 
 
 interface CrossSegmentAnalysisProps {
@@ -269,8 +269,8 @@ const prepareChartData = (filteredData: DataRow[], menuSelectedOptions: Option[]
         ChartDataSets.push({
             label: (index == 0 ? 'All' : 'Segment ' + index),
             data: dataPoints,
-            borderColor: travel_crossSegmentColors[index],
-            backgroundColor: travel_crossSegmentColors[index],
+            borderColor: Colors[index],
+            backgroundColor: Colors[index],
             barThickness: 'flex',
         });
 

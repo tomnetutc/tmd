@@ -1,5 +1,5 @@
 import { ChartDataProps, CountObj, DataRow, SampleSizeTableProps, TravelModeOption, TripPurposeOption } from "../../Types"
-import { tripsColorsForBtwYears } from "../../Colors";
+import { Colors } from "../../Colors";
 
 export const prepareVerticalChartData = (filteredData: DataRow[], startYear: string, endYear: string, includeDecember: boolean | undefined): {
     tripsChartData: ChartDataProps,
@@ -53,8 +53,8 @@ export const prepareVerticalChartData = (filteredData: DataRow[], startYear: str
     type ChartDataSet = ChartDataProps['datasets'][number];
     let tripsChartDataSets: ChartDataSet[] = [];
 
-    const colorIndex = 0 % tripsColorsForBtwYears.length;
-    const tripBackgroundColor = tripsColorsForBtwYears[colorIndex];
+    const colorIndex = 0 % Colors.length;
+    const tripBackgroundColor = Colors[colorIndex];
 
     const tripData = labels.map(year => {
         const data = YearDataPerOption[year];

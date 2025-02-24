@@ -1,5 +1,5 @@
 import { ChartDataProps, CountObj, DataRow, SampleSizeTableProps, TravelModeOption } from "../../Types"
-import { tripsColorsForBtwYears } from "../../Colors";
+import { Colors } from "../../Colors";
 
 export const prepareVerticalChartData = (filteredData: DataRow[], startYear: string, endYear: string,includeDecember: boolean | undefined, optionValues: TravelModeOption[], activeOption: string): {
     tripsChartData: ChartDataProps,
@@ -67,8 +67,8 @@ export const prepareVerticalChartData = (filteredData: DataRow[], startYear: str
 
     optionValues.forEach((option, index) => {
 
-        const colorIndex = index % tripsColorsForBtwYears.length;
-        const tripBackgroundColor = tripsColorsForBtwYears[colorIndex];
+        const colorIndex = index % Colors.length;
+        const tripBackgroundColor = Colors[colorIndex];
 
         const tripData = labels.map(year => {
             const data = YearDataPerOption[option.label][year];

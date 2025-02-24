@@ -6,8 +6,7 @@ import TravelMode from './Pages/TravelMode';
 import ZeropTripMaking from './Pages/ZeroTripMaking';
 import {Home} from './Pages/Home';
 import {About} from './Pages/About';
-import {DayPattern} from './Pages/DayPattern';
-
+import DayPattern from './Pages/DayPattern';
 
 function App() {
   return (

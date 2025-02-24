@@ -1,22 +1,24 @@
-import { ChartDataProps, CountObj, DataRow, SampleSizeTableProps, TripPurposeOption } from "../../Types"
+import { ChartDataProps, CountObj, DataRow, SampleSizeTableProps, DayPatternOption } from "../../Types"
 import { Colors } from "../../Colors";
+import { colors } from "@mui/material";
 
-export const prepareVerticalChartData = (filteredData: DataRow[], startYear: string, endYear: string,includeDecember: boolean | undefined, optionValues: TripPurposeOption[], activeOption: string): {
+export const prepareVerticalChartData = (filteredData: DataRow[], startYear: string, endYear: string,includeDecember: boolean | undefined, optionValues: DayPatternOption[], activeOption: string): {
     tripsChartData: ChartDataProps,
-    durationChartData: ChartDataProps,
     minYear: string,
     maxYear: string,
     sampleSizeTableData: SampleSizeTableProps
 } => {
-
     // Filter data by startYear and endYear
     const filteredByYearData = filteredData.filter(dataRow => {
-        const year = dataRow['year'];
-        return year >= startYear && year <= endYear;
+        const year = parseInt(dataRow['year'], 10);
+        return year >= Number(startYear) && year <= Number(endYear);
     });
 
-    const uniqueYears = Array.from(new Set(filteredByYearData.map(item => item.year)))
-        .sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
+    const uniqueYears = Array.from(
+        new Set(filteredByYearData.map(item => parseInt(item.year, 10))) // Convert to integer first
+    ).sort((a, b) => a - b) // Ensure numeric sorting
+     .map(year => year.toString()); // Convert back to string
+    
 
     let countObj: CountObj = {
         data: filteredByYearData,
@@ -28,10 +30,13 @@ export const prepareVerticalChartData = (filteredData: DataRow[], startYear: str
         countObj.count.push([
             year.toString(),
             countObj.data.filter(row =>
-                row.year === year && (includeDecember || parseInt(row.month, 10) !== 12)
+                parseInt(row.year).toString() === year && (includeDecember || parseInt(row.month, 10) !== 12)
             ).length
         ]);
             });
+
+            console.log(uniqueYears);
+
 
     // Assume optionValue is now an array of options
     let YearDataPerOption: any = {};
@@ -43,19 +48,23 @@ export const prepareVerticalChartData = (filteredData: DataRow[], startYear: str
 
     // Aggregate data for each option and year
     filteredByYearData.forEach(dataRow => {
-        const year = dataRow['year'];
+        const year = parseInt(dataRow['year']).toString();
         optionValues.forEach(option => {
             if (!includeDecember && parseInt(dataRow.month, 10) == 12) {
                 return;
             }
             if (!YearDataPerOption[option.label][year]) {
-                YearDataPerOption[option.label][year] = { totalTrips: 0, totalDuration: 0, count: 0 };
+                YearDataPerOption[option.label][year] = { totalTrips: 0, count: 0 };
             }
-            YearDataPerOption[option.label][year].totalTrips += parseFloat(dataRow[option.numberTrip] || '0');
-            YearDataPerOption[option.label][year].totalDuration += parseFloat(dataRow[option.durationTrips] || '0');
+            if(dataRow.day_pattern === option.label){
+                YearDataPerOption[option.label][year].totalTrips += parseFloat('1');
+            }
+            // YearDataPerOption[option.label][year].totalTrips += parseFloat(dataRow[option.numberTrip] || '0');
             YearDataPerOption[option.label][year].count++;
         });
     });
+
+    console.log(YearDataPerOption);
 
     // Generate labels from the years available in filtered data
     const labels = Object.keys(YearDataPerOption[optionValues[0].label]).sort();
@@ -63,7 +72,6 @@ export const prepareVerticalChartData = (filteredData: DataRow[], startYear: str
     type ChartDataSet = ChartDataProps['datasets'][number];
     // Prepare chart data for each option
     let tripsChartDataSets: ChartDataSet[] = [];
-    let durationChartDataSets: ChartDataSet[] = [];
 
     optionValues.forEach((option, index) => {
 
@@ -72,26 +80,13 @@ export const prepareVerticalChartData = (filteredData: DataRow[], startYear: str
 
         const tripData = labels.map(year => {
             const data = YearDataPerOption[option.label][year];
-            return parseFloat((data.totalTrips / (data.count > 0 ? data.count : 1)).toFixed(2));
-        });
-
-        const durationData = labels.map(year => {
-            const data = YearDataPerOption[option.label][year];
-            return parseFloat((data.totalDuration / (data.count > 0 ? data.count : 1)).toFixed(1));
+            return parseFloat((data.totalTrips / (data.count > 0 ? data.count : 1)*100).toFixed(2));
         });
 
         // Add to datasets for trips and duration charts
         tripsChartDataSets.push({
             label: option.label,
             data: tripData,
-            borderColor: tripBackgroundColor,
-            backgroundColor: tripBackgroundColor,
-            barThickness: 'flex',
-        });
-
-        durationChartDataSets.push({
-            label: option.label,
-            data: durationData,
             borderColor: tripBackgroundColor,
             backgroundColor: tripBackgroundColor,
             barThickness: 'flex',
@@ -103,11 +98,6 @@ export const prepareVerticalChartData = (filteredData: DataRow[], startYear: str
         datasets: tripsChartDataSets,
     };
 
-    const durationChartData: ChartDataProps = {
-        labels,
-        datasets: durationChartDataSets,
-    };
-
     const sampleSizeTableData: SampleSizeTableProps = {
         years: labels,
         counts: [countObj],
@@ -115,7 +105,6 @@ export const prepareVerticalChartData = (filteredData: DataRow[], startYear: str
 
     return {
         tripsChartData,
-        durationChartData,
         minYear: uniqueYears[0],
         maxYear: uniqueYears[uniqueYears.length - 1],
         sampleSizeTableData

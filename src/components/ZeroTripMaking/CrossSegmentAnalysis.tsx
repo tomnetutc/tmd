@@ -7,7 +7,7 @@ import ProfileCards from "../ProfileCard/ProfileCards";
 import { mean } from "d3";
 import SampleSizeTable from "../../SampleSizeTable";
 import RechartsLineChart from "../../LineChart/LineChart";
-import { travel_crossSegmentColors } from "../../Colors";
+import { Colors } from "../../Colors";
 
 
 interface CrossSegmentAnalysisProps {
@@ -29,7 +29,7 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
     const [ChartData, setChartData] = useState<ChartDataProps>({ labels: [], datasets: [] });
     const [sampleSizeTableData, setSampleSizeTableData] = useState<SampleSizeTableProps>({ years: [], counts: [] });
     const [optionValue, setOptionValue] = useState<TravelModeOption>();
-    const [chartTitle, setChartTitle] = useState<string>("Average number of zero-trips");
+    const [chartTitle, setChartTitle] = useState<string>("Percent of Zero-Trip Makers (%)");
     
     
 
@@ -149,8 +149,8 @@ const prepareChartData = (filteredData: DataRow[], menuSelectedOptions: Option[]
         ChartDataSets.push({
             label: (index == 0 ? 'All' : 'Segment ' + index),
             data: dataPoints,
-            borderColor: travel_crossSegmentColors[index],
-            backgroundColor: travel_crossSegmentColors[index],
+            borderColor: Colors[index],
+            backgroundColor: Colors[index],
             barThickness: 'flex',
         });
 

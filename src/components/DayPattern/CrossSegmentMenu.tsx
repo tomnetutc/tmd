@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { max, selection } from 'd3';
-import { WeekOptions, TravelDataProvider, AnalysisLevels, AnalysisTypes } from '../../utils/Helpers';
+import { WeekOptions, TravelDataProvider, AnalysisLevels, DayPatternAnalysisTypes} from '../../utils/Helpers';
 import { weekOption, YearOption, analysisLevel, analysisType } from '../../Types';
-import Sidebar from '../../SideBar';
+import Sidebar from '../../SideBarDayPattern';
 import "../../css/dropdowns.css";
 
 const CrossSegmentMenu: React.FC<{ onSelectionChange: (selections: { week: weekOption, analysisLevelValue: analysisLevel, analysisTypeValue: analysisType, includeDecember: boolean, startYear: string, endYear: string}) => void,}> = ({ onSelectionChange }) => {
     const [weekValue, setWeekValue] = useState<weekOption>(WeekOptions[0]); // Defaulting to first option for demonstration
     const [analysisLevelValue, setAnalysisLevelValue] = useState<analysisLevel>(AnalysisLevels[0]); // Default analysis level
-    const [analysisTypeValue, setAnalysisTypeValue] = useState<analysisType>(AnalysisTypes[1]); // Default analysis type
+    const [analysisTypeValue, setAnalysisTypeValue] = useState<analysisType>(DayPatternAnalysisTypes[2]); // Default analysis type
     const [includeDecember, setIncludeDecember] = useState<boolean>(true); // Default toggle state
     const [startYear, setStartYear] = useState<string>(new Date().getFullYear().toString());
     const [endYear, setEndYear] = useState<string>(new Date().getFullYear().toString());
@@ -17,7 +17,7 @@ const CrossSegmentMenu: React.FC<{ onSelectionChange: (selections: { week: weekO
 
     // Load year options from cache or fetch data
     useEffect(() => {
-        const cacheKey = "2023UpdatedYearDataCacheKey";
+        const cacheKey = "2023YearDataCache";
         const cachedData = localStorage.getItem(cacheKey);
         const handleDataLoad = async () => {
             const data = await TravelDataProvider.getInstance().loadData();
@@ -69,20 +69,21 @@ const CrossSegmentMenu: React.FC<{ onSelectionChange: (selections: { week: weekO
     return (
         <div style={{display:"flex", position:"relative"}}>
             <Sidebar 
-                analysisLevel={analysisLevelValue}
                 analysisType={analysisTypeValue}
                 startYear={startYear.toString()}
                 endYear={endYear.toString()}
                 analysisDay={weekValue}
+                analysisYear=""
                 includeDecember={includeDecember}
-                onAnalysisLevelChange={setAnalysisLevelValue}
                 onAnalysisTypeChange={setAnalysisTypeValue}
                 onStartYearChange={setStartYear}
+                onAnalysisYearChange={setStartYear}
                 onEndYearChange={setEndYear}
                 onAnalysisDayChange={setWeekValue}
                 onIncludeDecemberChange={setIncludeDecember}
                 yearOptions={yearOptions} // Pass the year dropdown options 
-                hideAnalysisLevels={true}
+                hideAnalysisYear={true}
+                hideStartEndYear={false}
             />
          </div>
     
