@@ -18,7 +18,7 @@ const tooltipFormatter = (value: number, name: string) => {
     const mappedLabel = DayPatternMap[name] || name; // Map label using DayPatternMap, fallback to original name
 
     // Ensure formatting is consistent
-    const formattedValue = Number(value) % 1 === 0 ? `${value}.0` : value.toFixed(2);
+    const formattedValue = Number(value) % 1 === 0 ? `${value}.0` : value.toFixed(2)+'%';
 
     return [formattedValue, mappedLabel]; // Return value and updated label
 };
@@ -30,12 +30,7 @@ const RechartsLineChart: React.FC<{ chartData: ChartDataProps, title: string, sh
             obj[dataset.label] = dataset.data[index];
         });
         return obj;
-    });
-    const gg = (...args: any[]) => {
-        console.log("Tooltip arguments:", args);
-        return args;
-    };
-    
+    });    
 
     return (
         <div className="chart-container">
