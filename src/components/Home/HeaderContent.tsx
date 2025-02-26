@@ -17,20 +17,21 @@ export function HeaderContent(): JSX.Element {
       <div className="centerColumn">
         <div className="HeaderContent">
           <div className="contentWrapper">
-            <div className="logoContainer">
-              <span className="title" style={{ fontSize: 60, color: "#2B2F88" }}>TMD</span>
+          <div className="logoContainer">
+              <img src={Logo} alt="Logo" className="logo" />
             </div>
             <div className="textContainer">
               <span className="title">The Mobility Dashboard</span>
-              <span className="subtitle"><em>-- by TOMNET and TBD University Transportation Centers</em></span>
+              <span className="subtitle"><em>-- by TBD and TOMNET University Transportation Centers</em></span>
             </div>
+          </div>
+          <div className="demoButtonContainer">
+            <button className="demoButton" onClick={openModal}>WATCH DEMO</button>
+            <YouTubeModal isOpen={modalOpen} onClose={closeModal} videoId="8khT9BQESjw" />
           </div>
         </div>
       </div>
       <div className="rightColumn">
-        <div className="graphImageContainer">
-          <img src={graphImage} alt="Dashboard" className="graphImage" />
-        </div>
       </div>
     </div>
   );
