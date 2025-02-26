@@ -1,42 +1,66 @@
 import "../../App.css";
-import { HashLink as Link } from "react-router-hash-link";
+import React from 'react';
 
 export function Sidebar(): JSX.Element {
   const LinkStyle = {
     textDecoration: "none",
     color: "#2B2F88",
     fontSize: "16px",
-    // width: "50%",
     height: "100%",
     display: "flex",
     alignItems: "center",
     padding: "0 16px",
   };
+
+  const scrollToSection = (event: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    event.preventDefault();
+    const section = document.getElementById(id);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <div className="col col-lg-3">
       <div className="sidediv">
         <nav className="sidenavbar">
-        <ul className="sidenavbarlist">
+          <ul className="sidenavbarlist">
             <li className="sidenavbarlistitem">
-              <Link style={LinkStyle} to="/about#section1">
+              <a 
+                style={LinkStyle} 
+                href="/about#section1" 
+                onClick={(event) => scrollToSection(event, "section1")}
+              >
                 About
-              </Link>
+              </a>
             </li>
 
             <li className="sidenavbarlistitem">
-              <Link style={LinkStyle} to="/about#section2">
+              <a 
+                style={LinkStyle} 
+                href="/about#section2" 
+                onClick={(event) => scrollToSection(event, "section2")}
+              >
                 Data source
-              </Link>
+              </a>
             </li>
             <li className="sidenavbarlistitem">
-              <Link style={LinkStyle} to="/about#section3">
+              <a 
+                style={LinkStyle} 
+                href="/about#section3" 
+                onClick={(event) => scrollToSection(event, "section3")}
+              >
                 Team
-              </Link>
+              </a>
             </li>
             <li className="sidenavbarlistitem">
-              <Link style={LinkStyle} to="/about#section4">
+              <a 
+                style={LinkStyle} 
+                href="/about#section4" 
+                onClick={(event) => scrollToSection(event, "section4")}
+              >
                 Citations
-              </Link>
+              </a>
             </li>
           </ul>
         </nav>

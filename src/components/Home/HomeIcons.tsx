@@ -19,16 +19,16 @@ export function HomeIcons(): JSX.Element {
       <div style={{ display: "flex", gap: '5%', alignContent: 'center', marginBottom: '50px' }}>
         <div className="column">
             <div className="column">
-              <Link to="/" style={{ textDecoration: 'none' }}>
+              <Link to="/travelpurpose" style={{ textDecoration: 'none' }}>
                 <img src={TripPurposeLogo} alt="Logo" style={{ maxWidth: '200px', height: '200px', padding: 10 }} />
-                <p className="Header">Trip Purpose</p>
+                <p className="Header">Travel Purpose</p>
               </Link>
               <span className="spanDescText">Understand why people travel and how it shapes mobility trends.</span>
             </div>
           </div>
         <div className="column">
           <div className="column">
-            <Link to="/timeuse" style={{ textDecoration: 'none' }}>
+            <Link to="/travelmode" style={{ textDecoration: 'none' }}>
               <img src={TravelModelogo} alt="Logo" style={{ maxWidth: '200px', height: '200px', padding: 10 }} />
               <p className="Header">Travel Mode</p>
             </Link>
@@ -36,14 +36,14 @@ export function HomeIcons(): JSX.Element {
           </div>
         </div>
         <div className="column">
-          <Link to="/travel" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <Link to="/zerotripmaking" style={{ textDecoration: 'none', color: 'inherit' }}>
             <img src={ZeroTripLogo} alt="Logo" style={{ maxWidth: '200px', height: '200px', padding: 10 }} />
             <p className="Header">Zero-Trip Making</p>
           </Link>
           <span className="spanDescText">Analyze the patterns of those who do not travel on a given day</span>
         </div>
         <div className="column">
-          <Link to="/telework" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <Link to="/daypattern" style={{ textDecoration: 'none', color: 'inherit' }}>
             <img src={DayPatternLogo} alt="Logo" style={{ maxWidth: '200px', height: '200px', padding: 10 }} />
             <p className="Header">Day Pattern</p>
           </Link>

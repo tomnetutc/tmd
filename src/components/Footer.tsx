@@ -13,6 +13,7 @@ import tomnetLogo from '../images/Logo/tomnet.png';
 //         tracking(docRefID, page, expiry);
 //     }, []);
 export default function Footer(): JSX.Element{
+    const currentYear = new Date().getFullYear();
     return (
         <div style={{ 
             zIndex: 1000, 
@@ -127,7 +128,7 @@ export default function Footer(): JSX.Element{
                         width: "100%",
                     }}
                 >
-                    &copy; 2024 TBD National Center
+                    &copy; {currentYear} TBD National Center
                 </span>
             </div>
         </div>
