@@ -1,16 +1,39 @@
 {
   "files": {
-    "main.css": "/tmd/static/css/main.7dfaf795.css",
-    "main.js": "/tmd/static/js/main.48f98f9e.js",
+    "main.css": "/tmd/static/css/main.b806fdab.css",
+    "main.js": "/tmd/static/js/main.ea47dbb3.js",
     "static/js/453.e83714ab.chunk.js": "/tmd/static/js/453.e83714ab.chunk.js",
-    "static/media/Graph.png": "/tmd/static/media/Graph.b0699f8614111038d532.png",
+    "static/media/TravelModeLogo.svg": "/tmd/static/media/TravelModeLogo.0fa30e5af4a40090ff8dc87c9f0c5cb7.svg",
+    "static/media/utaustin.png": "/tmd/static/media/utaustin.4d9c4d8501c077e9dfcb.png",
+    "static/media/rvarghese.jpeg": "/tmd/static/media/rvarghese.4f62fd57b80c17fdadda.jpeg",
+    "static/media/mohammed.jpg": "/tmd/static/media/mohammed.fe3b988daa3f1e3a7d01.jpg",
+    "static/media/spolzin.png": "/tmd/static/media/spolzin.489c628344b9c9a42231.png",
+    "static/media/us-dot.png": "/tmd/static/media/us-dot.b1e24565fc71f21c4ab1.png",
+    "static/media/rpendyala.png": "/tmd/static/media/rpendyala.ac1140527b497c3c02ed.png",
+    "static/media/TripPurposeLogo.svg": "/tmd/static/media/TripPurposeLogo.75135f6c5b2e943d7b7fd520c9eb8d10.svg",
+    "static/media/asu.png": "/tmd/static/media/asu.dd3034a1c788d6228ec6.png",
+    "static/media/tomnet.png": "/tmd/static/media/tomnet.acf267644c12e604d5ef.png",
+    "static/media/cbhat.jpg": "/tmd/static/media/cbhat.2e00f4680af0d2426189.jpg",
+    "static/media/tbd.png": "/tmd/static/media/tbd.87218437eb2c8eab3ecd.png",
+    "static/media/plmokhtarian.webp": "/tmd/static/media/plmokhtarian.263543767058fcd76a50.webp",
+    "static/media/ZeroTripLogo.svg": "/tmd/static/media/ZeroTripLogo.0ad108bf96f9aacf0412be5941b24c2c.svg",
+    "static/media/ibatur.jpg": "/tmd/static/media/ibatur.7609cb8082a7ecf6b27c.jpg",
+    "static/media/DayPatternLogo.svg": "/tmd/static/media/DayPatternLogo.f6ffeebd6481462b3013fe39b27800dc.svg",
+    "static/media/cchen.jpeg": "/tmd/static/media/cchen.4df3ef3eb7b58cf94a65.jpeg",
+    "static/media/HowItWorksLogo.svg": "/tmd/static/media/HowItWorksLogo.a6817e85aba56bc567dd17f1b389f60b.svg",
+    "static/media/MultiLevelAnalysisLogo.svg": "/tmd/static/media/MultiLevelAnalysisLogo.92a709e2b00079d1626f160f29b73d7c.svg",
+    "static/media/time-clockk.svg": "/tmd/static/media/time-clockk.d68ea253fb0cfed0d47c1358fe7a771d.svg",
+    "static/media/CustomizableInsightsLogo.svg": "/tmd/static/media/CustomizableInsightsLogo.101369838f7f151c9e57e5eb2db6fb9f.svg",
+    "static/media/LogoSVG.svg": "/tmd/static/media/LogoSVG.faf974c4244bf8af4c4ba992be58ee1d.svg",
+    "static/media/ComprehensiveComparisonToolsLogo.svg": "/tmd/static/media/ComprehensiveComparisonToolsLogo.0875c258a4f1599f281fbe46f489fdca.svg",
+    "static/media/FeaturesLogo.svg": "/tmd/static/media/FeaturesLogo.16865a86e1f064685a12650c98a3ef95.svg",
     "index.html": "/tmd/index.html",
-    "main.7dfaf795.css.map": "/tmd/static/css/main.7dfaf795.css.map",
-    "main.48f98f9e.js.map": "/tmd/static/js/main.48f98f9e.js.map",
+    "main.b806fdab.css.map": "/tmd/static/css/main.b806fdab.css.map",
+    "main.ea47dbb3.js.map": "/tmd/static/js/main.ea47dbb3.js.map",
     "453.e83714ab.chunk.js.map": "/tmd/static/js/453.e83714ab.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.7dfaf795.css",
-    "static/js/main.48f98f9e.js"
+    "static/css/main.b806fdab.css",
+    "static/js/main.ea47dbb3.js"
   ]
 }
