@@ -12,7 +12,14 @@ import {
 } from "chart.js";
 import { TripChartDataProps } from "../Types";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, ChartTitle, ChartTooltip, ChartLegend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  ChartTitle,
+  ChartTooltip,
+  ChartLegend
+);
 
 interface HistogramProps {
   chartData: TripChartDataProps;
@@ -20,6 +27,7 @@ interface HistogramProps {
   xAxisLabel?: string;
   yAxisLabel?: string;
   showLegend?: boolean;
+  showSampleSize?: boolean; // New prop to control sample size display
   invertAxis?: boolean;
 }
 
@@ -29,8 +37,11 @@ const HistogramChart: React.FC<HistogramProps> = ({
   xAxisLabel = "",
   yAxisLabel = "",
   showLegend = true,
+  showSampleSize = false, // Default to false
   invertAxis = false,
 }) => {
+  const formatter = new Intl.NumberFormat("en-US");
+
   // Process labels: if a label is an array, join its items with a comma
   const finalLabels = chartData.labels.map((lbl) =>
     Array.isArray(lbl) ? lbl.join(", ") : lbl
@@ -38,7 +49,9 @@ const HistogramChart: React.FC<HistogramProps> = ({
 
   // Process each dataset: round each data point to one decimal place
   const finalDatasets = chartData.datasets.map((dataset) => ({
-    label: dataset.label,
+    label: showSampleSize
+      ? `${dataset.label} (n=${formatter.format(dataset.totalNum)})`
+      : dataset.label,
     data: dataset.data.map((value) => parseFloat(value.toFixed(2))),
     backgroundColor: dataset.backgroundColor,
   }));
@@ -48,54 +61,31 @@ const HistogramChart: React.FC<HistogramProps> = ({
     datasets: finalDatasets,
   };
 
-  // Explicitly typing indexAxis as "x" or "y" resolves the type error
   const indexAxis: "x" | "y" = invertAxis ? "x" : "y";
 
   const scales = invertAxis
     ? {
-        // Vertical bar chart: x becomes the category axis, y the value axis.
         x: {
           grid: { display: false },
-          ticks: {
-            font: { size: 12 },
-          },
-          title: {
-            display: Boolean(yAxisLabel),
-            text: yAxisLabel,
-          },
+          ticks: { font: { size: 12 } },
+          title: { display: Boolean(yAxisLabel), text: yAxisLabel },
         },
         y: {
           grid: {},
-          ticks: {
-            font: { size: 12 },
-          },
-          title: {
-            display: Boolean(xAxisLabel),
-            text: xAxisLabel,
-          },
+          ticks: { font: { size: 12 } },
+          title: { display: Boolean(xAxisLabel), text: xAxisLabel },
         },
       }
     : {
-        // Horizontal bar chart: x becomes the value axis, y the category axis.
         x: {
           grid: {},
-          ticks: {
-            font: { size: 12 },
-          },
-          title: {
-            display: Boolean(xAxisLabel),
-            text: xAxisLabel,
-          },
+          ticks: { font: { size: 12 } },
+          title: { display: Boolean(xAxisLabel), text: xAxisLabel },
         },
         y: {
           grid: { display: false },
-          ticks: {
-            font: { size: 12 },
-          },
-          title: {
-            display: Boolean(yAxisLabel),
-            text: yAxisLabel,
-          },
+          ticks: { font: { size: 12 } },
+          title: { display: Boolean(yAxisLabel), text: yAxisLabel },
         },
       };
 
@@ -105,15 +95,10 @@ const HistogramChart: React.FC<HistogramProps> = ({
     maintainAspectRatio: false,
     scales: scales,
     plugins: {
-      datalabels: {
-        display: false, // This truly disables on-bar labels
-      },
-      legend: {
-        display: showLegend,
-      },
+      datalabels: { display: false },
+      legend: { display: showLegend },
       tooltip: {
         callbacks: {
-          // Format tooltip values to two decimals with a "%" sign
           label: (context: any) => {
             const val = context.raw;
             return `${parseFloat(val.toFixed(2))}%`;

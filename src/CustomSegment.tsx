@@ -1,21 +1,28 @@
-import React from 'react';
-import './css/CustomSegment.scss';
+import React from "react";
+import "./css/CustomSegment.scss";
 
 interface Props {
   title: string;
   segmentSize: string;
-  unit : string;
+  unit: string;
 }
 
-const CustomSegment: React.FC<Props> = ({title,segmentSize , unit}) => {
+const CustomSegment: React.FC<Props> = ({ title, segmentSize, unit }) => {
   return (
-    <div  className="container">
-<div className="segment-container">
-  <div className="segment-item">
-    <label htmlFor="segmentSize">{title} <b>{segmentSize}</b> {unit}</label>
+    <div className="container">
+      <div className="segment-container">
+        <div className="segment-item">
+          <label htmlFor="segmentSize">{title}</label>
+          <input
+            id="segmentSize"
+            type="text"
+            style={{ fontWeight: "bold" }}
+            value={`${segmentSize} ${unit}`}
+            readOnly
+          />
+        </div>
       </div>
-</div>
-</div>
+    </div>
   );
 };
 

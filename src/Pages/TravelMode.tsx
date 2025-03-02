@@ -1,192 +1,206 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { useDocumentTitle } from '../utils/Helpers';
-import NavBar from '../Navbar';
-import TopMenu from '../TopMenu';
-import { Option } from '../Types';
-import { weekOption, analysisLevel, analysisType } from '../Types';
-import { AnalysisLevels } from '../utils/Helpers';
-import '../css/travelpurpose.scss';
-import '../css/dropdowns.css';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap is loaded if needed
-import BtwYearMenu from '../components/TravelMode/BtwYearMenu';
-import CrossSegmentMenu from '../components/TravelMode/CrossSegmentMenu';
-import BtwYearAnalysis from '../components/TravelMode/BtwYearAnalysis';
-import CrossSegmentAnalysis from '../components/TravelMode/CrossSegmentAnalysis';
-import CrossSegmentTopMenu from '../components/CrossSegmentTopMenu';
-import TripLevelMenu from '../components/TravelMode/TripLevelMenu';
-import TripLevelAnalysis from '../components/TravelMode/TripLevelAnalysis';
-import LoadingOverlay from '../components/LoadingOverlay';
+import React, { useState, useCallback } from "react";
+import { useDocumentTitle } from "../utils/Helpers";
+import NavBar from "../Navbar";
+import TopMenu from "../TopMenu";
+import { Option } from "../Types";
+import { weekOption, analysisLevel, analysisType } from "../Types";
+import { AnalysisLevels } from "../utils/Helpers";
+import "../css/travelpurpose.scss";
+import "../css/dropdowns.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import BtwYearMenu from "../components/TravelMode/BtwYearMenu";
+import CrossSegmentMenu from "../components/TravelMode/CrossSegmentMenu";
+import BtwYearAnalysis from "../components/TravelMode/BtwYearAnalysis";
+import CrossSegmentAnalysis from "../components/TravelMode/CrossSegmentAnalysis";
+import CrossSegmentTopMenu from "../components/CrossSegmentTopMenu";
+import TripLevelMenu from "../components/TravelMode/TripLevelMenu";
+import TripLevelAnalysis from "../components/TravelMode/TripLevelAnalysis";
+import LoadingOverlay from "../components/LoadingOverlay";
+import CircularProgress from "../CircularprogressBar";
 
 interface Selections {
-    week?: weekOption;
-    analysisLevelValue?: analysisLevel;
-    analysisTypeValue?: analysisType;
-    includeDecember?: boolean;
-    startYear?: string;
-    endYear?: string;
+  week?: weekOption;
+  analysisLevelValue?: analysisLevel;
+  analysisTypeValue?: analysisType;
+  includeDecember?: boolean;
+  startYear?: string;
+  endYear?: string;
 }
 
 interface TripSelections {
-    week?: weekOption;
-    analysisLevelValue?: analysisLevel;
-    includeDecember?: boolean;
-    analysisYear?: string;
+  week?: weekOption;
+  analysisLevelValue?: analysisLevel;
+  includeDecember?: boolean;
+  analysisYear?: string;
 }
 
 export default function TravelMode(): JSX.Element {
-    useDocumentTitle('travelmode');
-    const [currAnalysisLevel, setCurrAnalaysisLevel] = useState<analysisLevel>(AnalysisLevels[0]);
-    const [menuSelectedOptions, setMenuSelectedOptions] = useState<Option[]>([]);
-    const [crossSegmentSelectedOptions, setCrossSegmentSelectedOptions] = useState<Option[][]>([[]]);
-    const [isBtwYearLoading, setIsBtwYearLoading] = useState(true);
-    const [isCrossSegmentLoading, setIsCrossSegmentLoading] = useState(true);
-    const [istripLevelAnalysisLoading, setIsTripLevelAnalysisLoading] = useState(true);
+  useDocumentTitle("travelmode");
 
+  const [currAnalysisLevel, setCurrAnalaysisLevel] = useState<analysisLevel>(
+    AnalysisLevels[0]
+  );
+  const [menuSelectedOptions, setMenuSelectedOptions] = useState<Option[]>([]);
+  const [crossSegmentSelectedOptions, setCrossSegmentSelectedOptions] =
+    useState<Option[][]>([[]]);
+  const [isBtwYearLoading, setIsBtwYearLoading] = useState(true);
+  const [isCrossSegmentLoading, setIsCrossSegmentLoading] = useState(true);
+  const [isTripLevelAnalysisLoading, setIsTripLevelAnalysisLoading] =
+    useState(true);
+  const [progress, setProgress] = useState<number>(0);
 
-    // Initialize selections state
-    const [selections, setSelections] = useState<Selections>({
-        week: undefined,
-        analysisLevelValue: undefined,
-        analysisTypeValue: undefined,
-        includeDecember: undefined,
-        startYear: undefined,
-        endYear: undefined,
+  const [selections, setSelections] = useState<Selections>({
+    week: undefined,
+    analysisLevelValue: undefined,
+    analysisTypeValue: undefined,
+    includeDecember: undefined,
+    startYear: undefined,
+    endYear: undefined,
+  });
+
+  const [tripSelections, setTripSelections] = useState<TripSelections>({
+    week: undefined,
+    analysisLevelValue: undefined,
+    includeDecember: undefined,
+    analysisYear: undefined,
+  });
+
+  const handleMenuOptionChange = useCallback(
+    (options: Option[] | Option[][]) => {
+      const isOptionArrayArray = Array.isArray(options[0]);
+
+      if (!isOptionArrayArray) {
+        const optionsArray = options as Option[];
+        setMenuSelectedOptions((prevOptions) => {
+          if (JSON.stringify(prevOptions) !== JSON.stringify(optionsArray)) {
+            return optionsArray;
+          }
+          return prevOptions;
+        });
+      }
+    },
+    []
+  );
+
+  const handleSelectionChange = useCallback((newSelections: Selections) => {
+    setSelections((prev) => ({
+      ...prev,
+      ...newSelections,
+    }));
+    setCurrAnalaysisLevel((prev) => {
+      if (newSelections.analysisLevelValue != undefined)
+        return newSelections.analysisLevelValue;
+      else return prev;
     });
+  }, []);
 
-    const [tripSelections, setTripSelections] = useState<TripSelections>({
-        week: undefined,
-        analysisLevelValue: undefined,
-        includeDecember: undefined,
-        analysisYear: undefined,
+  const handleTripSelectionChange = useCallback(
+    (newSelections: TripSelections) => {
+      setCurrAnalaysisLevel((prev) => {
+        if (newSelections.analysisLevelValue != undefined)
+          return newSelections.analysisLevelValue;
+        else return prev;
+      });
+      setTripSelections((prev) => ({
+        ...prev,
+        ...newSelections,
+      }));
+    },
+    []
+  );
+
+  const handleProfileRemove = useCallback((IRemoveIndex: number) => {
+    setCrossSegmentSelectedOptions((prevOptions) => {
+      const updatedOptions = prevOptions.filter(
+        (_, index) => index !== IRemoveIndex + 1
+      );
+      return updatedOptions;
     });
+  }, []);
 
-    // Callback to handle menu option changes for single selections
-    const handleMenuOptionChange = useCallback((options: Option[] | Option[][]) => {
-        const isOptionArrayArray = Array.isArray(options[0]);
+  const handleCrossSegmentOptionSubmit = useCallback(
+    (selectedOption: Option[]) => {
+      setCrossSegmentSelectedOptions((prevOptions) => {
+        const updatedOptions = [
+          ...prevOptions,
+          selectedOption.filter(Boolean) as Option[],
+        ];
+        return updatedOptions;
+      });
+    },
+    []
+  );
 
-        if (!isOptionArrayArray) {
-            const optionsArray = options as Option[];
-            setMenuSelectedOptions(prevOptions => {
-                if (JSON.stringify(prevOptions) !== JSON.stringify(optionsArray)) {
-                    console.log("Menu options updated:", optionsArray);
-                    return optionsArray;
-                }
-                return prevOptions;
-            });
-
-        }
-    }, []);
-
-    // Callback to update top menu selections
-    const handleSelectionChange = useCallback((newSelections: Selections) => {
-        setSelections(prev => ({
-            ...prev,
-            ...newSelections
-        }));
-        setCurrAnalaysisLevel(prev => {
-            console.log(newSelections);
-            if (newSelections.analysisLevelValue != undefined)
-                return newSelections.analysisLevelValue;
-            else return prev;
-        });
-    }, []);
-
-    // Callback to update trip selections
-    const handleTripSelectionChange = useCallback((newSelections: TripSelections) => {
-        setCurrAnalaysisLevel(prev => {
-            console.log(newSelections.analysisLevelValue);
-            if (newSelections.analysisLevelValue != undefined)
-                return newSelections.analysisLevelValue;
-            else return prev;
-        });
-        setTripSelections(prev => ({
-            ...prev,
-            ...newSelections
-        }));
-    }, []);
-
-    // Removes the ith entry from the cross segment selections
-    const handleProfileRemove = useCallback((IRemoveIndex: number) => {
-        setCrossSegmentSelectedOptions(prevOptions => {
-            const updatedOptions = prevOptions.filter((_, index) => index !== IRemoveIndex + 1);
-            return updatedOptions;
-        });
-    }, []);
-
-    const handleCrossSegmentOptionSubmit = useCallback((selectedOption: Option[]) => {
-        setCrossSegmentSelectedOptions(prevOptions => {
-            const updatedOptions = [...prevOptions, selectedOption.filter(Boolean) as Option[]];
-            return updatedOptions;
-        });
-    }, []);
-
-    return (
-        <div className="app-layout">
-            <NavBar/>
-            {
-                ((currAnalysisLevel?.value === 'person' && 
-                  ((selections.analysisTypeValue?.value === 'crosssegment' && isCrossSegmentLoading) || 
-                   (selections.analysisTypeValue?.value === 'betweenyear' && isBtwYearLoading))) || 
-                 (currAnalysisLevel?.value === 'trip' && istripLevelAnalysisLoading)) && <LoadingOverlay />
-            }
-            <div className="content-wrapper">
-                {(currAnalysisLevel?.value === 'person') ? (
-                    <div className="content-wrapper">
-                        {selections.analysisTypeValue?.value === 'crosssegment' ? (
-                            <CrossSegmentTopMenu
-                                filterOptionsForTelework={false}
-                                onSubmit={handleCrossSegmentOptionSubmit}
-                                crossSegmentSelections={crossSegmentSelectedOptions}
-                            />
-
-                        ) : (
-                            <TopMenu onOptionChange={handleMenuOptionChange} />
-                        )}
-                        <div className="main-area">
-                            {selections.analysisTypeValue?.value === 'crosssegment' ? (
-                                <CrossSegmentMenu onSelectionChange={handleSelectionChange} />
-
-                            ) : (
-                                <BtwYearMenu onSelectionChange={handleSelectionChange} />
-
-                            )}
-                            <div className="main-content">
-                                {selections.analysisTypeValue?.value === 'crosssegment' ? (
-                                    <CrossSegmentAnalysis
-                                        menuSelectedOptions={crossSegmentSelectedOptions}
-                                        toggleState={false}
-                                        selections={selections}
-                                        setIsCrossSegmentLoading= {setIsCrossSegmentLoading}
-                                        onProfileRemove={handleProfileRemove}
-                                    />
-                                ) : (
-                                    <BtwYearAnalysis
-                                        menuSelectedOptions={menuSelectedOptions}
-                                        toggleState={false}
-                                        selections={selections}
-                                        setIsBtwYearLoading={setIsBtwYearLoading}
-                                    />
-                                )}
-                            </div>
-                        </div>
-                    </div>
+  return (
+    <div className="app-layout">
+      <NavBar />
+      {/* {((currAnalysisLevel?.value === "person" &&
+        ((selections.analysisTypeValue?.value === "crosssegment" &&
+          isCrossSegmentLoading) ||
+          (selections.analysisTypeValue?.value === "betweenyear" &&
+            isBtwYearLoading))) ||
+        (currAnalysisLevel?.value === "trip" &&
+          isTripLevelAnalysisLoading)) && <LoadingOverlay />} */}
+      <div className="content-wrapper">
+        {currAnalysisLevel?.value === "person" ? (
+          <div className="content-wrapper">
+            {selections.analysisTypeValue?.value === "crosssegment" ? (
+              <CrossSegmentTopMenu
+                filterOptionsForTelework={false}
+                onSubmit={handleCrossSegmentOptionSubmit}
+                crossSegmentSelections={crossSegmentSelectedOptions}
+              />
+            ) : (
+              <TopMenu onOptionChange={handleMenuOptionChange} />
+            )}
+            <div className="main-area">
+              {selections.analysisTypeValue?.value === "crosssegment" ? (
+                <CrossSegmentMenu onSelectionChange={handleSelectionChange} />
+              ) : (
+                <BtwYearMenu onSelectionChange={handleSelectionChange} />
+              )}
+              <div className="main-content">
+                {progress <= 100 && <CircularProgress progress={progress} />}
+                {selections.analysisTypeValue?.value === "crosssegment" ? (
+                  <CrossSegmentAnalysis
+                    menuSelectedOptions={crossSegmentSelectedOptions}
+                    toggleState={false}
+                    selections={selections}
+                    setProgress={setProgress}
+                    setIsCrossSegmentLoading={setIsCrossSegmentLoading}
+                    onProfileRemove={handleProfileRemove}
+                  />
                 ) : (
-                    <div className="content-wrapper">
-                        <div className="main-area">
-                            <TopMenu onOptionChange={handleMenuOptionChange} />
-                            <TripLevelMenu onSelectionChange={handleTripSelectionChange} />
-                            <div className="main-content">
-                                <TripLevelAnalysis
-                                    menuSelectedOptions={menuSelectedOptions}
-                                    toggleState={false}
-                                    selections={tripSelections}
-                                    setIsTripLevelAnalysisLoading={setIsTripLevelAnalysisLoading}
-                                />
-                            </div>
-                        </div>
-                    </div>
+                  <BtwYearAnalysis
+                    menuSelectedOptions={menuSelectedOptions}
+                    toggleState={false}
+                    selections={selections}
+                    setProgress={setProgress}
+                    setIsBtwYearLoading={setIsBtwYearLoading}
+                  />
                 )}
+              </div>
             </div>
-        </div>
-    );
-}    
+          </div>
+        ) : (
+          <div className="content-wrapper">
+            <div className="main-area">
+              <TopMenu onOptionChange={handleMenuOptionChange} />
+              <TripLevelMenu onSelectionChange={handleTripSelectionChange} />
+              <div className="main-content">
+                {progress <= 100 && <CircularProgress progress={progress} />}
+                <TripLevelAnalysis
+                  menuSelectedOptions={menuSelectedOptions}
+                  toggleState={false}
+                  selections={tripSelections}
+                  setProgress={setProgress}
+                  setIsTripLevelAnalysisLoading={setIsTripLevelAnalysisLoading}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

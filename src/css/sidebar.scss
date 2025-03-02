@@ -1,83 +1,70 @@
-
 .sidebar {
-    background-color: white;
-    padding: 20px;
-    padding-top: 13px;
-    width: 300px;
-    position: sticky;
-    top: 105px; /* Same height as the navbar */
-    flex-shrink: 0; /* Prevent the sidebar from shrinking */
-    overflow-y: auto; /* Add scrolling if content overflows */
-    border-top: 2px solid #ccc;
-    border-right: 2px solid #ccc;
+  background-color: white;
+  padding: 20px;
+  padding-top: 13px;
+  width: 300px;
+  position: sticky;
+  top: 105px; /* Same height as the navbar */
+  flex-shrink: 0; /* Prevent the sidebar from shrinking */
+  overflow-y: auto; /* Add scrolling if content overflows */
+  border-top: 2px solid #ccc;
+  border-right: 2px solid #ccc;
 
-    .sideBarHeading {
-        font-size: 15px;
-        font-weight: 600;
-        text-align: center; 
-        width: 100%; 
-        margin-bottom: 10px; 
-    }
-    
+  .sideBarHeading {
+    font-size: 15px;
+    font-weight: 600;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 10px;
+  }
 
-    .sideBarMenu {
-        display: flex;
-        flex-direction: column;
-        gap: 20px; /* Space between each form group */
-    }
+  .sideBarMenu {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Space between each form group */
+  }
 
-    .form-container {
-        background-color: #eeeeee;
-        padding:20px 15px;
-        border-radius: 12px;
-    }
+  .form-container {
+    background-color: #eeeeee;
+    padding: 20px 15px;
+    border-radius: 12px;
+  }
 
-    .form-group {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 
-        .year-option{
-            display: flex;
-            flex-direction: row;
-            align-items: center; 
-            gap: 10px;
+    .year-option,
+    .year-option-2 {
+      display: flex;
+      flex-direction: row; /* Stack items vertically */
+      align-items: center; /* Center align items */
+      justify-content: center; /* Center content inside */
+      text-align: center;
+      gap: 5px; /* Add spacing between label and dropdown */
+      width: 100%; /* Ensure it takes full width */
 
-            .dropdown {
-                width: 60%;
-                font-size: 14px;
-            }
-    
-        }
-
-        
-        .year-option-2{
-            display: flex;
-            flex-direction: row;
-            align-items: center; 
-            gap: 12px;
-
-            .dropdown {
-                width: 60%;
-                font-size: 14px;
-            }
-    
-        }
-
-        label,p {
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .dropdown {
-            font-size: 14px;
-        }
-
-        .toggle {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-        }    
+      .dropdown {
+        width: 60%;
+        font-size: 14px;
+      }
     }
 
+    label,
+    p {
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .dropdown {
+      font-size: 14px;
+    }
+
+    .toggle {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+  }
 }
