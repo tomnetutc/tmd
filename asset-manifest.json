@@ -1,8 +1,9 @@
 {
   "files": {
-    "main.css": "/tmd/static/css/main.b806fdab.css",
-    "main.js": "/tmd/static/js/main.ea47dbb3.js",
+    "main.css": "/tmd/static/css/main.b720bef0.css",
+    "main.js": "/tmd/static/js/main.2a9cf21b.js",
     "static/js/453.e83714ab.chunk.js": "/tmd/static/js/453.e83714ab.chunk.js",
+    "static/media/SVGLogo.svg": "/tmd/static/media/SVGLogo.10877a8d6a8227f615b4eb80df2e7640.svg",
     "static/media/TravelModeLogo.svg": "/tmd/static/media/TravelModeLogo.0fa30e5af4a40090ff8dc87c9f0c5cb7.svg",
     "static/media/utaustin.png": "/tmd/static/media/utaustin.4d9c4d8501c077e9dfcb.png",
     "static/media/rvarghese.jpeg": "/tmd/static/media/rvarghese.4f62fd57b80c17fdadda.jpeg",
@@ -22,18 +23,17 @@
     "static/media/cchen.jpeg": "/tmd/static/media/cchen.4df3ef3eb7b58cf94a65.jpeg",
     "static/media/HowItWorksLogo.svg": "/tmd/static/media/HowItWorksLogo.a6817e85aba56bc567dd17f1b389f60b.svg",
     "static/media/MultiLevelAnalysisLogo.svg": "/tmd/static/media/MultiLevelAnalysisLogo.92a709e2b00079d1626f160f29b73d7c.svg",
-    "static/media/time-clockk.svg": "/tmd/static/media/time-clockk.d68ea253fb0cfed0d47c1358fe7a771d.svg",
     "static/media/CustomizableInsightsLogo.svg": "/tmd/static/media/CustomizableInsightsLogo.101369838f7f151c9e57e5eb2db6fb9f.svg",
     "static/media/LogoSVG.svg": "/tmd/static/media/LogoSVG.faf974c4244bf8af4c4ba992be58ee1d.svg",
     "static/media/ComprehensiveComparisonToolsLogo.svg": "/tmd/static/media/ComprehensiveComparisonToolsLogo.0875c258a4f1599f281fbe46f489fdca.svg",
     "static/media/FeaturesLogo.svg": "/tmd/static/media/FeaturesLogo.16865a86e1f064685a12650c98a3ef95.svg",
     "index.html": "/tmd/index.html",
-    "main.b806fdab.css.map": "/tmd/static/css/main.b806fdab.css.map",
-    "main.ea47dbb3.js.map": "/tmd/static/js/main.ea47dbb3.js.map",
+    "main.b720bef0.css.map": "/tmd/static/css/main.b720bef0.css.map",
+    "main.2a9cf21b.js.map": "/tmd/static/js/main.2a9cf21b.js.map",
     "453.e83714ab.chunk.js.map": "/tmd/static/js/453.e83714ab.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.b806fdab.css",
-    "static/js/main.ea47dbb3.js"
+    "static/css/main.b720bef0.css",
+    "static/js/main.2a9cf21b.js"
   ]
 }
