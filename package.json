@@ -20,6 +20,7 @@
     "chart.js": "^4.4.4",
     "d3": "^7.9.0",
     "export-from-json": "^1.7.4",
+    "firebase": "^11.4.0",
     "react-bootstrap": "^2.10.5",
     "react-dom": "^18.3.1",
     "react-ga4": "^2.1.0",

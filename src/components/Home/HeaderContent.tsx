@@ -13,21 +13,20 @@ export function HeaderContent(): JSX.Element {
 
   return (
     <div className="mainContainer">
-      <div className="leftColumn" style={{padding: 120}}></div> {/* Left section for future content or spacing */}
+      <div className="leftColumn" ></div> {/* Left section for future content or spacing */}
       <div className="centerColumn">
         <div className="HeaderContent">
           <div className="contentWrapper">
           <div className="logoContainer">
-              <img src={Logo} alt="Logo" className="logo" />
-            </div>
+          <img src={Logo} alt="Logo" className="logo"/>
+          </div>
             <div className="textContainer">
               <span className="title">The Mobility Dashboard</span>
               <span className="subtitle"><em>-- by TBD and TOMNET University Transportation Centers</em></span>
             </div>
           </div>
           <div className="demoButtonContainer">
-            <button className="demoButton" onClick={openModal}>WATCH DEMO</button>
-            <YouTubeModal isOpen={modalOpen} onClose={closeModal} videoId="8khT9BQESjw" />
+              <button className="demoButton">WATCH DEMO</button>
           </div>
         </div>
       </div>

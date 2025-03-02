@@ -1,18 +1,18 @@
 import { useEffect } from 'react';
 import "../App.css";
-// import { tracking } from "../utils/Helpers";
-// import { FooterProps } from './Types';
+import { tracking } from "../utils/Helpers";
+import { FooterProps } from '../Types';
 import asuLogo from '../images/Logo/asu.png';
 import tbdLogo from '../images/Logo/tbd.png';
 import utAustinLogo from '../images/Logo/utaustin.png';
 import usDotLogo from '../images/Logo/us-dot.png';
 import tomnetLogo from '../images/Logo/tomnet.png';
 
-// export default function Footer({ docRefID, page, expiry, footerBackgroundcolor = '' }: FooterProps): JSX.Element {
-//     useEffect(() => {
-//         tracking(docRefID, page, expiry);
-//     }, []);
-export default function Footer(): JSX.Element{
+export default function Footer({ docRefID, page, expiry, footerBackgroundcolor = '' }: FooterProps): JSX.Element {
+    useEffect(() => {
+        tracking(docRefID, page, expiry);
+    }, [docRefID, page, expiry]); // Added dependencies to useEffect
+
     const currentYear = new Date().getFullYear();
     return (
         <div style={{ 
@@ -20,7 +20,6 @@ export default function Footer(): JSX.Element{
             position: 'relative',
             backgroundColor: 'white',
             marginTop: '-30px',
-            boxShadow: '0 -4px 6px -1px rgba(0, 0, 0, 0.1)'
         }}>
             <div style={{ 
                 padding: '0 20px', 
@@ -47,7 +46,7 @@ export default function Footer(): JSX.Element{
                                 top: '50%',
                                 right: 0,
                                 transform: 'translateY(-50%)',
-                                height: '30px', 
+                                height: '40px', 
                                 width: '2px',
                                 backgroundColor: '#352c26',
                                 opacity: 0.2
