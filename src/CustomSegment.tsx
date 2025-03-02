@@ -12,9 +12,8 @@ const CustomSegment: React.FC<Props> = ({title,segmentSize , unit}) => {
     <div  className="container">
 <div className="segment-container">
   <div className="segment-item">
-    <label htmlFor="segmentSize">{title}</label>
-    <input id="segmentSize" type="text" value={`${segmentSize} ${unit}`} readOnly />
-  </div>
+    <label htmlFor="segmentSize">{title} <b>{segmentSize}</b> {unit}</label>
+      </div>
 </div>
 </div>
   );

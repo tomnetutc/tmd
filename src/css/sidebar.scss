@@ -1,12 +1,24 @@
-/* Sidebar styling */
+
 .sidebar {
-    background-color: #c4c4c4; /* Light grey background */
+    background-color: white;
     padding: 20px;
+    padding-top: 13px;
     width: 300px;
     position: sticky;
     top: 105px; /* Same height as the navbar */
     flex-shrink: 0; /* Prevent the sidebar from shrinking */
     overflow-y: auto; /* Add scrolling if content overflows */
+    border-top: 2px solid #ccc;
+    border-right: 2px solid #ccc;
+
+    .sideBarHeading {
+        font-size: 15px;
+        font-weight: 600;
+        text-align: center; 
+        width: 100%; 
+        margin-bottom: 10px; 
+    }
+    
 
     .sideBarMenu {
         display: flex;
@@ -15,7 +27,7 @@
     }
 
     .form-container {
-        background-color: white;
+        background-color: #eeeeee;
         padding:20px 15px;
         border-radius: 12px;
     }

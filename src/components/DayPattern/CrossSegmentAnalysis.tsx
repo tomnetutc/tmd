@@ -35,7 +35,7 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
     const [tripPurposeDropdownOptions, setTripPurposeDropdownOptions] = useState<DayPatternOption[]>();
     const [activityLocationDropdownOptions, setActivityLocationDropdownOptions] = useState<AnalysisTypeOption[]>([]);
     const [analysisType, setAnalysisType] = useState<AnalysisTypeOption>({ label: "", value: "" });
-    const [chartTitle, setChartTitle] = useState<string>("Share of Trip Chains (%) by Segment");
+    const [chartTitle, setChartTitle] = useState<string>("Share of trip chains (%) by segment");
 
         // Handle dropdown value change based on selected options
         const handleDropdownValueChange = (selectedOption: SingleValue<DayPatternOption>) => {

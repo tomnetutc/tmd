@@ -45,7 +45,7 @@ const AreaChartComponent: React.FC<AreaChartProps> = ({ chartData, title, xAxisL
     const transformedData = chartData.labels.map((label, index) => {
         const obj: { [key: string]: string | number } = { name: Array.isArray(label) ? label.join(', ') : label };
         chartData.datasets.forEach(dataset => {
-            obj[dataset.label] = parseFloat(dataset.data[index].toFixed(1));
+            obj[dataset.label] = parseFloat(dataset.data[index].toFixed(2));
         });
         return obj;
     });
@@ -67,7 +67,7 @@ const AreaChartComponent: React.FC<AreaChartProps> = ({ chartData, title, xAxisL
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="name" label={{ value: xAxisLabel, position: 'insideBottom', offset: -10 }} tick={{ fontSize: 12 }} />
                     <YAxis label={{ value: yAxisLabel, angle: -90, position: 'insideLeft', offset: 10 }} tick={{ fontSize: 12 }} />
-                    <Tooltip formatter={(value: any) => parseFloat(value.toFixed(1))} />
+                    <Tooltip formatter={(value: any) => parseFloat(value.toFixed(2)) + '%'} />
                     {showLegend && (
                         <Legend
                             content={(props) => <CustomLegend {...props} chartData={chartData} />}

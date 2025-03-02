@@ -2,7 +2,7 @@ import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import SignalCellularAltOutlinedIcon from '@mui/icons-material/SignalCellularAltOutlined';
 import RestoreOutlinedIcon from '@mui/icons-material/RestoreOutlined';
 import EventAvailableOutlinedIcon from '@mui/icons-material/EventAvailableOutlined';
-import CommuteIcon from '@mui/icons-material/Commute';
+import ModeOfTravelIcon from '@mui/icons-material/ModeOfTravel';
 
 export let segmentSizing = {
     title: "Segment size",
@@ -20,11 +20,11 @@ export let segmentShare = {
 export let segmentTripChains = {
     title: "Total number of trip chains",
     counter: "",
-    icon: CommuteIcon
+    icon: ModeOfTravelIcon
 }
 
 export const updateSegmentSize = (newCounter: number) => {
-    segmentSizing = { ...segmentSizing, counter: `N = ${newCounter.toLocaleString()} persons` };
+    segmentSizing = { ...segmentSizing, counter: `N= ${newCounter.toLocaleString()} persons` };
 };
 
 export const updateSegmentShare = (row1: number, row2: number) => {

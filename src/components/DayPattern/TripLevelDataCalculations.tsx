@@ -94,7 +94,11 @@ export const prepareVerticalChartData = (filteredData: DataRow[], analysisYear: 
         const tripBackgroundColor = DayPattern_PieChart[colorIndex];
 
         TripChainsPieChartDataSets.push({
-            label: index < 3 ? index + " Chain" : index + "+ Chains",
+            label: index === 0 ? "0 chain" 
+            : index === 1 ? "1 chain" 
+            : index === 2 ? "2 chains"
+            : index === 3 ? "3+ chains"
+            : index + "+ chains",
             data: parseFloat(((value/segmentSize)*100).toFixed(2)),
             totalNum: segmentSize,
             borderColor: tripBackgroundColor,
@@ -110,7 +114,11 @@ export const prepareVerticalChartData = (filteredData: DataRow[], analysisYear: 
         const tripBackgroundColor = DayPattern_PieChart[colorIndex];
 
         ChainStopsPieChartDataSets.push({
-            label: index < 3 ? index + " Stop" : index + "+ Stops",
+            label: index === 0 ? "0 stop" 
+            : index === 1 ? "1 stop" 
+            : index === 2 ? "2 stops"
+            : index === 3 ? "3+ stops"
+            : index + "+ stops",
             data: parseFloat(((value / chainCount_forAvgStops) * 100).toFixed(2)),
             totalNum: totalChainCount,
             borderColor: tripBackgroundColor,

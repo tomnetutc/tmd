@@ -155,7 +155,7 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
                 <div className="chart-container-1">
                     <RechartsLineChart
                         chartData={tripChartData}
-                        title="Percent of Individuals by Day Pattern"
+                        title="Percent of individuals by day pattern"
                         showLegend={true}
                         yAxisLabel="(%)"
                     />

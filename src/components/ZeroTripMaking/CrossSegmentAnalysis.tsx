@@ -29,7 +29,7 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
     const [ChartData, setChartData] = useState<ChartDataProps>({ labels: [], datasets: [] });
     const [sampleSizeTableData, setSampleSizeTableData] = useState<SampleSizeTableProps>({ years: [], counts: [] });
     const [optionValue, setOptionValue] = useState<TravelModeOption>();
-    const [chartTitle, setChartTitle] = useState<string>("Percent of Zero-Trip Makers (%)");
+    const [chartTitle, setChartTitle] = useState<string>("Percent of zero-trip makers (%)");
     
     
 

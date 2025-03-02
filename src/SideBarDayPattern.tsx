@@ -34,22 +34,13 @@ const IOSSwitch = styled(Switch)(({ theme }) => ({
         margin: 1,
         padding: 3,
         transform: 'translateX(6px)',
-        transition: theme.transitions.create(['transform', 'color'], {
-            duration: 300,
-        }),
         '&.Mui-checked': {
             color: '#fff',
             transform: 'translateX(22px)',
-            transition: theme.transitions.create(['transform', 'color'], {
-                duration: 300,
-            }),
             '& + .MuiSwitch-track': {
-                backgroundColor: '#65C466',
+                backgroundColor: '#198754',
                 opacity: 1,
                 border: 'none',
-                transition: theme.transitions.create(['background-color', 'opacity'], {
-                    duration: 300,
-                }),
             },
         },
     },
@@ -57,19 +48,17 @@ const IOSSwitch = styled(Switch)(({ theme }) => ({
         width: 26,
         height: 26,
         boxShadow: 'none',
-        transition: theme.transitions.create(['width', 'height'], {
-            duration: 300,
-        }),
     },
     '& .MuiSwitch-track': {
         borderRadius: 26 / 2,
         backgroundColor: '#E9E9EA',
         opacity: 1,
-        transition: theme.transitions.create(['background-color', 'opacity'], {
-            duration: 300,
+        transition: theme.transitions.create(['background-color'], {
+            duration: 500,
         }),
     },
 }));
+
 
 
 const Sidebar: React.FC<SidebarProps> = ({
@@ -91,6 +80,7 @@ const Sidebar: React.FC<SidebarProps> = ({
 }) => {
     return (
         <div className="sidebar">
+            <label className='sideBarHeading'>Configure Analysis</label>
             <div className="sideBarMenu">
                 {/* Analysis Type */}
                 <div className='form-container'>

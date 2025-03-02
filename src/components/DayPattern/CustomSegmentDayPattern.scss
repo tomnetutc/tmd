@@ -1,6 +1,6 @@
 .segment-container {
     display: flex;
-    justify-content: center;
+    justify-content: left;
     align-items: center;
     padding: 6px;
     background-color: #ffffff; // Light gray background
@@ -20,6 +20,7 @@
   .segment-item {
     display: flex;
     align-items: center;
+    justify-content: left;
     margin: 0 5px; // Spacing between label and input
 
   

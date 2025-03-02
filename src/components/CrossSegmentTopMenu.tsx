@@ -111,7 +111,7 @@ const CrossSegmentTopMenu: React.FC<{
         <div className="menu-container">
             <div className="menu-header" style={{ position: 'relative' }}>
                 <div className="options-container">
-                    <label className="segment-label">Add a segment:</label>
+                    <label className="segment-label">Add Segment:</label>
                     <div className="dropdowns-menu-container">
                         {selectedOptions.map((_, index) => (
                             <div key={index} className="dropdown-wrapper">

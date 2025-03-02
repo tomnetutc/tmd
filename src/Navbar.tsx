@@ -2,7 +2,7 @@ import React from 'react';
 import './css/navbar.css';
 import { Navbar as NavbarBs } from "react-bootstrap";
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import timeTravelIcon from '../src/images/time-clockk.svg';
+import timeTravelIcon from '../src/images/SVGLogo.svg';
 
 export const Navbar: React.FC = () => {
     const navigate = useNavigate();
@@ -12,7 +12,7 @@ export const Navbar: React.FC = () => {
     const getActiveOption = (): string => {
         switch (location.pathname) {
             case '/travelpurpose':
-                return 'Travel Purpose';
+                return 'Trip Purpose';
             case '/travelmode':
                 return 'Travel Mode';
             case '/zerotripmaking':
@@ -30,7 +30,7 @@ export const Navbar: React.FC = () => {
 
     const handleOptionClick = (option: string) => {
         switch (option) {
-            case 'Travel Purpose':
+            case 'Trip Purpose':
                 navigate('/travelpurpose');
                 break;
             case 'Travel Mode':
@@ -54,7 +54,7 @@ export const Navbar: React.FC = () => {
     return (
         <NavbarBs sticky="top" expand="lg" className="my-navbar shadow-sm">
             <div className="navbar-brand d-flex align-items-center" style={{ padding: '2px 20px' }}>
-                <img src={timeTravelIcon} alt="Time Use Icon" style={{ width: '34px' }} />
+                <img src={timeTravelIcon} alt="Time Use Icon" style={{ width: '80px' }} />
                 <h4 className="fw-bold mb-0 ml-2">The Mobility Dashboard</h4>
             </div>
             <div className="nav-container d-flex ms-auto">
@@ -64,7 +64,7 @@ export const Navbar: React.FC = () => {
                     <Link to="/travelpurpose" className="nav-link">Dashboard</Link>
                 </div>
                 <div className="nav-options d-flex">
-                    {['Travel Purpose', 'Travel Mode', 'Zero-Trip Making', 'Day Pattern'].map(option => (
+                    {['Trip Purpose', 'Travel Mode', 'Zero-Trip Making', 'Day Pattern'].map(option => (
                         <div
                             key={option}
                             className={`nav-option ${activeOption === option ? 'active' : ''}`}

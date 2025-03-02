@@ -31,7 +31,7 @@ const IOSSwitch = styled(Switch)(({ theme }) => ({
             color: '#fff',
             transform: 'translateX(22px)',
             '& + .MuiSwitch-track': {
-                backgroundColor: '#65C466',
+                backgroundColor: '#198754',
                 opacity: 1,
                 border: 'none',
             },
@@ -66,6 +66,7 @@ const Sidebar: React.FC<SidebarProps> = ({
 }) => {
     return (
         <div className="sidebar">
+            <label className='sideBarHeading'>Configure Analysis</label>
             <div className="sideBarMenu">
                 {/* Analysis Level */}
                 <div className='form-container'>

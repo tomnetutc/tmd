@@ -122,7 +122,7 @@ const TopMenu: React.FC<{ onOptionChange: (options: Option[]) => void; filterOpt
         <div className="menu-container">
             <div className="menu-header" style={{ position: 'relative' }}>
             <div className="options-container">
-                <label className="segment-label">Select segment:</label>
+                <label className="segment-label">Select Segment:</label>
                 <div className="all-select-checkbox">
                     <input
                         type="checkbox"

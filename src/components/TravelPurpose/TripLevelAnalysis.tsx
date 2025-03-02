@@ -127,7 +127,7 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
         <>
             <div style={{ position: "relative" }}>
                 <div className="trip-parent-dropdown-holder">
-                <CustomSegment title="Segment Size : " segmentSize={formatter.format(segmentSize)} unit="people"/>
+                <CustomSegment title="Segment size: " segmentSize={formatter.format(segmentSize)} unit="persons"/>
                     <div className="trip-dropdown-container">
                         <label className="trip-segment-label">Trip purpose:</label>
                         <Select
@@ -153,11 +153,11 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
                     <div className="chart-container-1">
                         <HistogramChart
                             chartData={tripDurationChartData}
-                            title="Travel Time Distribution"
+                            title="Travel time distribution"
                             showLegend={true}
-                            xAxisLabel="Duration (min)"
-                            yAxisLabel="%"
-                        />
+                            yAxisLabel="Duration (min)"
+                            xAxisLabel="%"
+                            invertAxis={true}                        />
                     </div>
 
                 </div>
@@ -168,7 +168,7 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
                     <div className="chart-container-1">
                         <AreaChartComponent
                             chartData={tripStartChartData}
-                            title="Temporal Distribution"
+                            title="Temporal distribution"
                             showLegend={true}
                             xAxisLabel="Starting Hour"
                             yAxisLabel="%"
@@ -184,9 +184,10 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
 <div className="chart-container-1">
     <HistogramChart
         chartData={tripModeDistributionChartData}
-        title="Travel Mode by Purpose"
+        title="Travel mode by purpose"
         showLegend={true}
-        yAxisLabel="%"
+        xAxisLabel="%"
+        invertAxis={true}
     />
 </div>
 

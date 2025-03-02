@@ -7,8 +7,10 @@ const Segment = (props: SegmentProps): JSX.Element => {
     return (
         <div className="widget">
             <div className="left">
-                <span className="icon"><Icon /></span>
-                <span className="title">{props.title}</span>
+                <div className="header">
+                    <span className="icon"><Icon /></span>
+                    <span className="title">{props.title}</span>
+                </div>
                 <span className="counter">{props.counter}</span>
             </div>
         </div>

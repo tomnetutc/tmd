@@ -125,10 +125,11 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
                     <div className="chart-container-1">
                         <HistogramChart
                             chartData={dayPatternChartData}
-                            title="Top 15 Day Patterns (%)"
+                            title="Top 15 day patterns by share in the sample (%)"
                             showLegend={true}
                             xAxisLabel="%"
                             yAxisLabel=""
+                            totalCount={segmentSize}
                         />
                     </div>
 
@@ -137,14 +138,14 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
                 <div className="grid-container">
                     <div>
                     <div className="trip-parent-dropdown-holder" style={{justifyContent:"center"}}>
-                        <CustomSegmentDayPattern  title="Average number of trip chains per person : " segmentSize={formatter.format(avgTripChains)} unit="" />
+                        <CustomSegmentDayPattern  title="Average number of trip chains per person: " segmentSize={formatter.format(parseFloat(avgTripChains.toFixed(2)))} unit="" />
                     </div>
 
                     <div className="chart-wrapper">
                     <div className="chart-container-1">
                         <RechartsPieChart
                             chartData={chainCountsChartData}
-                            title="Chain Counts"
+                            title={"Percent of day patterns by number of trip chains (N=" + segmentSize + " persons)"}
                             showLegend={true}
                         />
                     </div>
@@ -154,7 +155,7 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
 
                     <div>
                     <div className="trip-parent-dropdown-holder">
-                        <CustomSegmentDayPattern title="Average number of stops per trip chain : " segmentSize={formatter.format(avgStopPerChain)} unit="" />
+                        <CustomSegmentDayPattern title="Average number of stops per trip chain: " segmentSize={formatter.format(parseFloat(avgStopPerChain.toFixed(2)))} unit="" />
                     </div>
 
 
@@ -162,7 +163,7 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
                         <div className="chart-container-1">
                             <RechartsPieChart
                                 chartData={stopCountsChartData}
-                                title="Stop Counts"
+                                title={"Percent of trip chains by number of stops (N=" + countTripChains + " chains)"}
                                 showLegend={true}
                             />
                         </div>
