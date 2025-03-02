@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/tmd/static/css/main.5350d176.css",
-    "main.js": "/tmd/static/js/main.1652fbd9.js",
+    "main.js": "/tmd/static/js/main.bdbc5865.js",
     "static/js/453.e83714ab.chunk.js": "/tmd/static/js/453.e83714ab.chunk.js",
     "static/media/SVGLogo.svg": "/tmd/static/media/SVGLogo.10877a8d6a8227f615b4eb80df2e7640.svg",
     "static/media/TravelModeLogo.svg": "/tmd/static/media/TravelModeLogo.0fa30e5af4a40090ff8dc87c9f0c5cb7.svg",
@@ -29,11 +29,11 @@
     "static/media/FeaturesLogo.svg": "/tmd/static/media/FeaturesLogo.16865a86e1f064685a12650c98a3ef95.svg",
     "index.html": "/tmd/index.html",
     "main.5350d176.css.map": "/tmd/static/css/main.5350d176.css.map",
-    "main.1652fbd9.js.map": "/tmd/static/js/main.1652fbd9.js.map",
+    "main.bdbc5865.js.map": "/tmd/static/js/main.bdbc5865.js.map",
     "453.e83714ab.chunk.js.map": "/tmd/static/js/453.e83714ab.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.5350d176.css",
-    "static/js/main.1652fbd9.js"
+    "static/js/main.bdbc5865.js"
   ]
 }
