@@ -67,9 +67,21 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
       return;
     }
 
-    setIsCrossSegmentLoading(true);
     setProgress(0);
-    incrementProgress(10);
+
+    let loadingComplete = false;
+
+    // Increment progress randomly from 1-3% every 500ms until 80%
+    const progressInterval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev < 80) {
+          return Math.min(prev + Math.floor(Math.random() * 3) + 1, 80);
+        } else {
+          clearInterval(progressInterval);
+          return prev;
+        }
+      });
+    }, 300);
 
     Promise.all([
       CrossSegmentDataFilter(
@@ -81,7 +93,21 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
       ),
     ])
       .then(([FilteredData]) => {
-        setTimeout(() => incrementProgress(30), 300);
+        loadingComplete = true;
+        clearInterval(progressInterval);
+
+        // Smoothly transition to 80% if not already there
+        const targetProgress = 80;
+        const reach80Interval = setInterval(() => {
+          setProgress((prev) => {
+            if (prev < targetProgress) {
+              return prev + Math.ceil((targetProgress - prev) / 5);
+            } else {
+              clearInterval(reach80Interval);
+              return targetProgress;
+            }
+          });
+        }, 50);
 
         setCrossSegmentFilteredData(FilteredData);
         const { chartData, sampleSizeTableData } = prepareChartData(
@@ -94,17 +120,26 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
         setChartData(chartData);
         setSampleSizeTableData(sampleSizeTableData);
 
-        setTimeout(() => incrementProgress(40), 300);
+        // After reaching 80%, gradually move to 100%
+        let finalProgress = 80;
+        const completeLoading = setInterval(() => {
+          finalProgress += Math.floor(Math.random() * 3) + 1;
+          setProgress(finalProgress);
+          if (finalProgress >= 100) {
+            clearInterval(completeLoading);
+          }
+        }, 100);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       })
       .finally(() => {
         setTimeout(() => {
-          incrementProgress(20);
           setIsCrossSegmentLoading(false);
         }, 300);
       });
+
+    return () => clearInterval(progressInterval);
   }, [menuSelectedOptions, selections, toggleState]);
 
   return (
@@ -217,30 +252,11 @@ const prepareChartData = (
       backgroundColor: Colors[index],
       barThickness: "flex",
     });
-
-    const uniqueYears = Array.from(
-      new Set(optionFilteredData.map((item) => item.year))
-    ).sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
-
-    uniqueYears.forEach((year) => {
-      yearlyCounts.push([
-        year,
-        optionFilteredData.filter((row) => row.year === year).length,
-      ]);
-    });
-
-    sampleSizeCounts.push({ data: optionFilteredData, count: yearlyCounts });
   });
 
   return {
-    chartData: {
-      labels: labels,
-      datasets: ChartDataSets,
-    },
-    sampleSizeTableData: {
-      years: labels,
-      counts: sampleSizeCounts,
-    },
+    chartData: { labels: labels, datasets: ChartDataSets },
+    sampleSizeTableData: { years: labels, counts: sampleSizeCounts },
   };
 };
 

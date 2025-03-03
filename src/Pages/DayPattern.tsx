@@ -137,17 +137,26 @@ export default function DayPattern(): JSX.Element {
     []
   );
 
-  useEffect(() => {}, [currAnalysisType]); // Add dependencies
+  useEffect(() => {
+    if (currAnalysisType && currAnalysisType.value) {
+      setMenuSelectedOptions([]);
+      setCrossSegmentSelectedOptions([[]]);
+      setProgress(0);
+    }
+  }, [currAnalysisType.value]);
 
   const renderTopMenu = () => {
     switch (currAnalysisType?.value) {
       case "withinyear":
         return (
           <>
-            <TopMenu onOptionChange={handleMenuOptionChange} />
+            <TopMenu
+              onOptionChange={handleMenuOptionChange}
+              key={currAnalysisType.value}
+            />
             <TripLevelMenu onSelectionChange={handleTripSelectionChange} />
             <div className="main-content">
-              {progress <= 100 && <CircularProgress progress={progress} />}
+              {isWithinYearLoading && <CircularProgress progress={progress} />}
               <TripLevelAnalysis
                 menuSelectedOptions={menuSelectedOptions}
                 toggleState={false}
@@ -161,11 +170,14 @@ export default function DayPattern(): JSX.Element {
       case "betweenyear":
         return (
           <>
-            <TopMenu onOptionChange={handleMenuOptionChange} />
+            <TopMenu
+              onOptionChange={handleMenuOptionChange}
+              key={currAnalysisType.value}
+            />
 
             <BtwYearMenu onSelectionChange={handleSelectionChange} />
             <div className="main-content">
-              {progress <= 100 && <CircularProgress progress={progress} />}
+              {isBtwYearLoading && <CircularProgress progress={progress} />}
               <BtwYearAnalysis
                 menuSelectedOptions={menuSelectedOptions}
                 toggleState={false}
@@ -187,7 +199,9 @@ export default function DayPattern(): JSX.Element {
 
             <CrossSegmentMenu onSelectionChange={handleSelectionChange} />
             <div className="main-content">
-              {progress <= 100 && <CircularProgress progress={progress} />}
+              {isCrossSegmentLoading && (
+                <CircularProgress progress={progress} />
+              )}
               <CrossSegmentAnalysis
                 menuSelectedOptions={crossSegmentSelectedOptions}
                 toggleState={false}
@@ -206,7 +220,7 @@ export default function DayPattern(): JSX.Element {
             <TopMenu onOptionChange={handleMenuOptionChange} />
             <TripLevelMenu onSelectionChange={handleTripSelectionChange} />
             <div className="main-content">
-              {progress <= 100 && <CircularProgress progress={progress} />}
+              {isWithinYearLoading && <CircularProgress progress={progress} />}
               <TripLevelAnalysis
                 menuSelectedOptions={menuSelectedOptions}
                 toggleState={false}

@@ -62,9 +62,21 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
       return;
     }
 
-    setIsBtwYearLoading(true);
     setProgress(0);
-    incrementProgress(10);
+
+    let loadingComplete = false;
+
+    // Gradually increment progress randomly between 1-3% every 500ms until reaching 80%
+    const progressInterval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev < 80) {
+          return Math.min(prev + Math.floor(Math.random() * 3) + 1, 80);
+        } else {
+          clearInterval(progressInterval);
+          return prev;
+        }
+      });
+    }, 300);
 
     fetchAndFilterDataForBtwYearAnalysis(
       TravelDataProvider.getInstance(),
@@ -73,7 +85,21 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
       toggleState
     )
       .then((btwYearFilteredData) => {
-        setTimeout(() => incrementProgress(30), 300);
+        loadingComplete = true;
+        clearInterval(progressInterval);
+
+        // Smoothly transition to 80% if it's not already there
+        const targetProgress = 80;
+        const reach80Interval = setInterval(() => {
+          setProgress((prev) => {
+            if (prev < targetProgress) {
+              return prev + Math.ceil((targetProgress - prev) / 5);
+            } else {
+              clearInterval(reach80Interval);
+              return targetProgress;
+            }
+          });
+        }, 50);
 
         const { tripsChartData, minYear, maxYear, sampleSizeTableData } =
           prepareVerticalChartData(
@@ -89,17 +115,26 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
         setMaxYear(maxYear);
         setSampleSizeTableData(sampleSizeTableData);
 
-        setTimeout(() => incrementProgress(40), 300);
+        // After reaching 80%, gradually move to 100%
+        let finalProgress = 80;
+        const completeLoading = setInterval(() => {
+          finalProgress += Math.floor(Math.random() * 3) + 1;
+          setProgress(finalProgress);
+          if (finalProgress >= 100) {
+            clearInterval(completeLoading);
+          }
+        }, 100);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       })
       .finally(() => {
         setTimeout(() => {
-          incrementProgress(20);
           setIsBtwYearLoading(false);
         }, 300);
       });
+
+    return () => clearInterval(progressInterval);
   }, [menuSelectedOptions, selections, toggleState]);
 
   return (

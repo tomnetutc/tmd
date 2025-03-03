@@ -18,7 +18,6 @@ import {
 import "../../css/travelpurpose.scss";
 import "../../css/dropdowns.css";
 import ProfileCards from "../ProfileCard/ProfileCards";
-import { mean } from "d3";
 import SampleSizeTable from "../../SampleSizeTable";
 import RechartsLineChart from "../../LineChart/LineChart";
 import Select, { SingleValue } from "react-select";
@@ -33,7 +32,7 @@ interface CrossSegmentAnalysisProps {
     startYear?: string;
     endYear?: string;
     includeDecember?: boolean;
-  }; // Receive selections as prop
+  };
   setIsCrossSegmentLoading: (isLoading: boolean) => void;
   setProgress: React.Dispatch<React.SetStateAction<number>>;
   onProfileRemove: (index: number) => void;
@@ -50,86 +49,24 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
   const [crossSegmentFilteredData, setCrossSegmentFilteredData] = useState<
     DataRow[]
   >([]);
-  const [ChartData, setChartData] = useState<ChartDataProps>({
+  const [chartData, setChartData] = useState<ChartDataProps>({
     labels: [],
     datasets: [],
   });
   const [sampleSizeTableData, setSampleSizeTableData] =
     useState<SampleSizeTableProps>({ years: [], counts: [] });
-  const [dropdownOptions, setDropdownOptions] = useState<DayPatternOption[]>();
-  const [dropdownLabel, setDropdownLabel] = useState<string>("Day Pattern");
-  const [optionValue, setOptionValue] = useState<DayPatternOption>();
-  const [tripPurposeDropdownOptions, setTripPurposeDropdownOptions] =
-    useState<DayPatternOption[]>();
-  const [activityLocationDropdownOptions, setActivityLocationDropdownOptions] =
-    useState<AnalysisTypeOption[]>([]);
-  const [analysisType, setAnalysisType] = useState<AnalysisTypeOption>({
-    label: "",
-    value: "",
-  });
-  const [chartTitle, setChartTitle] = useState<string>(
-    "Share of day pattern by segment"
-  );
 
-  // Handle dropdown value change based on selected options
-  const handleDropdownValueChange = (
-    selectedOption: SingleValue<DayPatternOption>
-  ) => {
-    setOptionValue(selectedOption as DayPatternOption);
-  };
+  const [optionValue, setOptionValue] = useState<DayPatternOption>(
+    DayPatternOptions[0]
+  );
+  const [analysisType, setAnalysisType] = useState<AnalysisTypeOption>({
+    label: "Number of trips",
+    value: "NumberTrips",
+  });
 
   const incrementProgress = (value: number) => {
-    setProgress((prev) => {
-      const newProgress = Math.min(prev + value, 100);
-      return newProgress;
-    });
+    setProgress((prev) => Math.min(prev + value, 100));
   };
-
-  const customStyles = {
-    control: (provided: any) => ({
-      ...provided,
-      minHeight: "36px",
-      fontSize: "14px",
-    }),
-  };
-
-  const CustomDropdownIndicator: React.FC<{}> = () => (
-    <div className="dropdown-indicator">
-      <svg
-        width="15"
-        height="15"
-        fill="currentColor"
-        className="bi bi-chevron-down"
-        viewBox="-2 -2 21 21"
-      >
-        <path
-          fillRule="evenodd"
-          d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
-        />
-      </svg>
-    </div>
-  );
-
-  useEffect(() => {
-    const allTripPurposeOption = DayPatternOptions.find(
-      (option) => option.label === "H-W-H"
-    );
-
-    const sortedTripPurposeOptions = DayPatternOptions.filter(
-      (option) => option.label !== "0"
-    ).sort((a, b) => a.label.length - b.label.length); // Sorting strictly based on label length
-
-    const analysisTypeDropdownOptions = [
-      { label: "Number of trips", value: "NumberTrips" },
-      { label: "Travel duration", value: "TravelDuration" },
-    ];
-
-    setActivityLocationDropdownOptions(analysisTypeDropdownOptions);
-    setAnalysisType(analysisTypeDropdownOptions[0]); // Default to "Number of trips"
-    setTripPurposeDropdownOptions(sortedTripPurposeOptions);
-    setDropdownOptions(sortedTripPurposeOptions);
-    setOptionValue(DayPatternOptions[0]);
-  }, []);
 
   useEffect(() => {
     const { startYear, endYear, week } = selections;
@@ -137,10 +74,22 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
       return;
     }
 
-    setIsCrossSegmentLoading(true);
-    setProgress(0); // Start at 0
+    setProgress(0);
 
-    // Step 1: Fetching Data (simulate delay, then update to 30%)
+    let loadingComplete = false;
+
+    // Increment progress randomly from 1-3% every 500ms until reaching 80%
+    const incrementProgressSmoothly = setInterval(() => {
+      setProgress((prev) => {
+        if (prev < 80) {
+          return Math.min(prev + Math.floor(Math.random() * 3) + 1, 80);
+        } else {
+          clearInterval(incrementProgressSmoothly);
+          return prev;
+        }
+      });
+    }, 300);
+
     CrossSegmentDataFilter(
       DayPatternDataProvider.getInstance(),
       startYear,
@@ -148,16 +97,25 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
       week,
       toggleState
     )
-      .then((FilteredData) => {
-        setCrossSegmentFilteredData(FilteredData);
-        // Simulate delay before updating progress
-        setTimeout(() => {
-          incrementProgress(30);
-        }, 300); // 300ms delay
+      .then((filteredData) => {
+        loadingComplete = true;
+        clearInterval(incrementProgressSmoothly);
 
-        // Step 2: Processing Data
+        // Smoothly reach 80% if it's not there yet
+        const targetProgress = 80;
+        const reach80Interval = setInterval(() => {
+          setProgress((prev) => {
+            if (prev < targetProgress) {
+              return prev + Math.ceil((targetProgress - prev) / 5);
+            } else {
+              clearInterval(reach80Interval);
+              return targetProgress;
+            }
+          });
+        }, 50);
+
         return prepareChartData(
-          FilteredData,
+          filteredData,
           menuSelectedOptions,
           optionValue,
           analysisType,
@@ -169,35 +127,26 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
       .then(({ chartData, sampleSizeTableData }) => {
         setChartData(chartData);
         setSampleSizeTableData(sampleSizeTableData);
-        // Simulate delay before next progress update
-        setTimeout(() => {
-          incrementProgress(40);
-        }, 300); // 300ms delay
+
+        // After reaching 80%, gradually go to 100%
+        let finalProgress = 80;
+        const completeLoading = setInterval(() => {
+          finalProgress += Math.floor(Math.random() * 3) + 1;
+          setProgress(finalProgress);
+          if (finalProgress >= 100) {
+            clearInterval(completeLoading);
+          }
+        }, 100);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
       })
       .finally(() => {
-        // Simulate delay before final progress update
-        setTimeout(() => {
-          incrementProgress(20);
-          setIsCrossSegmentLoading(false);
-        }, 300); // 300ms delay
+        setTimeout(() => setIsCrossSegmentLoading(false), 300);
       });
-    incrementProgress(10);
-  }, [menuSelectedOptions, selections, toggleState, optionValue, analysisType]);
 
-  const scrollToSelectedOption = () => {
-    setTimeout(() => {
-      const selectedEl = document.querySelector(
-        ".dropdown-select__option--is-selected"
-      );
-      if (selectedEl) {
-        selectedEl.scrollIntoView({
-          behavior: "auto",
-          block: "nearest",
-          inline: "start",
-        });
-      }
-    }, 15);
-  };
+    return () => clearInterval(incrementProgressSmoothly);
+  }, [menuSelectedOptions, selections, toggleState, optionValue, analysisType]);
 
   return (
     <>
@@ -209,15 +158,12 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
               className="dropdown-select"
               classNamePrefix="dropdown-select"
               value={optionValue}
-              onChange={handleDropdownValueChange}
-              options={dropdownOptions}
+              onChange={(selectedOption) =>
+                setOptionValue(selectedOption as DayPatternOption)
+              }
+              options={DayPatternOptions}
               isSearchable={true}
-              styles={customStyles}
-              components={{
-                // Use the custom Option here
-                Option: CustomOption,
-                DropdownIndicator: CustomDropdownIndicator,
-              }}
+              components={{ Option: CustomOption }}
               menuPosition={"fixed"}
               maxMenuHeight={200}
               hideSelectedOptions={false}
@@ -240,14 +186,14 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
           </div>
           <div className="chart-container-1">
             <RechartsLineChart
-              chartData={ChartData}
-              title={chartTitle}
+              chartData={chartData}
+              title="Share of day pattern by segment"
               showLegend={true}
               yAxisLabel="%"
             />
           </div>
         </div>
-        <div className="sampeSizeTable">
+        <div className="sampleSizeTable">
           <SampleSizeTable
             years={sampleSizeTableData.years}
             counts={sampleSizeTableData.counts}

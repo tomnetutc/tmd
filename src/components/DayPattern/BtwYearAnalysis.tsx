@@ -19,7 +19,6 @@ import SampleSizeTable from "../../SampleSizeTable";
 import RechartsLineChart from "../../DayPatternCharts/DayPatternLineChart/LineChart";
 import Select, { MultiValue } from "react-select";
 import CustomOption from "./ToolTipOptionMultiSelect";
-import { sort } from "d3";
 
 interface BtwYearAnalysisProps {
   menuSelectedOptions: Option[];
@@ -46,25 +45,23 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
     labels: [],
     datasets: [],
   });
-  const [durationChartData, setDurationChartData] = useState<ChartDataProps>({
-    labels: [],
-    datasets: [],
-  });
   const [sampleSizeTableData, setSampleSizeTableData] =
     useState<SampleSizeTableProps>({ years: [], counts: [] });
   const [minYear, setMinYear] = useState("");
   const [maxYear, setMaxYear] = useState("");
   const [dropdownOptions, setDropdownOptions] =
     useState<DayPatternOption[]>(DayPatternOptions);
-  const [dropdownLabel, setDropdownLabel] = useState<string>("Trip purpose");
-  const [optionValue, setOptionValue] = useState<DayPatternOption[]>(
-    DayPatternOptions.length > 0 ? [DayPatternOptions[0]] : []
-  );
+  const [optionValue, setOptionValue] = useState<DayPatternOption[]>([
+    DayPatternOptions[0],
+  ]);
   const [isOptionDisabled, setIsOptionDisabled] = useState(false);
 
-  const incrementProgress = (value: number) => {
-    setProgress((prev) => Math.min(prev + value, 100));
-  };
+  useEffect(() => {
+    const sortedTripModeOptions = DayPatternOptions.filter(
+      (option) => option.label !== "0"
+    ).sort((a, b) => a.label.length - b.label.length);
+    setDropdownOptions(sortedTripModeOptions);
+  }, []);
 
   const handleDropdownValueChange = (
     selectedOption: MultiValue<DayPatternOption>
@@ -77,65 +74,25 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
     setIsOptionDisabled(selectedOption.length >= 5);
   };
 
-  const customStyles = {
-    control: (provided: any) => ({
-      ...provided,
-      minHeight: "36px",
-      fontSize: "14px",
-    }),
-  };
-
-  const CustomDropdownIndicator: React.FC<{}> = () => (
-    <div className="dropdown-indicator">
-      <svg
-        width="15"
-        height="15"
-        fill="currentColor"
-        className="bi bi-chevron-down"
-        viewBox="-2 -2 21 21"
-      >
-        <path
-          fillRule="evenodd"
-          d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
-        />
-      </svg>
-    </div>
-  );
-
-  const getOptionDisabledState = (option: DayPatternOption) => {
-    const isSelected = optionValue.some(
-      (selectedOption) => selectedOption.value === option.value
-    );
-    return isOptionDisabled && !isSelected;
-  };
-
-  const modifiedDropdownOptions = dropdownOptions.map((option) => ({
-    ...option,
-    isDisabled: getOptionDisabledState(option),
-  }));
-
-  useEffect(() => {
-    const sortedTripModeOptions = DayPatternOptions.filter(
-      (option) => option.label !== "0"
-    ).sort((a, b) => a.label.length - b.label.length);
-    setDropdownOptions(sortedTripModeOptions);
-  }, []);
-
   useEffect(() => {
     const { startYear, endYear, week } = selections;
-    if (
-      !startYear ||
-      !endYear ||
-      !week ||
-      !optionValue ||
-      optionValue.length === 0
-    ) {
-      return;
-    }
+    if (!startYear || !endYear || !week || optionValue.length === 0) return;
 
-    setIsBtwYearLoading(true);
     setProgress(0);
-    incrementProgress(10);
+
+    let loadingComplete = false;
+
+    // Increment progress randomly in steps of 1-3
+    const incrementProgressSmoothly = setInterval(() => {
+      setProgress((prev) => {
+        if (prev < 80) {
+          return Math.min(prev + Math.floor(Math.random() * 3) + 1, 80);
+        } else {
+          clearInterval(incrementProgressSmoothly);
+          return prev;
+        }
+      });
+    }, 300);
 
     fetchAndFilterDataForBtwYearAnalysis(
       DayPatternDataProvider.getInstance(),
@@ -144,7 +101,11 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
       toggleState
     )
       .then((btwYearFilteredData) => {
-        setTimeout(() => incrementProgress(30), 300);
+        loadingComplete = true;
+        clearInterval(incrementProgressSmoothly); // Stop random increments
+
+        setProgress((prev) => prev + (80 - prev)); // Instantly reach 80%
+
         const { tripsChartData, minYear, maxYear, sampleSizeTableData } =
           prepareVerticalChartData(
             btwYearFilteredData,
@@ -154,22 +115,31 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
             optionValue,
             "Travel mode"
           );
+
         setBtwYearFilteredData(btwYearFilteredData);
         setTripChartData(tripsChartData);
         setMinYear(minYear);
         setMaxYear(maxYear);
         setSampleSizeTableData(sampleSizeTableData);
-        setTimeout(() => incrementProgress(40), 300);
+
+        // Gradually increase from 80 to 100%
+        let finalProgress = 80;
+        const completeLoading = setInterval(() => {
+          finalProgress += Math.floor(Math.random() * 3) + 1;
+          setProgress(finalProgress);
+          if (finalProgress >= 100) {
+            clearInterval(completeLoading);
+          }
+        }, 100);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       })
       .finally(() => {
-        setTimeout(() => {
-          incrementProgress(20);
-          setIsBtwYearLoading(false);
-        }, 300);
+        setTimeout(() => setIsBtwYearLoading(false), 300);
       });
+
+    return () => clearInterval(incrementProgressSmoothly);
   }, [menuSelectedOptions, selections, toggleState, optionValue]);
 
   return (
@@ -182,14 +152,17 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
               className="dropdown-select"
               classNamePrefix="dropdown-select"
               value={optionValue}
-              styles={customStyles}
               onChange={handleDropdownValueChange}
-              options={modifiedDropdownOptions}
+              options={dropdownOptions.map((option) => ({
+                ...option,
+                isDisabled:
+                  isOptionDisabled &&
+                  !optionValue.some(
+                    (selected) => selected.value === option.value
+                  ),
+              }))}
               isSearchable={true}
-              components={{
-                Option: CustomOption,
-                DropdownIndicator: CustomDropdownIndicator,
-              }}
+              components={{ Option: CustomOption }}
               menuPosition={"fixed"}
               maxMenuHeight={200}
               hideSelectedOptions={false}

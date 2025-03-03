@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useDocumentTitle } from "../utils/Helpers";
 import NavBar from "../Navbar";
 import TopMenu from "../TopMenu";
@@ -131,6 +131,21 @@ export default function TravelMode(): JSX.Element {
     []
   );
 
+  useEffect(() => {
+    // Clear segment selections when switching between analysis types
+    setMenuSelectedOptions([]);
+    setCrossSegmentSelectedOptions([[]]);
+    setProgress(0);
+
+    // Ensure analysis type is set to "between year" when switching back to person level
+    if (selections.analysisLevelValue?.value === "trip") {
+      setSelections((prev) => ({
+        ...prev,
+        analysisTypeValue: { value: "betweenyear", label: "Between Year" },
+      }));
+    }
+  }, [selections.analysisTypeValue, selections.analysisLevelValue]);
+
   return (
     <div className="app-layout">
       <NavBar />
@@ -160,24 +175,33 @@ export default function TravelMode(): JSX.Element {
                 <BtwYearMenu onSelectionChange={handleSelectionChange} />
               )}
               <div className="main-content">
-                {progress <= 100 && <CircularProgress progress={progress} />}
                 {selections.analysisTypeValue?.value === "crosssegment" ? (
-                  <CrossSegmentAnalysis
-                    menuSelectedOptions={crossSegmentSelectedOptions}
-                    toggleState={false}
-                    selections={selections}
-                    setProgress={setProgress}
-                    setIsCrossSegmentLoading={setIsCrossSegmentLoading}
-                    onProfileRemove={handleProfileRemove}
-                  />
+                  <>
+                    {isCrossSegmentLoading && (
+                      <CircularProgress progress={progress} />
+                    )}
+                    <CrossSegmentAnalysis
+                      menuSelectedOptions={crossSegmentSelectedOptions}
+                      toggleState={false}
+                      selections={selections}
+                      setProgress={setProgress}
+                      setIsCrossSegmentLoading={setIsCrossSegmentLoading}
+                      onProfileRemove={handleProfileRemove}
+                    />
+                  </>
                 ) : (
-                  <BtwYearAnalysis
-                    menuSelectedOptions={menuSelectedOptions}
-                    toggleState={false}
-                    selections={selections}
-                    setProgress={setProgress}
-                    setIsBtwYearLoading={setIsBtwYearLoading}
-                  />
+                  <>
+                    {isBtwYearLoading && (
+                      <CircularProgress progress={progress} />
+                    )}
+                    <BtwYearAnalysis
+                      menuSelectedOptions={menuSelectedOptions}
+                      toggleState={false}
+                      selections={selections}
+                      setProgress={setProgress}
+                      setIsBtwYearLoading={setIsBtwYearLoading}
+                    />
+                  </>
                 )}
               </div>
             </div>
@@ -188,7 +212,9 @@ export default function TravelMode(): JSX.Element {
               <TopMenu onOptionChange={handleMenuOptionChange} />
               <TripLevelMenu onSelectionChange={handleTripSelectionChange} />
               <div className="main-content">
-                {progress <= 100 && <CircularProgress progress={progress} />}
+                {isTripLevelAnalysisLoading && (
+                  <CircularProgress progress={progress} />
+                )}
                 <TripLevelAnalysis
                   menuSelectedOptions={menuSelectedOptions}
                   toggleState={false}

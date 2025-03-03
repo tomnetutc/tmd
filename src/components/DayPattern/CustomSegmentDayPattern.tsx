@@ -20,9 +20,7 @@ const CustomSegmentDayPattern: React.FC<Props> = ({
           id="segmentSize"
           type="text"
           style={{ fontWeight: "bold" }}
-          value={`${new Intl.NumberFormat("en-US").format(
-            parseInt(segmentSize)
-          )} ${unit}`}
+          value={`${segmentSize} ${unit}`}
           readOnly
         />
       </div>

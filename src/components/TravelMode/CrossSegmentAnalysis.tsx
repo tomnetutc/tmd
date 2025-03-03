@@ -58,51 +58,26 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
   const [dropdownOptions, setDropdownOptions] =
     useState<TravelModeOption[]>(TravelModeOptions);
   const [optionValue, setOptionValue] = useState<TravelModeOption>();
-  const [activityLocationDropdownOptions, setActivityLocationDropdownOptions] =
-    useState<AnalysisTypeOption[]>([]);
   const [analysisType, setAnalysisType] = useState<AnalysisTypeOption>({
     label: "Number of trips",
     value: "NumberTrips",
   });
-  const [chartTitle, setChartTitle] = useState<string>(
-    "Average number of trips per person"
-  );
 
   const incrementProgress = (value: number) => {
     setProgress((prev) => Math.min(prev + value, 100));
   };
 
-  // Handle dropdown value change based on selected options
   const handleDropdownValueChange = (
     selectedOption: SingleValue<TravelModeOption>
   ) => {
     setOptionValue(selectedOption as TravelModeOption);
   };
 
-  const customStyles = {
-    control: (provided: any) => ({
-      ...provided,
-      minHeight: "36px",
-      fontSize: "14px",
-    }),
-  };
-
   useEffect(() => {
-    const allTripPurposeOption = TravelModeOptions.find(
-      (option) => option.label === "All"
+    const sortedTripPurposeOptions = TravelModeOptions.sort((a, b) =>
+      a.label.localeCompare(b.label)
     );
-
-    const sortedTripPurposeOptions = TravelModeOptions.filter(
-      (option) => option.label !== "All"
-    ).sort((a, b) => a.label.localeCompare(b.label));
-
-    const analysisTypeDropdownOptions = [
-      { label: "Number of trips", value: "NumberTrips" },
-      { label: "Travel duration", value: "TravelDuration" },
-    ];
-
-    setActivityLocationDropdownOptions(analysisTypeDropdownOptions);
-    setOptionValue(TravelModeOptions[0]);
+    setOptionValue(sortedTripPurposeOptions[0]);
   }, []);
 
   useEffect(() => {
@@ -112,9 +87,21 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
       return;
     }
 
-    setIsCrossSegmentLoading(true);
     setProgress(0);
-    incrementProgress(10);
+
+    let loadingComplete = false;
+
+    // Increment progress randomly from 1-3% every 500ms until reaching 80%
+    const incrementProgressSmoothly = setInterval(() => {
+      setProgress((prev) => {
+        if (prev < 80) {
+          return Math.min(prev + Math.floor(Math.random() * 3) + 1, 80);
+        } else {
+          clearInterval(incrementProgressSmoothly);
+          return prev;
+        }
+      });
+    }, 300);
 
     CrossSegmentDataFilter(
       TravelDataProvider.getInstance(),
@@ -124,7 +111,21 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
       toggleState
     )
       .then((FilteredData) => {
-        setTimeout(() => incrementProgress(30), 300);
+        loadingComplete = true;
+        clearInterval(incrementProgressSmoothly);
+
+        // Smoothly reach 80% if not there yet
+        const targetProgress = 80;
+        const reach80Interval = setInterval(() => {
+          setProgress((prev) => {
+            if (prev < targetProgress) {
+              return prev + Math.ceil((targetProgress - prev) / 5);
+            } else {
+              clearInterval(reach80Interval);
+              return targetProgress;
+            }
+          });
+        }, 50);
 
         setCrossSegmentFilteredData(FilteredData);
 
@@ -142,14 +143,24 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
         setChartData(chartData);
         setSampleSizeTableData(sampleSizeTableData);
 
-        setTimeout(() => incrementProgress(40), 300);
+        // After reaching 80%, gradually go to 100%
+        let finalProgress = 80;
+        const completeLoading = setInterval(() => {
+          finalProgress += Math.floor(Math.random() * 3) + 1;
+          setProgress(finalProgress);
+          if (finalProgress >= 100) {
+            clearInterval(completeLoading);
+          }
+        }, 100);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
       })
       .finally(() => {
-        setTimeout(() => {
-          incrementProgress(20);
-          setIsCrossSegmentLoading(false);
-        }, 300);
+        setTimeout(() => setIsCrossSegmentLoading(false), 300);
       });
+
+    return () => clearInterval(incrementProgressSmoothly);
   }, [menuSelectedOptions, selections, toggleState, optionValue, analysisType]);
 
   return (
@@ -165,7 +176,6 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
               onChange={handleDropdownValueChange}
               options={dropdownOptions}
               isSearchable={true}
-              styles={customStyles}
               menuPosition={"fixed"}
               maxMenuHeight={200}
               hideSelectedOptions={false}
@@ -190,7 +200,7 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
           <div className="chart-container-1">
             <RechartsLineChart
               chartData={ChartData}
-              title={chartTitle}
+              title="Average number of trips per person"
               showLegend={true}
             />
           </div>

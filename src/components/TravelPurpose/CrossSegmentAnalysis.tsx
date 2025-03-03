@@ -18,11 +18,11 @@ import {
 import "../../css/travelpurpose.scss";
 import "../../css/dropdowns.css";
 import ProfileCards from "../ProfileCard/ProfileCards";
-import { mean } from "d3";
 import SampleSizeTable from "../../SampleSizeTable";
 import RechartsLineChart from "../../LineChart/LineChart";
 import Select, { SingleValue } from "react-select";
 import { Colors } from "../../Colors";
+import { mean } from "d3";
 
 interface CrossSegmentAnalysisProps {
   menuSelectedOptions: Option[][];
@@ -49,75 +49,55 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
   const [crossSegmentFilteredData, setCrossSegmentFilteredData] = useState<
     DataRow[]
   >([]);
-  const [ChartData, setChartData] = useState<ChartDataProps>({
+  const [chartData, setChartData] = useState<ChartDataProps>({
     labels: [],
     datasets: [],
   });
   const [sampleSizeTableData, setSampleSizeTableData] =
     useState<SampleSizeTableProps>({ years: [], counts: [] });
-  const [dropdownOptions, setDropdownOptions] =
-    useState<TripPurposeOption[]>(TripPurposeOptions);
-  const [optionValue, setOptionValue] = useState<TripPurposeOption>();
+
+  const [optionValue, setOptionValue] = useState<TripPurposeOption>(
+    TripPurposeOptions[0]
+  );
   const [tripPurposeDropdownOptions, setTripPurposeDropdownOptions] = useState<
     TripPurposeOption[]
   >([]);
   const [analysisType, setAnalysisType] = useState<AnalysisTypeOption>({
-    label: "",
-    value: "",
+    label: "Number of trips",
+    value: "NumberTrips",
   });
   const [chartTitle, setChartTitle] = useState<string>(
     "Average number of trips per person"
   );
 
-  const incrementProgress = (value: number) => {
-    setProgress((prev) => Math.min(prev + value, 100));
-  };
-
-  const handleDropdownValueChange = (
-    selectedOption: SingleValue<TripPurposeOption>
-  ) => {
-    setOptionValue(selectedOption as TripPurposeOption);
-  };
-
-  const handleActivityLocationChange = (
-    selectedOption: SingleValue<AnalysisTypeOption>
-  ) => {
-    setAnalysisType(selectedOption as AnalysisTypeOption);
-  };
-
   useEffect(() => {
-    const allTripPurposeOption = TripPurposeOptions.find(
-      (option) => option.label === "All"
+    const sortedTripPurposeOptions = TripPurposeOptions.sort((a, b) =>
+      a.label.localeCompare(b.label)
     );
-
-    const sortedTripPurposeOptions = TripPurposeOptions.filter(
-      (option) => option.label !== "All"
-    ).sort((a, b) => a.label.localeCompare(b.label));
-
-    const tripPurposeDropdownOptions = allTripPurposeOption
-      ? [allTripPurposeOption, ...sortedTripPurposeOptions]
-      : sortedTripPurposeOptions;
-
-    const analysisTypeDropdownOptions = [
-      { label: "Number of trips", value: "NumberTrips" },
-      { label: "Travel duration", value: "TravelDuration" },
-    ];
-
-    setTripPurposeDropdownOptions(tripPurposeDropdownOptions);
-    setAnalysisType(analysisTypeDropdownOptions[0]);
-    setOptionValue(TripPurposeOptions[0]);
+    setTripPurposeDropdownOptions(sortedTripPurposeOptions);
   }, []);
 
   useEffect(() => {
     const { startYear, endYear, week } = selections;
-
     if (!startYear || !endYear || !week || !optionValue) {
       return;
     }
 
-    setIsCrossSegmentLoading(true);
     setProgress(0);
-    incrementProgress(10);
+
+    let loadingComplete = false;
+
+    // Increment progress randomly from 1-3% every 500ms until reaching 80%
+    const incrementProgressSmoothly = setInterval(() => {
+      setProgress((prev) => {
+        if (prev < 80) {
+          return Math.min(prev + Math.floor(Math.random() * 3) + 1, 80);
+        } else {
+          clearInterval(incrementProgressSmoothly);
+          return prev;
+        }
+      });
+    }, 300);
 
     CrossSegmentDataFilter(
       TravelDataProvider.getInstance(),
@@ -126,12 +106,26 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
       week,
       toggleState
     )
-      .then((FilteredData) => {
-        setTimeout(() => incrementProgress(30), 300);
+      .then((filteredData) => {
+        loadingComplete = true;
+        clearInterval(incrementProgressSmoothly);
 
-        setCrossSegmentFilteredData(FilteredData);
-        const { chartData, sampleSizeTableData } = prepareChartData(
-          FilteredData,
+        // Smoothly reach 80% if not there yet
+        const targetProgress = 80;
+        const reach80Interval = setInterval(() => {
+          setProgress((prev) => {
+            if (prev < targetProgress) {
+              return prev + Math.ceil((targetProgress - prev) / 5);
+            } else {
+              clearInterval(reach80Interval);
+              return targetProgress;
+            }
+          });
+        }, 50);
+
+        setCrossSegmentFilteredData(filteredData);
+        return prepareChartData(
+          filteredData,
           menuSelectedOptions,
           optionValue,
           analysisType,
@@ -139,27 +133,35 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
           endYear,
           selections.includeDecember
         );
-
+      })
+      .then(({ chartData, sampleSizeTableData }) => {
         setChartData(chartData);
         setSampleSizeTableData(sampleSizeTableData);
 
-        if (analysisType.value == "NumberTrips") {
+        if (analysisType.value === "NumberTrips") {
           setChartTitle("Average number of trips per person");
         } else {
           setChartTitle("Average travel duration per person (min)");
         }
 
-        setTimeout(() => incrementProgress(40), 300);
+        // After reaching 80%, gradually go to 100%
+        let finalProgress = 80;
+        const completeLoading = setInterval(() => {
+          finalProgress += Math.floor(Math.random() * 3) + 1;
+          setProgress(finalProgress);
+          if (finalProgress >= 100) {
+            clearInterval(completeLoading);
+          }
+        }, 100);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       })
       .finally(() => {
-        setTimeout(() => {
-          incrementProgress(20);
-          setIsCrossSegmentLoading(false);
-        }, 300);
+        setTimeout(() => setIsCrossSegmentLoading(false), 300);
       });
+
+    return () => clearInterval(incrementProgressSmoothly);
   }, [menuSelectedOptions, selections, toggleState, optionValue, analysisType]);
 
   return (
@@ -172,8 +174,10 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
               className="dropdown-select"
               classNamePrefix="dropdown-select"
               value={optionValue}
-              onChange={handleDropdownValueChange}
-              options={dropdownOptions}
+              onChange={(selectedOption) =>
+                setOptionValue(selectedOption as TripPurposeOption)
+              }
+              options={tripPurposeDropdownOptions}
               isSearchable={true}
               menuPosition={"fixed"}
               maxMenuHeight={200}
@@ -186,7 +190,9 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
               className="dropdown-select"
               classNamePrefix="dropdown-select"
               value={analysisType}
-              onChange={handleActivityLocationChange}
+              onChange={(selectedOption) =>
+                setAnalysisType(selectedOption as AnalysisTypeOption)
+              }
               options={[
                 { label: "Number of trips", value: "NumberTrips" },
                 { label: "Travel duration", value: "TravelDuration" },
@@ -211,7 +217,7 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
           </div>
           <div className="chart-container-1">
             <RechartsLineChart
-              chartData={ChartData}
+              chartData={chartData}
               title={chartTitle}
               showLegend={true}
             />

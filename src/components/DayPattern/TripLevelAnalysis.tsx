@@ -94,9 +94,22 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
       return;
     }
 
-    setIsTripLevelAnalysisLoading(true);
     setProgress(0);
-    incrementProgress(10);
+    setIsTripLevelAnalysisLoading(true);
+
+    let loadingComplete = false;
+
+    // Increment progress randomly from 1-3% every 500ms until reaching 80%
+    const incrementProgressSmoothly = setInterval(() => {
+      setProgress((prev) => {
+        if (prev < 80) {
+          return Math.min(prev + Math.floor(Math.random() * 3) + 1, 80);
+        } else {
+          clearInterval(incrementProgressSmoothly);
+          return prev;
+        }
+      });
+    }, 300);
 
     Promise.all([
       TripLevelDataFilter(
@@ -109,8 +122,23 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
       getTotalRowsForYear(DayPatternDataProvider.getInstance(), analysisYear),
     ])
       .then(([dayPatternFilteredData, totalRowsForYear]) => {
-        setTimeout(() => incrementProgress(30), 300);
+        loadingComplete = true;
+        clearInterval(incrementProgressSmoothly);
 
+        // Smoothly reach 80% if not there yet
+        const targetProgress = 80;
+        const reach80Interval = setInterval(() => {
+          setProgress((prev) => {
+            if (prev < targetProgress) {
+              return prev + Math.ceil((targetProgress - prev) / 5);
+            } else {
+              clearInterval(reach80Interval);
+              return targetProgress;
+            }
+          });
+        }, 50);
+
+        // ✅ Actually process and set data in state
         const {
           DayPatternDataSet,
           TripChainsDistribution,
@@ -140,17 +168,24 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
         updateSegmentShare(dayPatternFilteredData.length, totalRowsForYear);
         updateSegmentTripChains(totalChainCount);
 
-        setTimeout(() => incrementProgress(40), 300);
+        // After reaching 80%, gradually go to 100%
+        let finalProgress = 80;
+        const completeLoading = setInterval(() => {
+          finalProgress += Math.floor(Math.random() * 3) + 1;
+          setProgress(finalProgress);
+          if (finalProgress >= 100) {
+            clearInterval(completeLoading);
+          }
+        }, 100);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       })
       .finally(() => {
-        setTimeout(() => {
-          incrementProgress(20);
-          setIsTripLevelAnalysisLoading(false);
-        }, 300);
+        setTimeout(() => setIsTripLevelAnalysisLoading(false), 300);
       });
+
+    return () => clearInterval(incrementProgressSmoothly);
   }, [menuSelectedOptions, selections, toggleState, optionValue]);
 
   return (
@@ -199,9 +234,7 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
               >
                 <CustomSegmentDayPattern
                   title="Average number of trip chains per person: "
-                  segmentSize={formatter.format(
-                    parseFloat(avgTripChains.toFixed(2))
-                  )}
+                  segmentSize={avgTripChains.toFixed(2)}
                   unit=""
                 />
               </div>
@@ -223,9 +256,7 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
               <div className="trip-parent-dropdown-holder">
                 <CustomSegmentDayPattern
                   title="Average number of stops per trip chain: "
-                  segmentSize={formatter.format(
-                    parseFloat(avgStopPerChain.toFixed(2))
-                  )}
+                  segmentSize={avgStopPerChain.toFixed(2)}
                   unit=""
                 />
               </div>

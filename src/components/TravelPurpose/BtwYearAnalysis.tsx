@@ -50,31 +50,14 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
   });
   const [sampleSizeTableData, setSampleSizeTableData] =
     useState<SampleSizeTableProps>({ years: [], counts: [] });
-  const [dropdownOptions, setDropdownOptions] =
-    useState<TripPurposeOption[]>(TripPurposeOptions);
-  const [optionValue, setOptionValue] = useState<TripPurposeOption[]>(
-    TripPurposeOptions.length > 0 ? [TripPurposeOptions[0]] : []
-  );
+
+  const [optionValue, setOptionValue] = useState<TripPurposeOption[]>([
+    TripPurposeOptions[0],
+  ]);
   const [isOptionDisabled, setIsOptionDisabled] = useState(false);
   const [tripPurposeDropdownOptions, setTripPurposeDropdownOptions] = useState<
     TripPurposeOption[]
   >([]);
-
-  const incrementProgress = (value: number) => {
-    setProgress((prev) => Math.min(prev + value, 100));
-  };
-
-  // Handle dropdown value change based on selected options
-  const handleDropdownValueChange = (
-    selectedOption: MultiValue<TripPurposeOption>
-  ) => {
-    if (selectedOption.length === 0 && tripPurposeDropdownOptions.length > 0) {
-      setOptionValue([tripPurposeDropdownOptions[0]]);
-    } else if (selectedOption) {
-      setOptionValue(selectedOption as TripPurposeOption[]);
-    }
-    setIsOptionDisabled(selectedOption.length >= 5);
-  };
 
   useEffect(() => {
     const allTripPurposeOption = TripPurposeOptions.find(
@@ -91,22 +74,36 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
     setTripPurposeDropdownOptions(tripPurposeDropdownOptions);
   }, []);
 
+  const handleDropdownValueChange = (
+    selectedOption: MultiValue<TripPurposeOption>
+  ) => {
+    if (selectedOption.length === 0 && tripPurposeDropdownOptions.length > 0) {
+      setOptionValue([tripPurposeDropdownOptions[0]]);
+    } else if (selectedOption) {
+      setOptionValue(selectedOption as TripPurposeOption[]);
+    }
+    setIsOptionDisabled(selectedOption.length >= 5);
+  };
+
   useEffect(() => {
     const { startYear, endYear, week } = selections;
+    if (!startYear || !endYear || !week || optionValue.length === 0) return;
 
-    if (
-      !startYear ||
-      !endYear ||
-      !week ||
-      !optionValue ||
-      optionValue.length === 0
-    ) {
-      return;
-    }
-
-    setIsBtwYearLoading(true);
     setProgress(0);
-    incrementProgress(10);
+
+    let loadingComplete = false;
+
+    // Increment progress randomly from 1-3% every 500ms until reaching 80%
+    const incrementProgressSmoothly = setInterval(() => {
+      setProgress((prev) => {
+        if (prev < 80) {
+          return Math.min(prev + Math.floor(Math.random() * 3) + 1, 80);
+        } else {
+          clearInterval(incrementProgressSmoothly);
+          return prev;
+        }
+      });
+    }, 300);
 
     fetchAndFilterDataForBtwYearAnalysis(
       TravelDataProvider.getInstance(),
@@ -115,7 +112,21 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
       toggleState
     )
       .then((btwYearFilteredData) => {
-        setTimeout(() => incrementProgress(30), 300);
+        loadingComplete = true;
+        clearInterval(incrementProgressSmoothly);
+
+        // Smoothly reach 80% if not there yet
+        const targetProgress = 80;
+        const reach80Interval = setInterval(() => {
+          setProgress((prev) => {
+            if (prev < targetProgress) {
+              return prev + Math.ceil((targetProgress - prev) / 5);
+            } else {
+              clearInterval(reach80Interval);
+              return targetProgress;
+            }
+          });
+        }, 50);
 
         const { tripsChartData, durationChartData, sampleSizeTableData } =
           prepareVerticalChartData(
@@ -132,17 +143,24 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
         setDurationChartData(durationChartData);
         setSampleSizeTableData(sampleSizeTableData);
 
-        setTimeout(() => incrementProgress(40), 300);
+        // After reaching 80%, gradually go to 100%
+        let finalProgress = 80;
+        const completeLoading = setInterval(() => {
+          finalProgress += Math.floor(Math.random() * 3) + 1;
+          setProgress(finalProgress);
+          if (finalProgress >= 100) {
+            clearInterval(completeLoading);
+          }
+        }, 100);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       })
       .finally(() => {
-        setTimeout(() => {
-          incrementProgress(20);
-          setIsBtwYearLoading(false);
-        }, 300);
+        setTimeout(() => setIsBtwYearLoading(false), 300);
       });
+
+    return () => clearInterval(incrementProgressSmoothly);
   }, [menuSelectedOptions, selections, toggleState, optionValue]);
 
   return (
@@ -156,7 +174,7 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
               classNamePrefix="dropdown-select"
               value={optionValue}
               onChange={handleDropdownValueChange}
-              options={dropdownOptions}
+              options={tripPurposeDropdownOptions}
               isSearchable={true}
               menuPosition={"fixed"}
               maxMenuHeight={200}

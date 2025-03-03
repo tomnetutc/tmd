@@ -100,9 +100,21 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
       return;
     }
 
-    setIsTripLevelAnalysisLoading(true);
     setProgress(0);
-    incrementProgress(10);
+
+    let loadingComplete = false;
+
+    // Increment progress randomly from 1-3% every 500ms until reaching 80%
+    const incrementProgressSmoothly = setInterval(() => {
+      setProgress((prev) => {
+        if (prev < 80) {
+          return Math.min(prev + Math.floor(Math.random() * 3) + 1, 80);
+        } else {
+          clearInterval(incrementProgressSmoothly);
+          return prev;
+        }
+      });
+    }, 300);
 
     TripLevelDataFilter(
       TripLevelDataProvider.getInstance(),
@@ -112,38 +124,62 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
       toggleState
     )
       .then((tripLevelFilteredData) => {
-        setTimeout(() => incrementProgress(30), 300);
+        loadingComplete = true;
+        clearInterval(incrementProgressSmoothly);
 
-        const {
-          tripsDurationChartData,
-          tripStartTimeChartData,
-          tripModeDistributionChartData,
-          segmentSize,
-        } = prepareVerticalChartData(
+        // Smoothly reach 80% if not there yet
+        const targetProgress = 80;
+        const reach80Interval = setInterval(() => {
+          setProgress((prev) => {
+            if (prev < targetProgress) {
+              return prev + Math.ceil((targetProgress - prev) / 5);
+            } else {
+              clearInterval(reach80Interval);
+              return targetProgress;
+            }
+          });
+        }, 50);
+
+        return prepareVerticalChartData(
           tripLevelFilteredData,
           analysisYear,
           optionValue,
           selections.includeDecember,
           "Trip purpose"
         );
-
-        setTripLevelFilteredData(tripLevelFilteredData);
-        setTripDurationChartData(tripsDurationChartData);
-        setTripModeDistributionChartData(tripModeDistributionChartData);
-        setTripStartChartData(tripStartTimeChartData);
-        setSegmentSize(segmentSize);
-
-        setTimeout(() => incrementProgress(40), 300);
       })
+      .then(
+        ({
+          tripsDurationChartData,
+          tripStartTimeChartData,
+          tripModeDistributionChartData,
+          segmentSize,
+        }) => {
+          setTripLevelFilteredData(tripLevelFilteredData);
+          setTripDurationChartData(tripsDurationChartData);
+          setTripModeDistributionChartData(tripModeDistributionChartData);
+          setTripStartChartData(tripStartTimeChartData);
+          setSegmentSize(segmentSize);
+
+          // After reaching 80%, gradually go to 100%
+          let finalProgress = 80;
+          const completeLoading = setInterval(() => {
+            finalProgress += Math.floor(Math.random() * 3) + 1;
+            setProgress(finalProgress);
+            if (finalProgress >= 100) {
+              clearInterval(completeLoading);
+            }
+          }, 100);
+        }
+      )
       .catch((error) => {
         console.error("Error fetching data:", error);
       })
       .finally(() => {
-        setTimeout(() => {
-          incrementProgress(20);
-          setIsTripLevelAnalysisLoading(false);
-        }, 300);
+        setTimeout(() => setIsTripLevelAnalysisLoading(false), 300);
       });
+
+    return () => clearInterval(incrementProgressSmoothly);
   }, [menuSelectedOptions, selections, toggleState, optionValue]);
 
   return (
