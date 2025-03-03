@@ -132,19 +132,27 @@ export default function TravelMode(): JSX.Element {
   );
 
   useEffect(() => {
-    // Clear segment selections when switching between analysis types
-    setMenuSelectedOptions([]);
-    setCrossSegmentSelectedOptions([[]]);
+    if (!selections.analysisLevelValue) return;
+
+    // Avoid unnecessary state updates
+    setMenuSelectedOptions((prev) => (prev.length === 0 ? prev : []));
+    setCrossSegmentSelectedOptions((prev) =>
+      prev.length === 1 && prev[0].length === 0 ? prev : [[]]
+    );
     setProgress(0);
 
-    // Ensure analysis type is set to "between year" when switching back to person level
     if (selections.analysisLevelValue?.value === "trip") {
-      setSelections((prev) => ({
-        ...prev,
-        analysisTypeValue: { value: "betweenyear", label: "Between Year" },
-      }));
+      setSelections((prev) => {
+        if (prev.analysisTypeValue?.value !== "betweenyear") {
+          return {
+            ...prev,
+            analysisTypeValue: { value: "betweenyear", label: "Between Year" },
+          };
+        }
+        return prev;
+      });
     }
-  }, [selections.analysisTypeValue, selections.analysisLevelValue]);
+  }, [selections.analysisLevelValue]); // ✅ Only re-run when `analysisLevelValue` changes
 
   return (
     <div className="app-layout">

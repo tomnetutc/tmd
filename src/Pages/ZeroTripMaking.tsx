@@ -105,10 +105,12 @@ export default function ZeroTripMaking(): JSX.Element {
   );
 
   useEffect(() => {
-    // Clear segment selections when switching between analysis types
-    setMenuSelectedOptions([]);
-    setCrossSegmentSelectedOptions([[]]);
     setProgress(0);
+
+    setMenuSelectedOptions((prev) => (prev.length > 0 ? [] : prev));
+    setCrossSegmentSelectedOptions((prev) =>
+      prev.length > 1 || prev[0].length > 0 ? [[]] : prev
+    );
   }, [selections.analysisTypeValue, selections.analysisLevelValue]);
 
   return (

@@ -138,12 +138,12 @@ export default function DayPattern(): JSX.Element {
   );
 
   useEffect(() => {
-    if (currAnalysisType && currAnalysisType.value) {
-      setMenuSelectedOptions([]);
-      setCrossSegmentSelectedOptions([[]]);
-      setProgress(0);
-    }
-  }, [currAnalysisType.value]);
+    if (!currAnalysisType || !currAnalysisType.value) return;
+
+    setMenuSelectedOptions([]);
+    setCrossSegmentSelectedOptions([[]]);
+    setProgress(0);
+  }, [currAnalysisType]);
 
   const renderTopMenu = () => {
     switch (currAnalysisType?.value) {

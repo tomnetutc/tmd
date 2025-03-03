@@ -10,6 +10,7 @@ import {
   TripLevelDataProvider,
   TripLevelTripPurposeOptions,
   TripLevelDataFilter,
+  getTotalRowsForYear,
 } from "../../utils/Helpers";
 import "../../css/travelpurpose.scss";
 import "../../css/tripDropdown.css";
@@ -56,9 +57,6 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
       : []
   );
   const [isOptionDisabled, setIsOptionDisabled] = useState(false);
-  const [tripPurposeDropdownOptions, setTripPurposeDropdownOptions] = useState<
-    TripPurposeOption[]
-  >([]);
   const [segmentSize, setSegmentSize] = useState<number>(0);
   const formatter = new Intl.NumberFormat("en-US");
 
@@ -69,42 +67,24 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
   const handleDropdownValueChange = (
     selectedOption: MultiValue<TripPurposeOption>
   ) => {
-    if (selectedOption.length === 0 && tripPurposeDropdownOptions.length > 0) {
-      setOptionValue([tripPurposeDropdownOptions[0]]);
-    } else if (selectedOption) {
+    if (selectedOption.length === 0 && dropdownOptions.length > 0) {
+      setOptionValue([dropdownOptions[0]]);
+    } else {
       setOptionValue(selectedOption as TripPurposeOption[]);
     }
-
     setIsOptionDisabled(selectedOption.length >= 5);
   };
 
   useEffect(() => {
-    const allTripPurposeOption = TripLevelTripPurposeOptions.find(
-      (option) => option.label === "All"
-    );
-
-    const sortedTripPurposeOptions = TripLevelTripPurposeOptions.filter(
-      (option) => option.label !== "All"
-    ).sort((a, b) => a.label.localeCompare(b.label));
-
-    const tripPurposeDropdownOptions = allTripPurposeOption
-      ? [allTripPurposeOption, ...sortedTripPurposeOptions]
-      : sortedTripPurposeOptions;
-    setTripPurposeDropdownOptions(tripPurposeDropdownOptions);
-  }, []);
-
-  useEffect(() => {
     const { analysisYear, week } = selections;
-
-    if (!analysisYear || !week || !optionValue || optionValue.length === 0) {
-      return;
-    }
+    if (!analysisYear || !week || optionValue.length === 0) return;
 
     setProgress(0);
+    // setIsTripLevelAnalysisLoading(true);
 
     let loadingComplete = false;
 
-    // Increment progress randomly from 1-3% every 500ms until reaching 80%
+    // 🔹 Increment progress randomly (1-3%) every 200ms until reaching 80%
     const incrementProgressSmoothly = setInterval(() => {
       setProgress((prev) => {
         if (prev < 80) {
@@ -116,18 +96,23 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
       });
     }, 300);
 
-    TripLevelDataFilter(
-      TripLevelDataProvider.getInstance(),
-      menuSelectedOptions,
-      analysisYear,
-      week,
-      toggleState
-    )
-      .then((tripLevelFilteredData) => {
-        loadingComplete = true;
-        clearInterval(incrementProgressSmoothly);
+    const dataProvider = TripLevelDataProvider.getInstance();
 
-        // Smoothly reach 80% if not there yet
+    Promise.all([
+      TripLevelDataFilter(
+        dataProvider,
+        menuSelectedOptions,
+        analysisYear,
+        week,
+        toggleState
+      ),
+      getTotalRowsForYear(dataProvider, analysisYear),
+    ])
+      .then(([tripLevelFilteredData, totalRowsForYear]) => {
+        loadingComplete = true;
+        clearInterval(incrementProgressSmoothly); // Ensure progress stops at 80%
+
+        // 🔹 Ensure reaching exactly 80%
         const targetProgress = 80;
         const reach80Interval = setInterval(() => {
           setProgress((prev) => {
@@ -140,38 +125,36 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
           });
         }, 50);
 
-        return prepareVerticalChartData(
-          tripLevelFilteredData,
-          analysisYear,
-          optionValue,
-          selections.includeDecember,
-          "Trip purpose"
-        );
-      })
-      .then(
-        ({
+        // 🔹 Process the chart data
+        const {
           tripsDurationChartData,
           tripStartTimeChartData,
           tripModeDistributionChartData,
           segmentSize,
-        }) => {
-          setTripLevelFilteredData(tripLevelFilteredData);
-          setTripDurationChartData(tripsDurationChartData);
-          setTripModeDistributionChartData(tripModeDistributionChartData);
-          setTripStartChartData(tripStartTimeChartData);
-          setSegmentSize(segmentSize);
+        } = prepareVerticalChartData(
+          tripLevelFilteredData,
+          analysisYear,
+          optionValue,
+          selections.includeDecember,
+          "Travel mode"
+        );
 
-          // After reaching 80%, gradually go to 100%
-          let finalProgress = 80;
-          const completeLoading = setInterval(() => {
-            finalProgress += Math.floor(Math.random() * 3) + 1;
-            setProgress(finalProgress);
-            if (finalProgress >= 100) {
-              clearInterval(completeLoading);
-            }
-          }, 100);
-        }
-      )
+        setTripLevelFilteredData(tripLevelFilteredData);
+        setTripDurationChartData(tripsDurationChartData);
+        setTripModeDistributionChartData(tripModeDistributionChartData);
+        setTripStartChartData(tripStartTimeChartData);
+        setSegmentSize(segmentSize);
+
+        // 🔹 Final smooth transition from 80% → 100%
+        let finalProgress = 80;
+        const completeLoading = setInterval(() => {
+          finalProgress += Math.floor(Math.random() * 3) + 1;
+          setProgress(finalProgress);
+          if (finalProgress >= 100) {
+            clearInterval(completeLoading);
+          }
+        }, 100);
+      })
       .catch((error) => {
         console.error("Error fetching data:", error);
       })
@@ -179,7 +162,7 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
         setTimeout(() => setIsTripLevelAnalysisLoading(false), 300);
       });
 
-    return () => clearInterval(incrementProgressSmoothly);
+    return () => clearInterval(incrementProgressSmoothly); // Cleanup on unmount
   }, [menuSelectedOptions, selections, toggleState, optionValue]);
 
   return (
@@ -200,14 +183,10 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
               onChange={handleDropdownValueChange}
               options={dropdownOptions}
               isSearchable={true}
-              menuPosition={"fixed"}
-              maxMenuHeight={200}
-              hideSelectedOptions={false}
               isMulti
             />
           </div>
         </div>
-
         <div className="chart-wrapper">
           <div className="chart-container-1">
             <HistogramChart
@@ -216,12 +195,10 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
               showLegend={true}
               yAxisLabel="Duration (min)"
               xAxisLabel="%"
-              showSampleSize={true}
               invertAxis={true}
             />
           </div>
         </div>
-
         <div className="chart-wrapper">
           <div className="chart-container-1">
             <AreaChartComponent
@@ -233,15 +210,13 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
             />
           </div>
         </div>
-
         <div className="chart-wrapper">
           <div className="chart-container-1">
             <HistogramChart
               chartData={tripModeDistributionChartData}
-              title="Travel mode distribution by trip purpose"
+              title="Travel mode by purpose"
               showLegend={true}
               xAxisLabel="%"
-              showSampleSize={true}
               invertAxis={true}
             />
           </div>

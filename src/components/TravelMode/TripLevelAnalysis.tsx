@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   TripChartDataProps,
   weekOption,
@@ -53,58 +53,54 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
   const [optionValue, setOptionValue] = useState<TravelModeOption[]>(
     TripLevelTravelModeOptions.length > 0 ? [TripLevelTravelModeOptions[0]] : []
   );
-  const [isOptionDisabled, setIsOptionDisabled] = useState(false);
-  const [tripPurposeDropdownOptions, setTripPurposeDropdownOptions] = useState<
-    TravelModeOption[]
-  >([]);
   const [segmentSize, setSegmentSize] = useState<number>(0);
   const formatter = new Intl.NumberFormat("en-US");
 
-  const incrementProgress = (value: number) => {
-    setProgress((prev) => Math.min(prev + value, 100));
+  const isFetchingRef = useRef(false); // Prevents multiple API calls
+
+  const incrementProgress = (target: number) => {
+    let current = 0;
+    const interval = setInterval(() => {
+      current += Math.floor(Math.random() * 5) + 3;
+      setProgress((prev) => Math.min(prev + current, target));
+      if (current >= target) clearInterval(interval);
+    }, 100);
   };
 
-  // Handle dropdown value change based on selected options
   const handleDropdownValueChange = (
     selectedOption: MultiValue<TravelModeOption>
   ) => {
-    if (selectedOption.length === 0 && tripPurposeDropdownOptions.length > 0) {
-      setOptionValue([tripPurposeDropdownOptions[0]]);
-    } else if (selectedOption) {
-      setOptionValue(selectedOption as TravelModeOption[]);
-    }
-
-    setIsOptionDisabled(selectedOption.length >= 5);
+    setOptionValue(
+      selectedOption.length === 0
+        ? [dropdownOptions[0]]
+        : (selectedOption as TravelModeOption[])
+    );
   };
 
   useEffect(() => {
     const allTripPurposeOption = TripLevelTravelModeOptions.find(
       (option) => option.label === "All"
     );
-
     const sortedTripPurposeOptions = TripLevelTravelModeOptions.filter(
       (option) => option.label !== "All"
     ).sort((a, b) => a.label.localeCompare(b.label));
-
-    const tripPurposeDropdownOptions = allTripPurposeOption
-      ? [allTripPurposeOption, ...sortedTripPurposeOptions]
-      : sortedTripPurposeOptions;
-    setTripPurposeDropdownOptions(tripPurposeDropdownOptions);
+    setDropdownOptions(
+      allTripPurposeOption
+        ? [allTripPurposeOption, ...sortedTripPurposeOptions]
+        : sortedTripPurposeOptions
+    );
   }, []);
 
   useEffect(() => {
     const { analysisYear, week } = selections;
-
-    if (!analysisYear || !week || !optionValue || optionValue.length === 0) {
-      return;
-    }
+    if (!analysisYear || !week || optionValue.length === 0) return;
 
     setProgress(0);
     // setIsTripLevelAnalysisLoading(true);
 
     let loadingComplete = false;
 
-    // Increment progress randomly from 1-3% every 500ms until reaching 80%
+    // 🔹 Increment progress randomly (1-3%) every 200ms until reaching 80%
     const incrementProgressSmoothly = setInterval(() => {
       setProgress((prev) => {
         if (prev < 80) {
@@ -116,18 +112,22 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
       });
     }, 300);
 
-    TripLevelDataFilter(
-      TripLevelDataProvider.getInstance(),
-      menuSelectedOptions,
-      analysisYear,
-      week,
-      toggleState
-    )
-      .then((tripLevelFilteredData) => {
-        loadingComplete = true;
-        clearInterval(incrementProgressSmoothly);
+    const dataProvider = TripLevelDataProvider.getInstance();
 
-        // Smoothly reach 80% if not there yet
+    Promise.all([
+      TripLevelDataFilter(
+        dataProvider,
+        menuSelectedOptions,
+        analysisYear,
+        week,
+        toggleState
+      ),
+    ])
+      .then(([tripLevelFilteredData]) => {
+        loadingComplete = true;
+        clearInterval(incrementProgressSmoothly); // Ensure progress stops at 80%
+
+        // 🔹 Ensure reaching exactly 80%
         const targetProgress = 80;
         const reach80Interval = setInterval(() => {
           setProgress((prev) => {
@@ -140,38 +140,36 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
           });
         }, 50);
 
-        return prepareVerticalChartData(
+        // 🔹 Process the chart data
+        const {
+          tripsDurationChartData,
+          tripStartTimeChartData,
+          tripModeDistributionChartData,
+          segmentSize,
+        } = prepareVerticalChartData(
           tripLevelFilteredData,
           analysisYear,
           optionValue,
           selections.includeDecember,
           "Travel mode"
         );
-      })
-      .then(
-        ({
-          tripsDurationChartData,
-          tripStartTimeChartData,
-          tripModeDistributionChartData,
-          segmentSize,
-        }) => {
-          setTripLevelFilteredData(tripLevelFilteredData);
-          setTripDurationChartData(tripsDurationChartData);
-          setTripModeDistributionChartData(tripModeDistributionChartData);
-          setTripStartChartData(tripStartTimeChartData);
-          setSegmentSize(segmentSize);
 
-          // After reaching 80%, gradually go to 100%
-          let finalProgress = 80;
-          const completeLoading = setInterval(() => {
-            finalProgress += Math.floor(Math.random() * 3) + 1;
-            setProgress(finalProgress);
-            if (finalProgress >= 100) {
-              clearInterval(completeLoading);
-            }
-          }, 100);
-        }
-      )
+        setTripLevelFilteredData(tripLevelFilteredData);
+        setTripDurationChartData(tripsDurationChartData);
+        setTripModeDistributionChartData(tripModeDistributionChartData);
+        setTripStartChartData(tripStartTimeChartData);
+        setSegmentSize(segmentSize);
+
+        // 🔹 Final smooth transition from 80% → 100%
+        let finalProgress = 80;
+        const completeLoading = setInterval(() => {
+          finalProgress += Math.floor(Math.random() * 3) + 1;
+          setProgress(finalProgress);
+          if (finalProgress >= 100) {
+            clearInterval(completeLoading);
+          }
+        }, 100);
+      })
       .catch((error) => {
         console.error("Error fetching data:", error);
       })
@@ -179,7 +177,7 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
         setTimeout(() => setIsTripLevelAnalysisLoading(false), 300);
       });
 
-    return () => clearInterval(incrementProgressSmoothly);
+    return () => clearInterval(incrementProgressSmoothly); // Cleanup on unmount
   }, [menuSelectedOptions, selections, toggleState, optionValue]);
 
   return (
@@ -200,14 +198,10 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
               onChange={handleDropdownValueChange}
               options={dropdownOptions}
               isSearchable={true}
-              menuPosition={"fixed"}
-              maxMenuHeight={200}
-              hideSelectedOptions={false}
               isMulti
             />
           </div>
         </div>
-
         <div className="chart-wrapper">
           <div className="chart-container-1">
             <HistogramChart
@@ -216,12 +210,10 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
               showLegend={true}
               yAxisLabel="Duration (min)"
               xAxisLabel="%"
-              showSampleSize={true}
               invertAxis={true}
             />
           </div>
         </div>
-
         <div className="chart-wrapper">
           <div className="chart-container-1">
             <AreaChartComponent
@@ -233,14 +225,12 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
             />
           </div>
         </div>
-
         <div className="chart-wrapper">
           <div className="chart-container-1">
             <HistogramChart
               chartData={tripModeDistributionChartData}
-              title="Trip purpose distribution by travel mode"
+              title="Trip purpose by mode"
               showLegend={true}
-              showSampleSize={true}
               xAxisLabel="%"
             />
           </div>
