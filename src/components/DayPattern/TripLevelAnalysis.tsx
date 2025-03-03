@@ -95,7 +95,6 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
     }
 
     setProgress(0);
-    setIsTripLevelAnalysisLoading(true);
 
     let loadingComplete = false;
 
@@ -138,7 +137,6 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
           });
         }, 50);
 
-        // ✅ Actually process and set data in state
         const {
           DayPatternDataSet,
           TripChainsDistribution,
