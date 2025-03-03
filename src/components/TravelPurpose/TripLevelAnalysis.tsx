@@ -10,10 +10,10 @@ import {
   TripLevelDataProvider,
   TripLevelTripPurposeOptions,
   TripLevelDataFilter,
-  getTotalRowsForYear,
 } from "../../utils/Helpers";
 import "../../css/travelpurpose.scss";
 import "../../css/tripDropdown.css";
+import "../../css/dropdowns.css";
 import { prepareVerticalChartData } from "./TripLevelDataCalculations";
 import HistogramChart from "../../Histogram/Histogram";
 import Select, { MultiValue } from "react-select";
@@ -39,22 +39,13 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
   setIsTripLevelAnalysisLoading,
   setProgress,
 }) => {
-  const [tripLevelFilteredData, setTripLevelFilteredData] = useState<DataRow[]>(
-    []
-  );
-  const [tripDurationChartData, setTripDurationChartData] =
-    useState<TripChartDataProps>({ labels: [], datasets: [] });
-  const [tripStartChartData, setTripStartChartData] =
-    useState<TripChartDataProps>({ labels: [], datasets: [] });
-  const [tripModeDistributionChartData, setTripModeDistributionChartData] =
-    useState<TripChartDataProps>({ labels: [], datasets: [] });
-  const [dropdownOptions, setDropdownOptions] = useState<TripPurposeOption[]>(
-    TripLevelTripPurposeOptions
-  );
+  const [tripLevelFilteredData, setTripLevelFilteredData] = useState<DataRow[]>([]);
+  const [tripDurationChartData, setTripDurationChartData] = useState<TripChartDataProps>({ labels: [], datasets: [] });
+  const [tripStartChartData, setTripStartChartData] = useState<TripChartDataProps>({ labels: [], datasets: [] });
+  const [tripModeDistributionChartData, setTripModeDistributionChartData] = useState<TripChartDataProps>({ labels: [], datasets: [] });
+  const [dropdownOptions, setDropdownOptions] = useState<TripPurposeOption[]>(TripLevelTripPurposeOptions);
   const [optionValue, setOptionValue] = useState<TripPurposeOption[]>(
-    TripLevelTripPurposeOptions.length > 0
-      ? [TripLevelTripPurposeOptions[0]]
-      : []
+    TripLevelTripPurposeOptions.length > 0 ? [TripLevelTripPurposeOptions[0]] : []
   );
   const [isOptionDisabled, setIsOptionDisabled] = useState(false);
   const [segmentSize, setSegmentSize] = useState<number>(0);
@@ -64,16 +55,34 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
     setProgress((prev) => Math.min(prev + value, 100));
   };
 
-  const handleDropdownValueChange = (
-    selectedOption: MultiValue<TripPurposeOption>
-  ) => {
+  const handleDropdownValueChange = (selectedOption: MultiValue<TripPurposeOption>) => {
     if (selectedOption.length === 0 && dropdownOptions.length > 0) {
       setOptionValue([dropdownOptions[0]]);
-    } else {
+    } else if (selectedOption) {
       setOptionValue(selectedOption as TripPurposeOption[]);
     }
     setIsOptionDisabled(selectedOption.length >= 5);
   };
+
+
+  const getOptionDisabledState = (option: TripPurposeOption) => {
+    const isSelected = optionValue.some((selectedOption) => selectedOption.value === option.value);
+    return isOptionDisabled && !isSelected;
+  };
+
+  const modifiedDropdownOptions = dropdownOptions.map((option) => ({
+    ...option,
+    isDisabled: getOptionDisabledState(option),
+  }));
+
+  useEffect(() => {
+    const allTripPurposeOption = TripLevelTripPurposeOptions.find(option => option.label === "All");
+    const sortedTripPurposeOptions = TripLevelTripPurposeOptions
+      .filter(option => option.label !== "All")
+      .sort((a, b) => a.label.localeCompare(b.label));
+    const tripPurposeDropdownOptions = allTripPurposeOption ? [allTripPurposeOption, ...sortedTripPurposeOptions] : sortedTripPurposeOptions;
+    setDropdownOptions(tripPurposeDropdownOptions);
+  }, []);
 
   useEffect(() => {
     const { analysisYear, week } = selections;
@@ -84,7 +93,6 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
 
     let loadingComplete = false;
 
-    // 🔹 Increment progress randomly (1-3%) every 200ms until reaching 80%
     const incrementProgressSmoothly = setInterval(() => {
       setProgress((prev) => {
         if (prev < 80) {
@@ -105,14 +113,12 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
         analysisYear,
         week,
         toggleState
-      ),
-      getTotalRowsForYear(dataProvider, analysisYear),
+      )
     ])
-      .then(([tripLevelFilteredData, totalRowsForYear]) => {
+      .then(([tripLevelFilteredData]) => {
         loadingComplete = true;
-        clearInterval(incrementProgressSmoothly); // Ensure progress stops at 80%
+        clearInterval(incrementProgressSmoothly);
 
-        // 🔹 Ensure reaching exactly 80%
         const targetProgress = 80;
         const reach80Interval = setInterval(() => {
           setProgress((prev) => {
@@ -125,7 +131,6 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
           });
         }, 50);
 
-        // 🔹 Process the chart data
         const {
           tripsDurationChartData,
           tripStartTimeChartData,
@@ -145,7 +150,6 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
         setTripStartChartData(tripStartTimeChartData);
         setSegmentSize(segmentSize);
 
-        // 🔹 Final smooth transition from 80% → 100%
         let finalProgress = 80;
         const completeLoading = setInterval(() => {
           finalProgress += Math.floor(Math.random() * 3) + 1;
@@ -162,27 +166,32 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
         setTimeout(() => setIsTripLevelAnalysisLoading(false), 300);
       });
 
-    return () => clearInterval(incrementProgressSmoothly); // Cleanup on unmount
+    return () => clearInterval(incrementProgressSmoothly);
   }, [menuSelectedOptions, selections, toggleState, optionValue]);
 
   return (
     <>
       <div style={{ position: "relative" }}>
         <div className="trip-parent-dropdown-holder">
-          <CustomSegment
-            title="Segment size: "
-            segmentSize={formatter.format(segmentSize)}
-            unit="persons"
-          />
+          <div>
+            <CustomSegment
+              title="Segment size: "
+              segmentSize={formatter.format(segmentSize)}
+              unit="persons"
+            />
+          </div>
           <div className="trip-dropdown-container">
             <label className="trip-segment-label">Trip purpose:</label>
             <Select
-              className="trip-dropdown-select"
+              className="dropdown-select"
               classNamePrefix="dropdown-select"
               value={optionValue}
               onChange={handleDropdownValueChange}
-              options={dropdownOptions}
+              options={modifiedDropdownOptions}
               isSearchable={true}
+              menuPosition={"fixed"}
+              maxMenuHeight={200}
+              hideSelectedOptions={false}
               isMulti
             />
           </div>

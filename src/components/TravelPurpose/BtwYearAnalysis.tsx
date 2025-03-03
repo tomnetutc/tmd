@@ -74,6 +74,16 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
     setTripPurposeDropdownOptions(tripPurposeDropdownOptions);
   }, []);
 
+  const getOptionDisabledState = (option: TripPurposeOption) => {
+    const isSelected = optionValue.some((selectedOption) => selectedOption.value === option.value);
+    return isOptionDisabled && !isSelected;
+  };
+
+  const modifiedDropdownOptions = tripPurposeDropdownOptions.map((option) => ({
+    ...option,
+    isDisabled: getOptionDisabledState(option),
+  }));
+
   const handleDropdownValueChange = (
     selectedOption: MultiValue<TripPurposeOption>
   ) => {
@@ -174,7 +184,7 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
               classNamePrefix="dropdown-select"
               value={optionValue}
               onChange={handleDropdownValueChange}
-              options={tripPurposeDropdownOptions}
+              options={modifiedDropdownOptions}
               isSearchable={true}
               menuPosition={"fixed"}
               maxMenuHeight={200}

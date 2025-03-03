@@ -10,7 +10,7 @@
 .trip-dropdown-container {
     display: flex;
     justify-content: flex-end; /* Align to the right */
-    width: fit-content;
+    width: auto;
     align-items: center;
     margin: 0px;
     gap: 10px;
@@ -30,6 +30,7 @@
     min-width: 150px;
     width: auto;
     max-width: 100%;
+    max-height: 150px;
 }
 
 .trip-dropdown-indicator {

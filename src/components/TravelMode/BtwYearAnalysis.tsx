@@ -54,10 +54,53 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
   const [optionValue, setOptionValue] = useState<TravelModeOption[]>(
     TravelModeOptions.length > 0 ? [TravelModeOptions[0]] : []
   );
+  const [isOptionDisabled, setIsOptionDisabled] = useState(false);
 
   const incrementProgress = (value: number) => {
     setProgress((prev) => Math.min(prev + value, 100));
   };
+
+  const [travelModeDropdownOptions, setTravelModeDropdownOptions] = useState<
+  TravelModeOption[]
+>([]);
+
+
+  useEffect(() => {
+    const allTravelModeOption = TravelModeOptions.find(
+      (option) => option.label === "All"
+    );
+
+    const sortedTravelModeOptions = TravelModeOptions.filter(
+      (option) => option.label !== "All"
+    ).sort((a, b) => a.label.localeCompare(b.label));
+
+    const dropdownOptions = allTravelModeOption
+      ? [allTravelModeOption, ...sortedTravelModeOptions]
+      : sortedTravelModeOptions;
+    setTravelModeDropdownOptions(dropdownOptions);
+  }, []);
+
+  const getOptionDisabledState = (option: TravelModeOption) => {
+    const isSelected = optionValue.some((selectedOption) => selectedOption.value === option.value);
+    return isOptionDisabled && !isSelected;
+  };
+
+  const modifiedDropdownOptions = travelModeDropdownOptions.map((option) => ({
+    ...option,
+    isDisabled: getOptionDisabledState(option),
+  }));
+
+  const handleDropdownValueChange = (
+    selectedOption: MultiValue<TravelModeOption>
+  ) => {
+    if (selectedOption.length === 0 && travelModeDropdownOptions.length > 0) {
+      setOptionValue([travelModeDropdownOptions[0]]);
+    } else if (selectedOption) {
+      setOptionValue(selectedOption as TravelModeOption[]);
+    }
+    setIsOptionDisabled(selectedOption.length >= 5);
+  };
+
 
   useEffect(() => {
     const { startYear, endYear, week } = selections;
@@ -142,6 +185,25 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
 
   return (
     <>
+          <div style={{ position: "relative" }}>
+          <div className="parent-dropdown-holder">
+          <div className="dropdown-container">
+            <label className="segment-label">Travel mode:</label>
+            <Select
+              className="dropdown-select"
+              classNamePrefix="dropdown-select"
+              value={optionValue}
+              onChange={handleDropdownValueChange}
+              options={modifiedDropdownOptions}
+              isSearchable={true}
+              menuPosition={"fixed"}
+              maxMenuHeight={200}
+              hideSelectedOptions={false}
+              isMulti
+            />
+          </div>
+        </div>
+
       <div style={{ position: "relative" }}>
         <div className="chart-wrapper">
           <div className="chart-container-1">
@@ -165,6 +227,7 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
           years={sampleSizeTableData.years}
           counts={sampleSizeTableData.counts}
         />
+      </div>
       </div>
     </>
   );

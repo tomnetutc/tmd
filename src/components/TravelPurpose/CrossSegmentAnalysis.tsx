@@ -71,10 +71,14 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
   );
 
   useEffect(() => {
-    const sortedTripPurposeOptions = TripPurposeOptions.sort((a, b) =>
-      a.label.localeCompare(b.label)
-    );
-    setTripPurposeDropdownOptions(sortedTripPurposeOptions);
+    const allOption = TripPurposeOptions.find(option => option.label === "All");
+    const sortedOthers = TripPurposeOptions
+      .filter(option => option.label !== "All")
+      .sort((a, b) => a.label.localeCompare(b.label));
+    const sortedTripPurposeOptions = allOption ? [allOption, ...sortedOthers] : sortedOthers;
+    
+    setTripPurposeDropdownOptions(sortedTripPurposeOptions);  // Pass this sorted array to your dropdown
+    setOptionValue(sortedTripPurposeOptions[0]);     // Optionally, set "All" as the default selection
   }, []);
 
   useEffect(() => {

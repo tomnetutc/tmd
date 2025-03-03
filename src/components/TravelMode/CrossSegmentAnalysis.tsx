@@ -73,12 +73,24 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
     setOptionValue(selectedOption as TravelModeOption);
   };
 
+  const [chartTitle, setChartTitle] = useState<string>(
+    "Average number of trips per person"
+  );
+
+
   useEffect(() => {
-    const sortedTripPurposeOptions = TravelModeOptions.sort((a, b) =>
-      a.label.localeCompare(b.label)
-    );
-    setOptionValue(sortedTripPurposeOptions[0]);
+    const allOption = TravelModeOptions.find(option => option.label === "All");
+    const sortedOthers = TravelModeOptions
+      .filter(option => option.label !== "All")
+      .sort((a, b) => a.label.localeCompare(b.label));
+    const sortedTripPurposeOptions = allOption ? [allOption, ...sortedOthers] : sortedOthers;
+    
+    setDropdownOptions(sortedTripPurposeOptions);  // Pass this sorted array to your dropdown
+    setOptionValue(sortedTripPurposeOptions[0]);     // Optionally, set "All" as the default selection
   }, []);
+  
+  
+
 
   useEffect(() => {
     const { startYear, endYear, week } = selections;
@@ -143,6 +155,12 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
         setChartData(chartData);
         setSampleSizeTableData(sampleSizeTableData);
 
+        if (analysisType.value === "NumberTrips") {
+          setChartTitle("Average number of trips per person");
+        } else {
+          setChartTitle("Average travel duration per person (min)");
+        }
+
         // After reaching 80%, gradually go to 100%
         let finalProgress = 80;
         const completeLoading = setInterval(() => {
@@ -181,7 +199,25 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
               hideSelectedOptions={false}
             />
           </div>
+          <div className="dropdown-container">
+            <label className="segment-label">Metric:</label>
+            <Select
+              className="dropdown-select"
+              classNamePrefix="dropdown-select"
+              value={analysisType}
+              onChange={(selectedOption) =>
+                setAnalysisType(selectedOption as AnalysisTypeOption)
+              }
+              options={[
+                { label: "Number of trips", value: "NumberTrips" },
+                { label: "Travel duration", value: "TravelDuration" },
+              ]}
+              isSearchable={true}
+              menuPosition={"fixed"}
+              maxMenuHeight={120}
+            />
         </div>
+          </div>
       </div>
 
       <div className="home">
@@ -200,7 +236,7 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
           <div className="chart-container-1">
             <RechartsLineChart
               chartData={ChartData}
-              title="Average number of trips per person"
+              title={chartTitle}
               showLegend={true}
             />
           </div>

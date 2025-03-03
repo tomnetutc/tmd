@@ -53,6 +53,7 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
   const [optionValue, setOptionValue] = useState<TravelModeOption[]>(
     TripLevelTravelModeOptions.length > 0 ? [TripLevelTravelModeOptions[0]] : []
   );
+  const [isOptionDisabled, setIsOptionDisabled] = useState(false);
   const [segmentSize, setSegmentSize] = useState<number>(0);
   const formatter = new Intl.NumberFormat("en-US");
 
@@ -70,24 +71,35 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
   const handleDropdownValueChange = (
     selectedOption: MultiValue<TravelModeOption>
   ) => {
-    setOptionValue(
-      selectedOption.length === 0
-        ? [dropdownOptions[0]]
-        : (selectedOption as TravelModeOption[])
-    );
+    if (selectedOption.length === 0 && dropdownOptions.length > 0) {
+      setOptionValue([dropdownOptions[0]]);
+    } else if (selectedOption) {
+      setOptionValue(selectedOption as TravelModeOption[]);
+    }
+    setIsOptionDisabled(selectedOption.length >= 5);
+  };
+  
+  const getOptionDisabledState = (option: TravelModeOption) => {
+    const isSelected = optionValue.some((selectedOption) => selectedOption.value === option.value);
+    return isOptionDisabled && !isSelected;
   };
 
+  const modifiedDropdownOptions = dropdownOptions.map((option) => ({
+    ...option,
+    isDisabled: getOptionDisabledState(option),
+  }));
+  
   useEffect(() => {
-    const allTripPurposeOption = TripLevelTravelModeOptions.find(
+    const allTravelModeOption = TripLevelTravelModeOptions.find(
       (option) => option.label === "All"
     );
-    const sortedTripPurposeOptions = TripLevelTravelModeOptions.filter(
+    const sortedTravelModeOptions = TripLevelTravelModeOptions.filter(
       (option) => option.label !== "All"
     ).sort((a, b) => a.label.localeCompare(b.label));
     setDropdownOptions(
-      allTripPurposeOption
-        ? [allTripPurposeOption, ...sortedTripPurposeOptions]
-        : sortedTripPurposeOptions
+      allTravelModeOption
+        ? [allTravelModeOption, ...sortedTravelModeOptions]
+        : sortedTravelModeOptions
     );
   }, []);
 
@@ -100,7 +112,7 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
 
     let loadingComplete = false;
 
-    // 🔹 Increment progress randomly (1-3%) every 200ms until reaching 80%
+    //Increment progress randomly (1-3%) every 200ms until reaching 80%
     const incrementProgressSmoothly = setInterval(() => {
       setProgress((prev) => {
         if (prev < 80) {
@@ -127,7 +139,6 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
         loadingComplete = true;
         clearInterval(incrementProgressSmoothly); // Ensure progress stops at 80%
 
-        // 🔹 Ensure reaching exactly 80%
         const targetProgress = 80;
         const reach80Interval = setInterval(() => {
           setProgress((prev) => {
@@ -140,7 +151,6 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
           });
         }, 50);
 
-        // 🔹 Process the chart data
         const {
           tripsDurationChartData,
           tripStartTimeChartData,
@@ -184,20 +194,26 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
     <>
       <div style={{ position: "relative" }}>
         <div className="trip-parent-dropdown-holder">
-          <CustomSegment
-            title="Segment size: "
-            segmentSize={formatter.format(segmentSize)}
-            unit="persons"
-          />
+          <div>
+            <CustomSegment
+              title="Segment size: "
+              segmentSize={formatter.format(segmentSize)}
+              unit="persons"
+            />
+
+          </div>
           <div className="trip-dropdown-container">
             <label className="trip-segment-label">Travel mode:</label>
             <Select
-              className="trip-dropdown-select"
+              className="dropdown-select"
               classNamePrefix="dropdown-select"
               value={optionValue}
               onChange={handleDropdownValueChange}
-              options={dropdownOptions}
+              options={modifiedDropdownOptions}
               isSearchable={true}
+              menuPosition={"fixed"}
+              maxMenuHeight={200}
+              hideSelectedOptions={false}
               isMulti
             />
           </div>
