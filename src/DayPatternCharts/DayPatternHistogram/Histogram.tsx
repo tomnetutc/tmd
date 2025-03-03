@@ -1,111 +1,125 @@
-import React from 'react';
-import { 
-    BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer 
-} from 'recharts';
-import { DayPatternChartDataProps } from "../../Types";
+import React from "react";
 import "./Histogram.scss";
+import { DayPatternChartDataProps } from "../../Types";
 import { DayPatternMap } from "../../utils/Helpers";
 
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import { Bar } from "react-chartjs-2";
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 interface HistogramProps {
-    chartData: DayPatternChartDataProps;
-    title: string;
-    xAxisLabel?: string;
-    yAxisLabel?: string;
-    showLegend?: boolean;
+  chartData: DayPatternChartDataProps;
+  title: string;
+  xAxisLabel?: string;
+  yAxisLabel?: string;
+  showLegend?: boolean;
+  totalCount?:number;
 }
 
-// Example Legend (optional)
-const CustomLegend: React.FC<{ payload?: any[]; chartData: DayPatternChartDataProps }> = ({
-    payload,
-    chartData
-}) => {
-    if (!payload || !Array.isArray(payload)) return null;
-    return (
-        <ul className="custom-legend" style={{ textAlign: 'center', margin: '10px 0' }}>
-        </ul>
-    );
-};
-
 const HistogramChart: React.FC<HistogramProps> = ({
-    chartData,
-    title,
-    xAxisLabel = '',
-    yAxisLabel = '',
-    showLegend = true
+  chartData,
+  title,
+  xAxisLabel = "",
+  yAxisLabel = "",
+  showLegend = true,
+  totalCount =0
 }) => {
-    // Generate unique keys for each dataset
-    const datasetKeys = chartData.datasets.map((_, i) => `dataset_${i}`);
+  const finalLabels = chartData.labels.map((lbl) =>
+    Array.isArray(lbl) ? lbl.join(", ") : lbl
+  );
 
-    // Transform the data for Recharts
-    const transformedData = chartData.labels.map((label, index) => {
-        const row: { [key: string]: string | number } = {
-            // Ensure "label" is a string
-            name: Array.isArray(label) ? label.join(', ') : label
-        };
+  const finalDatasets = chartData.datasets.map((dataset) => ({
+    label: dataset.label[0] || "Dataset",
+    data: dataset.data,
+    backgroundColor: dataset.backgroundColor,
+  }));
 
-        chartData.datasets.forEach((dataset, dsIndex) => {
-            row[datasetKeys[dsIndex]] = dataset.data[index];
-            // If you don't need a separate _label, just skip it
-            // row[`${datasetKeys[dsIndex]}_label`] = dataset.label[index];
-        });
+  const dataForChartJS = {
+    labels: finalLabels,
+    datasets: finalDatasets,
+  };
 
-        return row;
-    });
+  const options = {
+    indexAxis: "y" as const,
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      x: {
+        grid: {},
+        ticks: {
+          font: {
+            size: 12,
+          },
+        },
+        title: {
+          display: Boolean(xAxisLabel),
+          text: xAxisLabel,
+        },
+      },
+      y: {
+        grid: {display: false},
+        ticks: {
+          font: {
+            size: 12,
+          },
+        },
+        title: {
+          display: Boolean(yAxisLabel),
+          text: yAxisLabel,
+        },
+      },
+    },
+    plugins: {
+      datalabels: {
+            display: false, // This truly disables on-bar labels
+          },          
+      legend: {
+        display: false,
+      },
+      title: {
+        display: false,
+      },
+      tooltip: {
+        callbacks: {
+          label: function (context: any) {
+            let label = "";
+            let val = context.raw;
+            const categoryLabel = context.label; // Key from the chart labels
+            const mappedValue = DayPatternMap[categoryLabel] || categoryLabel; // Get mapped value from DayPatternMap
+                        
+            if (Number(val) % 1 === 0) {
+              label += `${val}.00`;
+            } else {
+              label += val;
+            }
+            let N=(totalCount*val/100).toFixed(0);
 
-    return (
-        <div className="chart-container">
-            <div className="title-container">
-                <span className="title">{title}</span>
-            </div>
-            <ResponsiveContainer width="100%" height={550}>
-                <BarChart
-                    data={transformedData}
-                    layout="vertical"
-                    margin={{ top: 10, right: 20, left: 10, bottom: 20 }}
-                >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <YAxis
-                        dataKey="name"
-                        type="category"
-                        width={170}
-                        tick={{ fontSize: 12 }}
-                    />
-                    <XAxis
-                        type="number"
-                        label={{ value: xAxisLabel, position: 'insideBottom', offset: -10 }}
-                        tick={{ fontSize: 12 }}
-                    />
-                    <Tooltip
-                        formatter={(value: any, dataKey: string, props: any) => {
-                            // "name" is your row label from "transformedData"
-                            const categoryLabel = props.payload?.name || "";
-                            return [`${value.toFixed(2)}%`, DayPatternMap[categoryLabel]];
-                        }}
-                    />
-                    {showLegend && (
-                        <Legend
-                            content={(props) => <CustomLegend {...props} chartData={chartData} />}
-                            layout="horizontal"
-                            verticalAlign="top"
-                            align="center"
-                        />
-                    )}
+            return `${mappedValue}: ${label}% (n=${N})`; // Show mapped value before data
+          },
+        },
+      },
+    },
+  };
 
-                    {chartData.datasets.map((dataset, dsIndex) => (
-                        <Bar
-                            key={datasetKeys[dsIndex]}
-                            dataKey={datasetKeys[dsIndex]}
-                            fill={dataset.backgroundColor}
-                            // For the legend label, you could show dataset.label[0] or a static name
-                            name={dataset.label[0] || `Dataset ${dsIndex}`}
-                            barSize={25}
-                        />
-                    ))}
-                </BarChart>
-            </ResponsiveContainer>
-        </div>
-    );
+  return (
+    <div className="chart-container">
+      <div className="title-container">
+        <span className="title">{title}</span>
+      </div>
+      <div className="chart" style={{ width: "100%", height: 550 }}>
+        <Bar data={dataForChartJS} options={options} />
+      </div>
+    </div>
+  );
 };
 
 export default HistogramChart;

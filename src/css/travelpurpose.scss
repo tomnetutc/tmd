@@ -1,137 +1,135 @@
 /* App layout styling */
 .app-layout {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
 
 /* Content wrapper styling */
 .content-wrapper {
-    display: flex;
-    flex: 1;
-    overflow: hidden;
+  display: flex;
+  flex: 1;
+  overflow: hidden;
 }
 
 .grid-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Creates 2 equal columns */
-    gap: 20px; /* Adds space between grid items */
-    width: 95%;
-    padding: 20px 0;
-    justify-self: center;
-  }
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Creates 2 equal columns */
+  gap: 20px; /* Adds space between grid items */
+  width: 95%;
+  padding: 20px 0;
+  justify-self: center;
+}
 
-  .segment-grid-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Creates 2 equal columns */
-    gap: 20px; /* Adds space between grid items */
-    width: 95%;
-    justify-self: center;
-    padding: 20px 0;
-  }
-
-  
+.segment-grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Creates 2 equal columns */
+  gap: 20px; /* Adds space between grid items */
+  width: 95%;
+  justify-self: center;
+  padding: 20px 0;
+}
 
 /* Main area styling */
 .main-area {
-    flex-grow: 1;
-    display: flex;
+  flex-grow: 1;
+  display: flex;
 }
 
 /* TopMenu styling */
 .topmenu {
-    background-color: #f1f1f1;
-    padding: 10px 20px;
-    border-bottom: 1px solid #ddd;
-    position: sticky;
-    top: 60px;
-    z-index: 4;
+  background-color: #f1f1f1;
+  padding: 10px 20px;
+  border-bottom: 1px solid #ddd;
+  position: sticky;
+  top: 60px;
+  z-index: 4;
 }
 
 /* Main content styling */
 .main-content {
-    flex-grow: 1;
-    padding-top: 75px;
-    overflow-y: auto;
-    background-color: #eeeeee;
+  flex-grow: 1;
+  padding-top: 75px;
+  overflow-y: auto;
+  background-color: #eeeeee;
+  position: relative;
 }
 
 /* Home styling for grid components */
 .home {
-    .travel,
-    .betweenYearTravel,
-    .crossSegmentTravel {
-
-        /* Chart component styling with centered alignment */
-        .NumberTripsBtwYearChartComponent,
-        .DurationTripsBtwYearChartComponent {
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
+  .travel,
+  .betweenYearTravel,
+  .crossSegmentTravel {
+    /* Chart component styling with centered alignment */
+    .NumberTripsBtwYearChartComponent,
+    .DurationTripsBtwYearChartComponent {
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
     }
+  }
 }
 
 .chart-wrapper {
-    display: grid;
-    grid-template-columns: 1fr; /* 1 column */
-    grid-template-rows: repeat(1, 1fr); /* 2 equal rows */
-    grid-gap: 20px; /* Gap between charts */
-    width: 100%;
-    margin: auto;
-    padding: 20px 0;
-    align-items: start; /* Align items to the start of the grid cells */
-    justify-items: start;
-
+  display: grid;
+  grid-template-columns: 1fr; /* 1 column */
+  grid-template-rows: repeat(1, 1fr); /* 2 equal rows */
+  grid-gap: 20px; /* Gap between charts */
+  width: 100%;
+  margin: auto;
+  padding: 20px 0;
+  align-items: start; /* Align items to the start of the grid cells */
+  justify-items: start;
 }
 
 /* Chart container styling */
 .chart-container-1 {
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 90%;
-    margin: auto;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+  margin: auto;
 }
 
 .box {
-    padding: 20px;
-    border-radius: 10px;
-    -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
-    box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
-    background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+  box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+  background-color: white;
 }
 
 .SegmentSize,
 .SegmentTrips,
 .SegmentTripChains {
-    grid-row: span 1;
-    grid-column: span .5;
-    position: relative;
+  grid-row: span 1;
+  grid-column: span 0.5;
+  position: relative;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-    .home {
-        .travel,
-        .betweenYearTravel,
-        .crossSegmentTravel {
-            grid-template-columns: 1fr; /* Stack elements vertically on small screens */
+  .home {
+    .travel,
+    .betweenYearTravel,
+    .crossSegmentTravel {
+      grid-template-columns: 1fr; /* Stack elements vertically on small screens */
 
-            .NumberTripsBtwYearChartComponent,
-            .DurationTripsBtwYearChartComponent {
-                grid-column: span 1;
-            }
-        }
+      .NumberTripsBtwYearChartComponent,
+      .DurationTripsBtwYearChartComponent {
+        grid-column: span 1;
+      }
     }
+  }
 
-    .chart-container, .SampleSizeTable {
-        padding: 15px;
-        width: 100%;
-    }
+  .chart-container,
+  .SampleSizeTable {
+    padding: 15px;
+    width: 100%;
+  }
 }

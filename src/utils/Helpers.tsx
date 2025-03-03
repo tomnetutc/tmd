@@ -243,7 +243,7 @@ export const TripPurposeOptions: TripPurposeOption[] = [
     },
     {
         label: "Adult or Child care",
-        value: "Adult or Child care",
+        value: "Adult or child care",
         numberTrip: "tr_ccare",
         durationTrips: "tr_ccare_dur",
     },
@@ -293,8 +293,8 @@ export const TripLevelTripPurposeOptions: TripPurposeOption[] = [
         durationTrips: "tr_shopping_dur",
     },
     {
-        label: "Adult or Child care",
-        value: "Adult or Child care",
+        label: "Adult or child care",
+        value: "Adult or child care",
         numberTrip: "tr_ccare",
         durationTrips: "tr_ccare_dur",
     },

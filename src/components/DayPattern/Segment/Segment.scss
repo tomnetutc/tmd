@@ -7,8 +7,22 @@
         flex-direction: column;
         justify-content: space-between;
 
-        .title {
-            font-size: 15px;
+        .header{
+            display: flex;
+            flex-direction: row;
+            gap: 5px;           
+            align-items: center; 
+
+            .title {
+                font-size: 15px;
+            }
+            .icon {
+                margin-top: -10px;
+                font-size: 35px;
+                opacity: 0.7;
+            }
+    
+    
         }
 
         .counter {
@@ -16,10 +30,5 @@
             font-size: 20px;
         }
 
-        .icon {
-            margin-top: -10px;
-            font-size: 35px;
-            opacity: 0.7;
-        }
     }
 }
