@@ -20,7 +20,7 @@ export function Content(): JSX.Element {
             About
           </h3>
           <p className="mt-4">
-          The <u>T</u>ravel and ,<u>M</u>obility <u>D</u>ashboard (TMD) is an open-source platform designed to provide data-driven insights into mobility trends and patterns in the United States. 
+          The Mobility Dashboard (TMD) is an open-source platform designed to provide data-driven insights into mobility trends and patterns in the United States. 
           Developed with support from the National Center for Understanding Future Travel Behavior and Demand (TBD) and the Center for Teaching Old Models New Tricks
           (
             <a href="https://tomnet-utc.engineering.asu.edu/" target="_blank">
@@ -47,31 +47,31 @@ export function Content(): JSX.Element {
             <p>
               TMD features advanced tools for exploring within-year, between-year, and cross-segment analyses, offering users the ability to:
             </p>
-            <ul style={{ listStyleType: 'disc', marginLeft: '20px' }}>
-              <li>Compare trends over time by selecting any year since 2003</li>
-              <li>Examine mobility behaviors across population groups based on a host of socio-economic, demographic, mobility, and other characteristics</li>
-              <li>Customize insights by refining analyses based on weekdays vs. weekends, excluding holiday seasons, or focusing on specific time frames</li>
+            <ul style={{ listStyleType: 'disc'}}>
+              <li className="mt-2">Compare trends over time by selecting any year since 2003</li>
+              <li className="mt-2">Examine mobility behaviors across population groups based on a host of socio-economic, demographic, mobility, and other characteristics</li>
+              <li className="mt-2">Customize insights by refining analyses based on weekdays vs. weekends, excluding holiday seasons, or focusing on specific time frames</li>
             </ul>
         </section>
         <section style={{ textAlign: "justify" }}>
           <h3 className="mt-4 fw-bold contenthead">
-          Key Concepts
+          Key concepts
           </h3>
           <p className="mt-4 mb-4">
-            While each page of the dashboard —Trip Purpose, Travel Mode, Zero-Trip Making, and Day Patterns — is designed to be self-explanatory, with all charts and graphs featuring an information button to explain the presented data. Some concepts, however, may require further explanations as listed below.
+            While each page of the dashboard — Trip Purpose, Travel Mode, Zero-Trip Making, and Day Patterns — is designed to be self-explanatory, with all charts and graphs featuring an information button to explain the presented data. Some concepts, however, may require further explanations as listed below.
           </p>
         </section>
 
         <section style={{ textAlign: "justify" }}>
           <h5 className="mt-4 fw-bold contenthead">
-            Zero trip-making
+            Zero-trip making
           </h5>
           <p className="mt-4 mb-4">
-          Zero-trip making refers to individuals who do not travel outside the home on a given day. This phenomenon can have significant implications for mobility equity and social well-being, potentially leading to reduced physical activity, increased isolation, and lower access to essential services. TMD allows users to track how zero-trip rates change over time and compare them across different population segments using cross-segment analysis.
+          Zero-trip making refers to individuals who do not travel outside the home on a given day. This phenomenon can have significant implications for mobility equity and societal wellbeing, potentially leading to reduced physical activity, increased isolation, and lower access to essential services. TMD allows users to track how zero-trip rates change over time and compare them across different population segments using cross-segment analysis.
           </p>
 
           <p className="mt-4">
-          More details about the notions of time poverty and zero trip-making can be found in the following sources:
+          More details about the notion of zero-trip making can be found in the following sources:
           </p>
           <ul>
             <li className="mt-4">
@@ -89,21 +89,21 @@ export function Content(): JSX.Element {
 
         <section style={{ textAlign: "justify" }}>
           <h5 className="mt-4 fw-bold contenthead">
-          Day Patterns and Trip Chains
+          Day patterns and trip chains
           </h5>
           <p className="mt-4 mb-4">
           TMD provides insights into how people structure their daily travel, capturing sequences of trip purposes and identifying the most common travel day patterns. Users can:
           </p>
-          <ul style={{ listStyleType: 'disc', marginLeft: '20px' }}>
-              <li>Analyze the top 15 most common travel day patterns for any given year</li>
-              <li>Compare specific day patterns over time to track evolving mobility behaviors</li>
-              <li>Examine trip chain structures, including the number of stops and purpose sequences, to understand how people organize their travel throughout a day</li>
+          <ul style={{ listStyleType: 'disc'}}>
+              <li className="mt-2">Analyze the top 15 most common travel day patterns for any given year</li>
+              <li className="mt-2">Compare specific day patterns over time to track evolving mobility behaviors</li>
+              <li className="mt-2">Examine trip chain structures, including the number of stops and purpose sequences, to understand how people organize their travel throughout a day</li>
             </ul>
         </section>
 
         <section style={{ textAlign: "justify" }}>
           <h3 className="mt-4 fw-bold contenthead">
-          Segment Attributes & Customization
+          Segment attributes & customization
           </h3>
           <p className="mt-4 mb-4">
           TMD allows users to define custom market segments by selecting up to three socio-demographic attributes, such as age, employment status, household income, or travel behavior characteristics. These segmentation options provide a nuanced view of how different groups experience and adapt their mobility over time.
@@ -122,16 +122,16 @@ export function Content(): JSX.Element {
               <strong>Non-workers</strong>: This group includes individuals who have indicated that they are not participating in the labor force.
             </li>
             <li className="mt-2">
-              <strong>Workers with Zero Work</strong>: This category comprises respondents who reported no work activity in their time use diary.
+              <strong>Workers with zero Work</strong>: This category comprises respondents who reported no work activity in their time use diary.
             </li>
             <li className="mt-2">
-              <strong>In-home Only Workers</strong>: These individuals are those who reported working exclusively from home, with no reported out-of-home work activity.
+              <strong>In-home only workers</strong>: These individuals are those who reported working exclusively from home, with no reported out-of-home work activity.
             </li>
             <li className="mt-2">
-              <strong>Commuters Only</strong>: Respondents in this group reported engaging in at least some out-of-home work activity in their time use diary, without any in-home work activity.
+              <strong>Commuters only</strong>: Respondents in this group reported engaging in at least some out-of-home work activity in their time use diary, without any in-home work activity.
             </li>
             <li className="mt-2">
-              <strong>Multi-site Workers</strong>: This category encompasses those who reported both out-of-home and in-home work activity in their time use diary.
+              <strong>Multi-site workers</strong>: This category encompasses those who reported both out-of-home and in-home work activity in their time use diary.
             </li>
           </ol>
         </section>
@@ -157,15 +157,17 @@ export function Content(): JSX.Element {
         </section> */}
         <section style={{ textAlign: "justify" }}>
           <h5 className="mt-4 fw-bold contenthead">
-          Time Poverty
+          Time poverty
           </h5>
           <p className="mt-4 mb-4">
           TMD leverages the concept of time poverty to classify individuals as time poor or non-time poor based on their available time for discretionary activities during the survey day. Under this framework, a person is considered time poor if their discretionary time falls below a defined threshold. In TMD, this threshold follows the "60% of median" criterion. Specifically, total necessary and committed activity time of individuals is subtracted from 1,440 minutes (24 hours) to determine their available discretionary time. The median discretionary time across the population is then multiplied by 0.6 to establish the threshold. Individuals with discretionary time below this threshold are classified as time poor, while those with more are non-time poor. More details about time poverty can be found in the following dissertation:
           </p>
+          <ul>
           <li className="mt-4">
               Batur, I. (2023). Understanding and Modeling the Nexus of Mobility, Time Poverty, and Wellbeing (Doctoral dissertation, Arizona State University).&nbsp;
               <a href="https://hdl.handle.net/2286/R.2.N.189319" target="_blank" rel="noopener noreferrer">https://hdl.handle.net/2286/R.2.N.189319</a>
           </li>
+          </ul>
         </section>
 
         <section style={{ textAlign: "justify" }}>
@@ -294,7 +296,7 @@ export function Content(): JSX.Element {
           </h3>
           <p className="mt-4">
             <strong>Note:</strong> When using any material from this website, please consider citing
-            the relevant papers listed below.
+            the relevant sources listed below.
           </p>
           <ul>
             <li className="mt-4">

@@ -23,11 +23,15 @@ export function About(): JSX.Element {
     return (
         <>
             <HomepageNavbar />
-            <div className="custom-container">
+            <Container>
                 <Sidebar />
                 <Content />
-            </div>
-            <Footer />
+            </Container>
+            <Footer 
+                docRefID="globalcounter"
+                page="hasVisitedAboutPage"
+                expiry='aboutExpiry'
+                footerBackgroundcolor="white" />
             
         </>
     );

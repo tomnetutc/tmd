@@ -30,7 +30,7 @@ export function HomeFeatures(): JSX.Element {
                         <span className="SpanContent">TMD supports both person-level and trip-level analyses, allowing users to explore mobility patterns from different perspectives. Whether analyzing individual trip-making behavior or aggregated trends, TMD provides a flexible framework for mobility research.</span>
                     </div>
                     <div className="FeatureLogo">
-                        <img src={MultiLevelAnalysisLogo} alt="MultiLevelAnalysisLogo" style={{ maxWidth: '100%', height: 'auto', marginLeft: '-50px' }} />
+                        <img src={MultiLevelAnalysisLogo} alt="MultiLevelAnalysisLogo" style={{ maxWidth: '100%', height: 'auto'}} />
                     </div>
                 </div>
                 <div className="FeatureHolder" style={{ backgroundColor: "white" }}>
@@ -40,7 +40,7 @@ export function HomeFeatures(): JSX.Element {
                         </span>
                     </div>
                     <div className="FeatureLogo">
-                        <img src={ComprehensiveComparisonToolsLogo} alt="ComprehensiveComparisonToolsLogo" style={{ maxWidth: '100%', height: '140px', marginLeft: '-50px' }} />
+                        <img src={ComprehensiveComparisonToolsLogo} alt="ComprehensiveComparisonToolsLogo" style={{ maxWidth: '100%', height: '140px'}} />
                     </div>
                 </div>
                 <div className="FeatureHolder">
@@ -49,7 +49,7 @@ export function HomeFeatures(): JSX.Element {
                         <span className="SpanContent">Users can refine their analysis by selecting sociodemographic attributes, weekdays vs. weekends, excluding holiday periods, or filtering data from any year since 2003. This flexibility allows for highly targeted insights tailored to specific research needs.</span>
                     </div>
                     <div className="FeatureLogo">
-                        <img src={CustomizableInsightsLogo} alt="CustomizableInsightsLogo" style={{ maxWidth: '100%', width: '140px', height: '140px', marginLeft: '-50px' }} />
+                        <img src={CustomizableInsightsLogo} alt="CustomizableInsightsLogo" style={{ maxWidth: '100%', width: '140px', height: '140px'}} />
                     </div>
                 </div>
                 <div className="FeatureHolder" style={{ backgroundColor: "white", height: 'auto', paddingBottom: '30px' }}>
@@ -74,7 +74,7 @@ export function HomeFeatures(): JSX.Element {
                         </span>
                     </div>
                     <div className="FeatureLogo">
-                        <img src={HowItWorksLogo} alt="Dashboard" style={{ maxWidth: '100%', width: '140px', height: '140px', marginLeft: '-50px' }} />
+                        <img src={HowItWorksLogo} alt="Dashboard" style={{ maxWidth: '100%', width: '140px', height: '140px'}} />
                     </div>
                 </div>
 

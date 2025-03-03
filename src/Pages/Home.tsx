@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { HomeIcons } from "../components/Home/HomeIcons";
 import { HomeFeatures } from "../components/Home/HomeFeatures";
 import Footer from "../components/Footer";
+import { Container, Nav } from "react-bootstrap";
 
 export function Home(): JSX.Element {
 
@@ -23,11 +24,15 @@ export function Home(): JSX.Element {
         <>
             <HomepageNavbar />
             <HeaderContent />
-            <div className="custom-container">
-            <HomeIcons />
-            <HomeFeatures />
-            </div>
-            <Footer />
+            <Container>
+                <HomeIcons />
+                <HomeFeatures />
+            </Container>
+            <Footer 
+                docRefID="globalcounter"
+                page="hasVisitedAboutPage"
+                expiry='aboutExpiry'
+                footerBackgroundcolor="white" />
         </>
     );
 }
