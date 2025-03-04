@@ -21,7 +21,7 @@ export function HomeIcons(): JSX.Element {
             <div className="column">
               <Link to="/travelpurpose" style={{ textDecoration: 'none' }}>
                 <img src={TripPurposeLogo} alt="Logo" style={{ maxWidth: '200px', height: '200px', padding: 10 }} />
-                <p className="Header">Travel Purpose</p>
+                <p className="Header">Trip Purpose</p>
               </Link>
               <span className="spanDescText">Understand why people travel and how it shapes mobility trends.</span>
             </div>
