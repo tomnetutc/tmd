@@ -35,7 +35,7 @@ interface TripSelections {
 }
 
 export default function TravelMode(): JSX.Element {
-  useDocumentTitle("travelmode");
+  useDocumentTitle("Travel Mode");
 
   const [currAnalysisLevel, setCurrAnalaysisLevel] = useState<analysisLevel>(
     AnalysisLevels[0]
@@ -152,7 +152,7 @@ export default function TravelMode(): JSX.Element {
         return prev;
       });
     }
-  }, [selections.analysisLevelValue]); // ✅ Only re-run when `analysisLevelValue` changes
+  }, [selections.analysisLevelValue]);
 
   return (
     <div className="app-layout">

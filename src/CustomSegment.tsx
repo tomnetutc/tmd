@@ -9,18 +9,16 @@ interface Props {
 
 const CustomSegment: React.FC<Props> = ({ title, segmentSize, unit }) => {
   return (
-    <div className="container">
-      <div className="segment-container">
-        <div className="segment-item">
-          <label htmlFor="segmentSize">{title}</label>
-          <input
-            id="segmentSize"
-            type="text"
-            style={{ fontWeight: "bold" }}
-            value={`${segmentSize} ${unit}`}
-            readOnly
-          />
-        </div>
+    <div className="segment-container">
+      <div className="segment-item">
+        <label htmlFor="segmentSize">{title}</label>
+        <input
+          id="segmentSize"
+          type="text"
+          style={{ fontWeight: "bold" }}
+          value={`${segmentSize} ${unit}`}
+          readOnly
+        />
       </div>
     </div>
   );

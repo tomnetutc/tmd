@@ -27,7 +27,7 @@ interface HistogramProps {
   xAxisLabel?: string;
   yAxisLabel?: string;
   showLegend?: boolean;
-  showSampleSize?: boolean; // New prop to control sample size display
+  showSampleSize?: boolean;
   invertAxis?: boolean;
 }
 
@@ -37,7 +37,7 @@ const HistogramChart: React.FC<HistogramProps> = ({
   xAxisLabel = "",
   yAxisLabel = "",
   showLegend = true,
-  showSampleSize = false, // Default to false
+  showSampleSize = false,
   invertAxis = false,
 }) => {
   const formatter = new Intl.NumberFormat("en-US");
@@ -48,13 +48,16 @@ const HistogramChart: React.FC<HistogramProps> = ({
   );
 
   // Process each dataset: round each data point to one decimal place
-  const finalDatasets = chartData.datasets.map((dataset) => ({
-    label: showSampleSize
-      ? `${dataset.label} (n=${formatter.format(dataset.totalNum)})`
-      : dataset.label,
-    data: dataset.data.map((value) => parseFloat(value.toFixed(2))),
-    backgroundColor: dataset.backgroundColor,
-  }));
+  const finalDatasets = chartData.datasets.map((dataset) => {
+    const avgLabel =
+      dataset.average !== -1 ? ` ( \u03BC: ${dataset.average.toFixed(2)})` : "";
+
+    return {
+      label: `${dataset.label}${avgLabel}`,
+      data: dataset.data.map((value) => parseFloat(value.toFixed(2))),
+      backgroundColor: dataset.backgroundColor,
+    };
+  });
 
   const dataForChartJS = {
     labels: finalLabels,
@@ -96,12 +99,21 @@ const HistogramChart: React.FC<HistogramProps> = ({
     scales: scales,
     plugins: {
       datalabels: { display: false },
-      legend: { display: showLegend },
+      legend: {
+        display: showLegend,
+        labels: {
+          font: { size: 14 },
+          boxWidth: 10,
+          boxHeight: 10,
+          padding: 10,
+          usePointStyle: false,
+        },
+      },
       tooltip: {
         callbacks: {
           label: (context: any) => {
-            const val = context.raw;
-            return `${parseFloat(val.toFixed(2))}%`;
+            const val = parseFloat(context.raw);
+            return !isNaN(val) ? `${val.toFixed(2)}%` : "N/A";
           },
         },
       },

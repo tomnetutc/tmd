@@ -78,9 +78,11 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
     }
     setIsOptionDisabled(selectedOption.length >= 5);
   };
-  
+
   const getOptionDisabledState = (option: TravelModeOption) => {
-    const isSelected = optionValue.some((selectedOption) => selectedOption.value === option.value);
+    const isSelected = optionValue.some(
+      (selectedOption) => selectedOption.value === option.value
+    );
     return isOptionDisabled && !isSelected;
   };
 
@@ -88,7 +90,7 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
     ...option,
     isDisabled: getOptionDisabledState(option),
   }));
-  
+
   useEffect(() => {
     const allTravelModeOption = TripLevelTravelModeOptions.find(
       (option) => option.label === "All"
@@ -169,7 +171,6 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
         setTripModeDistributionChartData(tripModeDistributionChartData);
         setTripStartChartData(tripStartTimeChartData);
         setSegmentSize(segmentSize);
-
         // 🔹 Final smooth transition from 80% → 100%
         let finalProgress = 80;
         const completeLoading = setInterval(() => {
@@ -194,14 +195,11 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
     <>
       <div style={{ position: "relative" }}>
         <div className="trip-parent-dropdown-holder">
-          <div>
-            <CustomSegment
-              title="Segment size: "
-              segmentSize={formatter.format(segmentSize)}
-              unit="persons"
-            />
-
-          </div>
+          <CustomSegment
+            title="Segment size: "
+            segmentSize={formatter.format(segmentSize)}
+            unit="persons"
+          />
           <div className="trip-dropdown-container">
             <label className="trip-segment-label">Travel mode:</label>
             <Select
@@ -245,7 +243,7 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
           <div className="chart-container-1">
             <HistogramChart
               chartData={tripModeDistributionChartData}
-              title="Trip purpose by mode"
+              title="Trip purpose distribution by travel mode"
               showLegend={true}
               xAxisLabel="%"
             />

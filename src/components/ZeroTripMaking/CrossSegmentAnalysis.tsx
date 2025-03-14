@@ -53,7 +53,7 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
   const [sampleSizeTableData, setSampleSizeTableData] =
     useState<SampleSizeTableProps>({ years: [], counts: [] });
   const [chartTitle, setChartTitle] = useState<string>(
-    "Percent of zero-trip makers (%)"
+    "Percent of zero-trip makers"
   );
 
   const incrementProgress = (value: number) => {
@@ -162,6 +162,7 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
               <RechartsLineChart
                 chartData={ChartData}
                 title={chartTitle}
+                yAxisLabel="%"
                 showLegend={true}
               />
             </div>
@@ -252,6 +253,19 @@ const prepareChartData = (
       backgroundColor: Colors[index],
       barThickness: "flex",
     });
+
+    const uniqueYears = Array.from(
+      new Set(optionFilteredData.map((item) => item.year))
+    ).sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
+
+    uniqueYears.forEach((year) => {
+      yearlyCounts.push([
+        year,
+        optionFilteredData.filter((row) => row.year === year).length,
+      ]);
+    });
+
+    sampleSizeCounts.push({ data: optionFilteredData, count: yearlyCounts });
   });
 
   return {

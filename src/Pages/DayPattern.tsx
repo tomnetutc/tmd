@@ -38,7 +38,7 @@ interface DayPatternSelections {
 }
 
 export default function DayPattern(): JSX.Element {
-  useDocumentTitle("daypattern");
+  useDocumentTitle("Day Pattern");
   const [currAnalysisType, setCurrAnalaysisType] = useState<analysisLevel>(
     DayPatternAnalysisTypes[0]
   );

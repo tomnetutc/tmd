@@ -39,13 +39,22 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
   setIsTripLevelAnalysisLoading,
   setProgress,
 }) => {
-  const [tripLevelFilteredData, setTripLevelFilteredData] = useState<DataRow[]>([]);
-  const [tripDurationChartData, setTripDurationChartData] = useState<TripChartDataProps>({ labels: [], datasets: [] });
-  const [tripStartChartData, setTripStartChartData] = useState<TripChartDataProps>({ labels: [], datasets: [] });
-  const [tripModeDistributionChartData, setTripModeDistributionChartData] = useState<TripChartDataProps>({ labels: [], datasets: [] });
-  const [dropdownOptions, setDropdownOptions] = useState<TripPurposeOption[]>(TripLevelTripPurposeOptions);
+  const [tripLevelFilteredData, setTripLevelFilteredData] = useState<DataRow[]>(
+    []
+  );
+  const [tripDurationChartData, setTripDurationChartData] =
+    useState<TripChartDataProps>({ labels: [], datasets: [] });
+  const [tripStartChartData, setTripStartChartData] =
+    useState<TripChartDataProps>({ labels: [], datasets: [] });
+  const [tripModeDistributionChartData, setTripModeDistributionChartData] =
+    useState<TripChartDataProps>({ labels: [], datasets: [] });
+  const [dropdownOptions, setDropdownOptions] = useState<TripPurposeOption[]>(
+    TripLevelTripPurposeOptions
+  );
   const [optionValue, setOptionValue] = useState<TripPurposeOption[]>(
-    TripLevelTripPurposeOptions.length > 0 ? [TripLevelTripPurposeOptions[0]] : []
+    TripLevelTripPurposeOptions.length > 0
+      ? [TripLevelTripPurposeOptions[0]]
+      : []
   );
   const [isOptionDisabled, setIsOptionDisabled] = useState(false);
   const [segmentSize, setSegmentSize] = useState<number>(0);
@@ -55,7 +64,9 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
     setProgress((prev) => Math.min(prev + value, 100));
   };
 
-  const handleDropdownValueChange = (selectedOption: MultiValue<TripPurposeOption>) => {
+  const handleDropdownValueChange = (
+    selectedOption: MultiValue<TripPurposeOption>
+  ) => {
     if (selectedOption.length === 0 && dropdownOptions.length > 0) {
       setOptionValue([dropdownOptions[0]]);
     } else if (selectedOption) {
@@ -64,9 +75,10 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
     setIsOptionDisabled(selectedOption.length >= 5);
   };
 
-
   const getOptionDisabledState = (option: TripPurposeOption) => {
-    const isSelected = optionValue.some((selectedOption) => selectedOption.value === option.value);
+    const isSelected = optionValue.some(
+      (selectedOption) => selectedOption.value === option.value
+    );
     return isOptionDisabled && !isSelected;
   };
 
@@ -76,11 +88,15 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
   }));
 
   useEffect(() => {
-    const allTripPurposeOption = TripLevelTripPurposeOptions.find(option => option.label === "All");
-    const sortedTripPurposeOptions = TripLevelTripPurposeOptions
-      .filter(option => option.label !== "All")
-      .sort((a, b) => a.label.localeCompare(b.label));
-    const tripPurposeDropdownOptions = allTripPurposeOption ? [allTripPurposeOption, ...sortedTripPurposeOptions] : sortedTripPurposeOptions;
+    const allTripPurposeOption = TripLevelTripPurposeOptions.find(
+      (option) => option.label === "All"
+    );
+    const sortedTripPurposeOptions = TripLevelTripPurposeOptions.filter(
+      (option) => option.label !== "All"
+    ).sort((a, b) => a.label.localeCompare(b.label));
+    const tripPurposeDropdownOptions = allTripPurposeOption
+      ? [allTripPurposeOption, ...sortedTripPurposeOptions]
+      : sortedTripPurposeOptions;
     setDropdownOptions(tripPurposeDropdownOptions);
   }, []);
 
@@ -113,7 +129,7 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
         analysisYear,
         week,
         toggleState
-      )
+      ),
     ])
       .then(([tripLevelFilteredData]) => {
         loadingComplete = true;
@@ -223,7 +239,7 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
           <div className="chart-container-1">
             <HistogramChart
               chartData={tripModeDistributionChartData}
-              title="Travel mode by purpose"
+              title="Travel mode distribution by trip purpose"
               showLegend={true}
               xAxisLabel="%"
               invertAxis={true}

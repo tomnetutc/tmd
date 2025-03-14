@@ -35,7 +35,7 @@ interface TripSelections {
 }
 
 export default function TravelPurpose(): JSX.Element {
-  useDocumentTitle("travelpurpose");
+  useDocumentTitle("Trip Purpose");
 
   const [currAnalysisLevel, setCurrAnalaysisLevel] = useState<analysisLevel>(
     AnalysisLevels[0]

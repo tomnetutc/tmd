@@ -1,11 +1,8 @@
-import TravelPurpose  from "./Pages/TravelPurpose";
+import TravelPurpose from "./Pages/TravelPurpose";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 
-
-
 function App(): JSX.Element {
-
   const location = useLocation();
 
   useEffect(() => {
@@ -15,7 +12,7 @@ function App(): JSX.Element {
   return (
     <>
       <Routes>
-        <Route path="/travelpurpose" element={<TravelPurpose />} />
+        <Route path="/trippurpose" element={<TravelPurpose />} />
       </Routes>
     </>
   );

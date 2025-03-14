@@ -233,7 +233,7 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
                 <CustomSegmentDayPattern
                   title="Average number of trip chains per person: "
                   segmentSize={avgTripChains.toFixed(2)}
-                  unit=""
+                  unit="chains"
                 />
               </div>
 
@@ -255,7 +255,7 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
                 <CustomSegmentDayPattern
                   title="Average number of stops per trip chain: "
                   segmentSize={avgStopPerChain.toFixed(2)}
-                  unit=""
+                  unit="stops"
                 />
               </div>
 

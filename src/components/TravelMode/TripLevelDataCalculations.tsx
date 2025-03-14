@@ -61,6 +61,7 @@ export const prepareVerticalChartData = (
   let TripPurposeDistributionPerOption: any = {};
   let segmentSize = 0;
   let uniqueTUCASE = new Set();
+  let cumulativeDurationPerOption: any = {};
 
   // Aggregate data for each option and year
   filteredData.forEach((dataRow) => {
@@ -87,6 +88,7 @@ export const prepareVerticalChartData = (
           TripPurposeDistributionPerOption[option.numberTrip] = new Array(
             labelPurposeDistribution.length
           ).fill(0);
+          cumulativeDurationPerOption[option.numberTrip] = 0;
         }
         const binIndex = bins.findIndex(
           (bin) =>
@@ -98,6 +100,7 @@ export const prepareVerticalChartData = (
         if (binIndex !== -1) {
           TripDurationPerOption[option.numberTrip][binIndex] += 1;
         }
+        cumulativeDurationPerOption[option.numberTrip] += duration;
         TripStartTimePerOption[option.numberTrip][start_hour] += 1;
         TripPurposeDistributionPerOption[option.numberTrip][
           mapModeToIndex[purpose]
@@ -111,6 +114,7 @@ export const prepareVerticalChartData = (
   const totalDurationRows: { [key: string]: number } = {};
   const totalStartTimeRows: { [key: string]: number } = {};
   const totalPurposeDistributionRows: { [key: string]: number } = {};
+  const averageDuration: { [key: string]: number } = {};
 
   Object.keys(TripDurationPerOption).forEach((key: string) => {
     totalDurationRows[key] = TripDurationPerOption[key].reduce(
@@ -144,6 +148,9 @@ export const prepareVerticalChartData = (
         (value: number) => (value / totalPurposeDistributionRows[key]) * 100
       );
     }
+
+    averageDuration[key] =
+      cumulativeDurationPerOption[key] / totalDurationRows[key];
   });
 
   type TripChartDataSet = TripChartDataProps["datasets"][number];
@@ -159,6 +166,7 @@ export const prepareVerticalChartData = (
       label: option.label,
       data: TripDurationPerOption[option.numberTrip],
       totalNum: totalDurationRows[option.numberTrip],
+      average: averageDuration[option.numberTrip],
       borderColor: tripBackgroundColor,
       backgroundColor: tripBackgroundColor,
       barThickness: "flex",
@@ -169,6 +177,7 @@ export const prepareVerticalChartData = (
       data: TripStartTimePerOption[option.numberTrip],
       totalNum: totalStartTimeRows[option.numberTrip],
       borderColor: tripBackgroundColor,
+      average: -1,
       backgroundColor: tripBackgroundColor,
       barThickness: "flex",
     });
@@ -177,6 +186,7 @@ export const prepareVerticalChartData = (
       label: option.label,
       data: TripPurposeDistributionPerOption[option.numberTrip],
       totalNum: totalPurposeDistributionRows[option.numberTrip],
+      average: -1,
       borderColor: tripBackgroundColor,
       backgroundColor: tripBackgroundColor,
       barThickness: "flex",

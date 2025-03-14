@@ -1,14 +1,14 @@
 .segment-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 6px;
-    background-color: #ffffff; // Light gray background
-    border: 1px solid #ffffff; // Light gray border
-    border-radius: 5px; // Rounded corners
-    width: fit-content; // Adjust width to content
-    margin: 0px; // Spacing around the container
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0px;
+  background-color: #ffffff; // Light gray background
+  border: 1px solid #ffffff; // Light gray border
+  border-radius: 5px; // Rounded corners
+  width: fit-content; // Adjust width to content
+  margin: 0px; // Spacing around the container
+}
 //   .container {
 //     display: flex;
 //     justify-content: flex-start; /* Align to the right */
@@ -18,27 +18,25 @@
 //     padding: 0px;
 //  }
 
-  .segment-item {
-    display: flex;
-    align-items: center;
-    margin: 0 5px; // Spacing between label and input
+.segment-item {
+  display: flex;
+  align-items: center;
+  margin: 0 5px; // Spacing between label and input
 
-  
-    label {
-      font-size: 14px; // Larger text for label
-      color: #333; // Dark gray text color
-      margin-right: 5px; // Space between label and input
-      font-weight: 500;
-    }
-  
-    input {
-      font-size: 14px; // Consistent font size with label
-      padding: 2px 10px; // Padding inside the input
-      border: 1px solid #ccc; // Border to match the container
-      background-color: white; // White background for the input
-      border-radius: 3px; // Slightly rounded corners for the input
-      width: 150px; // Fixed width for the input
-      text-align: center; // Center text inside the input
-    }
+  label {
+    font-size: 14px; // Larger text for label
+    color: #333; // Dark gray text color
+    margin-right: 5px; // Space between label and input
+    font-weight: 500;
   }
-  
+
+  input {
+    font-size: 14px; // Consistent font size with label
+    padding: 2px 10px; // Padding inside the input
+    border: 1px solid #ccc; // Border to match the container
+    background-color: white; // White background for the input
+    border-radius: 3px; // Slightly rounded corners for the input
+    width: 150px; // Fixed width for the input
+    text-align: center; // Center text inside the input
+  }
+}

@@ -11,7 +11,7 @@ export const Navbar: React.FC = () => {
   // Determine active option for Dashboard categories
   const getActiveOption = (): string => {
     switch (location.pathname) {
-      case "/travelpurpose":
+      case "/trippurpose":
         return "Trip Purpose";
       case "/travelmode":
         return "Travel Mode";
@@ -32,7 +32,7 @@ export const Navbar: React.FC = () => {
   const handleOptionClick = (option: string) => {
     switch (option) {
       case "Trip Purpose":
-        navigate("/travelpurpose");
+        navigate("/trippurpose");
         break;
       case "Travel Mode":
         navigate("/travelmode");
@@ -86,9 +86,9 @@ export const Navbar: React.FC = () => {
             About
           </Link>
           <Link
-            to="/travelpurpose"
+            to="/trippurpose"
             className={`nav-link ${
-              isActiveLink("/travelpurpose") ? "active-bold" : ""
+              isActiveLink("/trippurpose") ? "active-bold" : ""
             }`}
           >
             Dashboard
