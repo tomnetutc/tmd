@@ -23,6 +23,7 @@ import RechartsLineChart from "../../LineChart/LineChart";
 import Select, { SingleValue } from "react-select";
 import { Colors } from "../../Colors";
 import CustomOption from "./ToolTipOptionSingleSelect";
+import Infobox from '../InfoBox/InfoBox';
 
 interface CrossSegmentAnalysisProps {
   menuSelectedOptions: Option[][];
@@ -183,6 +184,9 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
               removeProfile={(index: number) => onProfileRemove(index)}
               title="Segments"
             />
+            <Infobox>
+              <p>Add up to four additional user-defined segments using the segmentation menu above to compare and display their patterns.</p>
+            </Infobox>
           </div>
           <div className="chart-container-1">
             <RechartsLineChart
@@ -191,6 +195,9 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
               showLegend={true}
               yAxisLabel="%"
             />
+            <Infobox>
+              <p>Shows the percent of individuals following a specific day pattern over time for selected segment(s). A day pattern represents the sequence of trips an individual takes throughout the day, with all patterns starting and ending at home for trip makers. Use the dropdown menu above to select a day pattern and view its shares across years for selected segment(s). The menu shows Home&gt;Work&gt;Home as the default and includes the 30 most common day patterns since 2003.</p>
+            </Infobox>
           </div>
         </div>
         <div className="sampleSizeTable">
@@ -199,6 +206,9 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
             counts={sampleSizeTableData.counts}
             crossSegment={true}
           />
+          <Infobox style={{ right : "70px"}}>
+              <p>Number of respondents per year for selected segment(s).</p>
+            </Infobox>
         </div>
       </div>
     </>

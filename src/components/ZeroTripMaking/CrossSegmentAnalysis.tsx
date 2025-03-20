@@ -20,6 +20,7 @@ import { mean } from "d3";
 import SampleSizeTable from "../../SampleSizeTable";
 import RechartsLineChart from "../../LineChart/LineChart";
 import { Colors } from "../../Colors";
+import Infobox from '../InfoBox/InfoBox';
 
 interface CrossSegmentAnalysisProps {
   menuSelectedOptions: Option[][];
@@ -157,6 +158,9 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
                 removeProfile={(index: number) => onProfileRemove(index)}
                 title="Segments"
               />
+            <Infobox>
+              <p>Add up to four additional user-defined segments using the segmentation menu above to compare and display their patterns.</p>
+            </Infobox>
             </div>
             <div className="chart-container-1">
               <RechartsLineChart
@@ -165,14 +169,20 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
                 yAxisLabel="%"
                 showLegend={true}
               />
+            <Infobox>
+              <p>Shows the percent of respondents who did not make any trips on a given day over the analysis period for selected segment(s).</p>
+            </Infobox>
             </div>
           </div>
-          <div className="sampeSizeTable">
+          <div className="sampleSizeTable">
             <SampleSizeTable
               years={sampleSizeTableData.years}
               counts={sampleSizeTableData.counts}
               crossSegment={true}
             />
+          <Infobox style={{ right : "70px"}}>
+              <p>Number of respondents per year for selected segment(s).</p>
+            </Infobox>
           </div>
         </div>
       </div>

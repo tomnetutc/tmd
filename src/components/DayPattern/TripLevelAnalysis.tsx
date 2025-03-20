@@ -20,6 +20,7 @@ import HistogramChart from "../../DayPatternCharts/DayPatternHistogram/Histogram
 import RechartsPieChart from "../../PieChart/PieChart";
 import CustomSegmentDayPattern from "../DayPattern/CustomSegmentDayPattern";
 import Segment from "./Segment/Segment";
+import Infobox from '../InfoBox/InfoBox';
 import {
   segmentSizing,
   segmentShare,
@@ -200,12 +201,21 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
           <div className="segment-grid-container">
             <div className="box SegmentSize">
               <Segment {...segmentSizing} />
+              <Infobox>
+              <p>The total number of respondents in the selected segment within the year.</p>
+              </Infobox>
             </div>
-            <div className="box SegmentShare">
+            <div className="box SegmentShare" style={{ position: "relative" }}>
               <Segment {...segmentShare} />
+              <Infobox>
+                <p>The proportion of the selected segment within the total sample for the year.</p>
+              </Infobox>
             </div>
             <div className="box SegmentTripChains">
               <Segment {...segmentTripChains} />
+              <Infobox>
+              <p>Total number of trip chains for the selected segment. A 'trip chain' is a sequence of trips where the first trip's origin and the last trip's destination are home.</p>
+              </Infobox>
             </div>
           </div>
         </div>
@@ -220,6 +230,9 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
               yAxisLabel=""
               totalCount={segmentSize}
             />
+            <Infobox>
+              <p>Displays the 15 most common daily travel patterns based on their share (%) in the sample. A day pattern represents the sequence of all trips (or no trips) an individual takes over a day. All patterns start and end at home for trip makers. Hover over each bar to see the decoding of pattern codes and the number of individuals with that specific pattern in the selected segment.</p>
+            </Infobox>
           </div>
         </div>
 
@@ -228,13 +241,16 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
             <div>
               <div
                 className="trip-parent-dropdown-holder"
-                style={{ justifyContent: "center" }}
+                style={{ justifyContent: "center", position: "relative" }}
               >
                 <CustomSegmentDayPattern
                   title="Average number of trip chains per person: "
                   segmentSize={avgTripChains.toFixed(2)}
                   unit="chains"
                 />
+                <Infobox>
+                <p>The average number of trip chains within a day pattern for the selected segment. A trip chain consists of sequential trips that begin and end at home.</p>
+                </Infobox>
               </div>
 
               <div className="chart-wrapper">
@@ -246,17 +262,24 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
                     ).format(Number(segmentSize))} persons)`}
                     showLegend={true}
                   />
+              <Infobox>
+              <p>Shows the distribution of individuals based on the number of trip chains they complete in a day. Each category represents the percent of day patterns with 0, 1, 2, or 3+ trip chains in their daily patterns.</p>
+              </Infobox>
                 </div>
               </div>
             </div>
 
             <div>
-              <div className="trip-parent-dropdown-holder">
+              <div className="trip-parent-dropdown-holder"
+                   style={{ position: "relative" }}>
                 <CustomSegmentDayPattern
                   title="Average number of stops per trip chain: "
                   segmentSize={avgStopPerChain.toFixed(2)}
                   unit="stops"
                 />
+                <Infobox>
+                <p>The average number of stops made within a trip chain for the selected segment. A stop refers to an intermediate destination before returning home.</p>
+                </Infobox>
               </div>
 
               <div className="chart-wrapper">
@@ -268,6 +291,9 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
                     ).format(Number(countTripChains))} chains)`}
                     showLegend={true}
                   />
+                <Infobox>
+                <p>Shows the distribution of trip chains based on the number of stops made. Each category represents the percent of trip chains with 0, 1, 2, or 3+ stops before returning home.</p>
+                </Infobox>
                 </div>
               </div>
             </div>

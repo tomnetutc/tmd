@@ -23,6 +23,7 @@ import RechartsLineChart from "../../LineChart/LineChart";
 import Select, { SingleValue } from "react-select";
 import { Colors } from "../../Colors";
 import { mean } from "d3";
+import Infobox from '../InfoBox/InfoBox';
 
 interface CrossSegmentAnalysisProps {
   menuSelectedOptions: Option[][];
@@ -218,6 +219,9 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
               removeProfile={(index: number) => onProfileRemove(index)}
               title="Segments"
             />
+            <Infobox>
+              <p>Add up to four additional user-defined segments using the segmentation menu above to compare and display their patterns.</p>
+            </Infobox>
           </div>
           <div className="chart-container-1">
             <RechartsLineChart
@@ -225,14 +229,24 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
               title={chartTitle}
               showLegend={true}
             />
+          <Infobox>
+            <p>
+              {analysisType.value === "NumberTrips"
+                ? "Shows the average number of trips per person per day over the analysis period for selected segment(s). Use the dropdown menu above to focus on a specific trip purpose."
+                : "Shows the average daily travel duration per person over the analysis period for selected segment(s). Use the dropdown menu above to focus on a specific trip purpose."}
+            </p>
+          </Infobox>
           </div>
         </div>
-        <div className="sampeSizeTable">
+        <div className="sampleSizeTable">
           <SampleSizeTable
             years={sampleSizeTableData.years}
             counts={sampleSizeTableData.counts}
             crossSegment={true}
           />
+          <Infobox style={{ right : "70px"}}>
+              <p>Number of respondents per year for selected segment(s).</p>
+            </Infobox>
         </div>
       </div>
     </>

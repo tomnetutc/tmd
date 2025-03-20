@@ -18,6 +18,7 @@ import { prepareVerticalChartData } from "./BtwYearDataCalculations";
 import SampleSizeTable from "../../SampleSizeTable";
 import RechartsLineChart from "../../LineChart/LineChart";
 import Select, { MultiValue } from "react-select";
+import Infobox from '../InfoBox/InfoBox';
 
 interface BtwYearAnalysisProps {
   menuSelectedOptions: Option[];
@@ -212,6 +213,9 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
               title="Average number of trips per person"
               showLegend={true}
             />
+            <Infobox>
+              <p>Shows the average number of trips per person per day over the analysis period. Use the dropdown menu above to compare different travel modes.</p>
+            </Infobox>
           </div>
 
           <div className="chart-container-1">
@@ -220,13 +224,21 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
               title="Average travel duration per person (min)"
               showLegend={true}
             />
+            <Infobox>
+              <p>Shows the average daily travel duration per person over the analysis period. Use the dropdown menu above to compare different travel modes.</p>
+            </Infobox>
           </div>
         </div>
 
+        <div className="sampleSizeTable">
         <SampleSizeTable
           years={sampleSizeTableData.years}
           counts={sampleSizeTableData.counts}
         />
+        <Infobox style={{  right : "70px"}}>
+          <p>Number of respondents per year for the selected segment. It is displayed for “All” by default.</p>
+        </Infobox>
+        </div>
       </div>
       </div>
     </>

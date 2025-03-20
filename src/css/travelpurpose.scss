@@ -94,6 +94,7 @@
   align-items: center;
   width: 90%;
   margin: auto;
+  position: relative;
 }
 
 .box {
@@ -110,6 +111,12 @@
   grid-row: span 1;
   grid-column: span 0.5;
   position: relative;
+}
+
+.sampleSizeTable {
+  position: relative;
+  margin: 0; /* Reset unnecessary margins */
+  padding: 0; /* Remove extra padding */
 }
 
 /* Responsive adjustments */

@@ -18,6 +18,7 @@ import HistogramChart from "../../Histogram/Histogram";
 import Select, { MultiValue } from "react-select";
 import AreaChartComponent from "../../AreaChart/AreaChart";
 import CustomSegment from "../../CustomSegment";
+import Infobox from '../InfoBox/InfoBox';
 
 interface TripLevelAnalysisProp {
   menuSelectedOptions: Option[];
@@ -195,11 +196,16 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
     <>
       <div style={{ position: "relative" }}>
         <div className="trip-parent-dropdown-holder">
+        <div style={{ display: 'flex', alignItems: 'center' }}>
           <CustomSegment
             title="Segment size: "
             segmentSize={formatter.format(segmentSize)}
             unit="persons"
           />
+          <Infobox style={{ display: 'flex', position: 'relative', left : 5 }}>
+          <p>The total number of respondents in the selected segment within the year.</p>
+          </Infobox>
+        </div>
           <div className="trip-dropdown-container">
             <label className="trip-segment-label">Travel mode:</label>
             <Select
@@ -226,6 +232,9 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
               xAxisLabel="%"
               invertAxis={true}
             />
+            <Infobox>
+              <p>Shows the distribution of trip travel times. Each bar represents the percent of trips for each mode within a specific duration range. The average travel time (μ) is displayed in the legend.</p>
+            </Infobox>
           </div>
         </div>
         <div className="chart-wrapper">
@@ -237,6 +246,9 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
               xAxisLabel="Starting Hour"
               yAxisLabel="%"
             />
+            <Infobox>
+              <p>Shows the distribution of trip start times throughout the day. Each point represents the percent of trips beginning at a specific hour for each mode. The total number of trips (n) is displayed in the legend.</p>
+            </Infobox>
           </div>
         </div>
         <div className="chart-wrapper">
@@ -247,6 +259,9 @@ const TripLevelAnalysis: React.FC<TripLevelAnalysisProp> = ({
               showLegend={true}
               xAxisLabel="%"
             />
+            <Infobox>
+              <p>Shows the distribution of trip purposes by travel mode. Each bar represents the percent of trips by trip purpose for a given mode. Additional travel modes can be included using the dropdown above.</p>
+            </Infobox>
           </div>
         </div>
       </div>

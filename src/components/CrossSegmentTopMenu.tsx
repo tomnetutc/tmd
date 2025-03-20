@@ -6,6 +6,7 @@ import '../css/topmenu.scss';
 import Select from 'react-select';
 import { cross } from 'd3';
 import { useFetcher } from 'react-router-dom';
+import Infobox from './InfoBox/InfoBox';
 
 const CrossSegmentTopMenu: React.FC<{ 
     filterOptionsForTelework?: boolean; 
@@ -136,6 +137,9 @@ const CrossSegmentTopMenu: React.FC<{
                             Reset
                         </Button>
                     </div>
+                    <Infobox style={{ display: 'flex', position: 'relative', padding: 12, right : 20 }}>
+                        <p>Select up to three attributes to define and add a specific population segment for comparison purposes. The default view shows data for ‘all’ individuals aged 15 and older.</p>
+                    </Infobox>
                 </div>
             </div>
         </div>
