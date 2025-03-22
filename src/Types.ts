@@ -157,6 +157,7 @@ export interface SampleSizeTableProps {
   years: (string | undefined)[];
   counts: CountObj[];
   crossSegment?: boolean;
+  infoboxContent?: string; // Optional content for the Infobox
 }
 
 export type TripPurposeOption = {

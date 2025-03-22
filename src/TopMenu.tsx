@@ -4,6 +4,7 @@ import { Option } from './Types';
 import { groupedOptions } from './utils/Helpers';
 import './css/topmenu.scss';
 import Select from 'react-select';
+import Infobox from './components/InfoBox/InfoBox';
 
 const TopMenu: React.FC<{ onOptionChange: (options: Option[]) => void; filterOptionsForTelework?: boolean }> = ({ onOptionChange, filterOptionsForTelework = false }) => {
     const [selectedOptions, setSelectedOptions] = useState<Array<Option | null>>([null, null, null]);
@@ -144,6 +145,9 @@ const TopMenu: React.FC<{ onOptionChange: (options: Option[]) => void; filterOpt
                         Reset
                     </Button>
                 </div>
+                <Infobox style={{ display: 'flex', position: 'relative', padding: 12, right : 23 }}>
+                    <p>Select up to three attributes to define a specific population segment and limit the analysis to that group. The default view shows data for ‘all’ individuals aged 15 and older.</p>
+                </Infobox>
             </div>
             </div>
         </div>

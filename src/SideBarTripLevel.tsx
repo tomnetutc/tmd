@@ -5,7 +5,7 @@ import Switch from "@mui/material/Switch";
 import "./css/sidebar.scss";
 import { analysisLevel, analysisType, weekOption, YearOption } from "./Types";
 import { AnalysisLevels, AnalysisTypes, WeekOptions } from "./utils/Helpers";
-
+import Infobox from './components/InfoBox/InfoBox';
 interface SidebarProps {
   analysisLevel: analysisLevel;
   analysisType: analysisType;
@@ -72,7 +72,18 @@ const Sidebar: React.FC<SidebarProps> = ({
         {/* Analysis Level */}
         <div className="form-container">
           <div className="form-group">
+          <div style={{ position: 'relative' }}>
             <label>Analysis Level</label>
+          <div style={{ 
+              position: 'absolute', 
+              top: '-20px', 
+              right: '-15px',
+            }}>
+            <Infobox> 
+             <p>Select whether to analyze mobility patterns at the person or trip level.</p> 
+            </Infobox>
+            </div>
+            </div>
             <Select<analysisLevel>
               options={AnalysisLevels}
               onChange={(option: SingleValue<analysisLevel>) =>
@@ -88,7 +99,18 @@ const Sidebar: React.FC<SidebarProps> = ({
         {/* Analysis Period */}
         <div className="form-container">
           <div className="form-group">
-            <label>Analysis Year</label>
+            <div style={{ position: 'relative' }}>
+              <label>Analysis Year</label>
+              <div style={{ 
+                  position: 'absolute', 
+                  top: '-20px', 
+                  right: '-15px',
+                    }}>
+                  <Infobox> 
+                  <p>Select a year to view mobility trends.</p> 
+                  </Infobox>
+                </div>
+            </div>
             <div>
               <Select
                 options={yearOptions}
@@ -108,7 +130,18 @@ const Sidebar: React.FC<SidebarProps> = ({
         {/* Analysis Day */}
         <div className="form-container">
           <div className="form-group">
+          <div style={{ position: 'relative' }}>
             <label>Analysis Day</label>
+            <div style={{ 
+              position: 'absolute', 
+              top: '-20px', 
+              right: '-15px',
+            }}>
+              <Infobox> 
+                <p>Select whether to analyze mobility patterns for all days, weekdays, or weekends.</p> 
+              </Infobox>
+            </div>
+            </div>
             <Select<weekOption>
               options={WeekOptions}
               onChange={(option: SingleValue<weekOption>) =>
@@ -124,6 +157,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         {/* Include December Switch */}
         <div className="form-container">
           <div className="form-group toggle">
+          <div style={{ position: 'relative' }}>
             <p>
               Include December:{" "}
               <IOSSwitch
@@ -133,6 +167,16 @@ const Sidebar: React.FC<SidebarProps> = ({
                 }
               />
             </p>
+            <div style={{ 
+                position: 'absolute', 
+                top: '-20px', 
+                right: '-15px',
+                }}>
+                <Infobox> 
+                  <p>Exclude or include the respondents’ trips in December from the analysis.</p> 
+                </Infobox>
+            </div>
+          </div>
           </div>
         </div>
       </div>

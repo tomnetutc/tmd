@@ -19,6 +19,7 @@ import SampleSizeTable from "../../SampleSizeTable";
 import RechartsLineChart from "../../DayPatternCharts/DayPatternLineChart/LineChart";
 import Select, { MultiValue } from "react-select";
 import CustomOption from "./ToolTipOptionMultiSelect";
+import Infobox from '../InfoBox/InfoBox';
 
 interface BtwYearAnalysisProps {
   menuSelectedOptions: Option[];
@@ -178,12 +179,18 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
               showLegend={true}
               yAxisLabel="%"
             />
+            <Infobox>
+            <p>Shows the percent of individuals following selected day patterns over time. A day pattern represents the sequence of trips an individual takes throughout the day, with all patterns starting and ending at home for trip makers. Use the dropdown menu above to select one or multiple day patterns and view their shares across years. The menu shows Home&gt;Work&gt;Home as the default and includes the 30 most common day patterns since 2003.</p>
+            </Infobox>
           </div>
         </div>
+        <div className="sampleSizeTable">
         <SampleSizeTable
           years={sampleSizeTableData.years}
           counts={sampleSizeTableData.counts}
+          infoboxContent= "Number of respondents per year for selected segment(s)."
         />
+        </div>
       </div>
     </>
   );

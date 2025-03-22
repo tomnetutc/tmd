@@ -300,7 +300,7 @@ export function Content(): JSX.Element {
           </p>
           <ul>
             <li className="mt-4">
-              Batur, I., Varghese, R., Mohammed Zaid, Bhat, C. R., Mokhtarian, P. L., Polzin, S. E., Chen, C. and Pendyala, R. M. The Mobility Dashboard (TMD). TOMNET and TBD University Transportation Centers, 2024.&nbsp;
+              Batur, I., Varghese, R., Mohammed Zaid, Bhat, C. R., Mokhtarian, P. L., Polzin, S. E., Chen, C. and Pendyala, R. M. The Mobility Dashboard (TMD). TOMNET and TBD University Transportation Centers, {new Date().getFullYear()}.&nbsp;
               <a href="https://tomnetutc.github.io/tmd/" target="_blank" rel="noopener noreferrer">https://tomnetutc.github.io/tmd/</a>
             </li>
             <li className="mt-4">

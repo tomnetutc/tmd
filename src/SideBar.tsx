@@ -6,6 +6,7 @@ import "./css/sidebar.scss";
 import { analysisLevel, analysisType, weekOption, YearOption } from "./Types";
 import { AnalysisLevels, AnalysisTypes, WeekOptions } from "./utils/Helpers";
 import { BorderAll } from "@mui/icons-material";
+import Infobox from './components/InfoBox/InfoBox';
 
 interface SidebarProps {
   analysisLevel: analysisLevel;
@@ -81,7 +82,18 @@ const Sidebar: React.FC<SidebarProps> = ({
         {hideAnalysisLevels === false ? (
           <div className="form-container">
             <div className="form-group">
-              <label>Analysis Level</label>
+            <div style={{ position: 'relative' }}>
+            <label>Analysis Level</label>
+            <div style={{ 
+              position: 'absolute', 
+              top: '-20px', 
+              right: '-15px',
+            }}>
+              <Infobox> 
+                <p>Select whether to analyze mobility patterns at the person or trip level.</p> 
+              </Infobox>
+            </div>
+          </div>
               <Select<analysisLevel>
                 options={AnalysisLevels}
                 onChange={(option: SingleValue<analysisLevel>) =>
@@ -100,7 +112,18 @@ const Sidebar: React.FC<SidebarProps> = ({
         {/* Analysis Type */}
         <div className="form-container">
           <div className="form-group">
+          <div style={{ position: 'relative' }}>
             <label>Analysis Type</label>
+            <div style={{ 
+              position: 'absolute', 
+              top: '-20px', 
+              right: '-15px',
+            }}>
+              <Infobox> 
+                <p>Select how to analyze mobility trends. 'Between Year' compares trends across years, whereas 'Cross-Segment' shows trends between user-defined population groups.</p> 
+              </Infobox>
+            </div>
+            </div>
             <Select<analysisType>
               options={AnalysisTypes}
               onChange={(option: SingleValue<analysisType>) =>
@@ -116,7 +139,18 @@ const Sidebar: React.FC<SidebarProps> = ({
         {/* Analysis Period */}
         <div className="form-container">
           <div className="form-group">
+          <div style={{ position: 'relative' }}>
             <label>Analysis Period</label>
+            <div style={{ 
+              position: 'absolute', 
+              top: '-20px', 
+              right: '-15px',
+            }}>
+              <Infobox> 
+                <p>Select the start and end year to define the analysis period.</p> 
+              </Infobox>
+            </div>
+            </div>
             <div className="year-option" style={{ alignItems: "center" }}>
               <p
                 style={{
@@ -165,7 +199,18 @@ const Sidebar: React.FC<SidebarProps> = ({
         {/* Analysis Day */}
         <div className="form-container">
           <div className="form-group">
+          <div style={{ position: 'relative' }}>
             <label>Analysis Day</label>
+            <div style={{ 
+              position: 'absolute', 
+              top: '-20px', 
+              right: '-15px',
+            }}>
+              <Infobox> 
+                <p>Select whether to analyze mobility patterns for all days, weekdays, or weekends.</p> 
+              </Infobox>
+            </div>
+            </div>
             <Select<weekOption>
               options={WeekOptions}
               onChange={(option: SingleValue<weekOption>) =>
@@ -181,6 +226,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         {/* Include December Switch */}
         <div className="form-container">
           <div className="form-group toggle">
+          <div style={{ position: 'relative' }}>
             <p>
               Include December:{" "}
               <IOSSwitch
@@ -190,6 +236,16 @@ const Sidebar: React.FC<SidebarProps> = ({
                 }
               />
             </p>
+            <div style={{ 
+                position: 'absolute', 
+                top: '-20px', 
+                right: '-15px',
+                }}>
+                <Infobox> 
+                  <p>Exclude or include the respondents surveyed in December from the analysis.</p> 
+                </Infobox>
+            </div>
+          </div>
           </div>
         </div>
       </div>

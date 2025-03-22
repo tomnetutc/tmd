@@ -20,6 +20,7 @@ import { prepareVerticalChartData } from "./BtwYearDataCalculations";
 import SampleSizeTable from "../../SampleSizeTable";
 import RechartsLineChart from "../../LineChart/LineChart";
 import Select, { MultiValue } from "react-select";
+import Infobox from '../InfoBox/InfoBox';
 
 interface BtwYearAnalysisProps {
   menuSelectedOptions: Option[];
@@ -148,12 +149,18 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
               showLegend={true}
               yAxisLabel="%"
             />
+            <Infobox>
+              <p>Shows the percent of respondents who did not make any trips on a given day over the analysis period.</p>
+            </Infobox>
           </div>
         </div>
+        <div className="sampleSizeTable">
         <SampleSizeTable
           years={sampleSizeTableData.years}
           counts={sampleSizeTableData.counts}
+          infoboxContent="Number of respondents per year for the selected segment. It is displayed for 'All' by default."
         />
+      </div>
       </div>
     </>
   );

@@ -1,0 +1,11 @@
+.info-box-position {
+    position: absolute;
+    top: 0;
+    right: 7px;
+      
+    .info-icon {
+      color: rgba(108, 117, 125, .4); // Lighter and transparent color
+      font-size: 15px;
+      cursor: pointer;
+    }
+  }

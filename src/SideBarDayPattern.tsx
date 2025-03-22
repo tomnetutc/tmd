@@ -9,6 +9,7 @@ import {
   DayPatternAnalysisTypes,
   WeekOptions,
 } from "./utils/Helpers";
+import Infobox from './components/InfoBox/InfoBox';
 
 interface SidebarProps {
   analysisType: analysisType;
@@ -86,7 +87,18 @@ const Sidebar: React.FC<SidebarProps> = ({
         {/* Analysis Type */}
         <div className="form-container">
           <div className="form-group">
+          <div style={{ position: 'relative' }}>
             <label>Analysis Type</label>
+            <div style={{ 
+                  position: 'absolute', 
+                  top: '-20px', 
+                  right: '-15px',
+                    }}>
+                  <Infobox> 
+                  <p>Select how to analyze day pattern trends. 'Within Year' examines patterns within a single year .'Between Year' compares trends across years, whereas 'Cross-Segment' shows trends between user-defined population groups.</p> 
+                  </Infobox>
+                </div>
+            </div> 
             <Select<analysisType>
               options={DayPatternAnalysisTypes}
               onChange={(option: SingleValue<analysisType>) =>
@@ -105,7 +117,18 @@ const Sidebar: React.FC<SidebarProps> = ({
         {hideStartEndYear === false ? (
           <div className="form-container">
             <div className="form-group">
+            <div style={{ position: 'relative' }}>
               <label>Analysis Period</label>
+              <div style={{ 
+                  position: 'absolute', 
+                  top: '-20px', 
+                  right: '-15px',
+                    }}>
+                  <Infobox> 
+                  <p>Select the start and end year to define the analysis period.</p> 
+                  </Infobox>
+                </div>
+            </div> 
               <div className="year-option">
                 <p
                   style={{
@@ -157,7 +180,18 @@ const Sidebar: React.FC<SidebarProps> = ({
         {hideAnalysisYear === false ? (
           <div className="form-container">
             <div className="form-group">
+            <div style={{ position: 'relative' }}>
               <label>Analysis Year</label>
+              <div style={{ 
+                  position: 'absolute', 
+                  top: '-20px', 
+                  right: '-15px',
+                    }}>
+                  <Infobox> 
+                  <p>Select a year to view mobility trends.</p> 
+                  </Infobox>
+                </div>
+            </div> 
               <div>
                 <Select
                   options={yearOptions}
@@ -178,7 +212,18 @@ const Sidebar: React.FC<SidebarProps> = ({
         {/* Analysis Day */}
         <div className="form-container">
           <div className="form-group">
+          <div style={{ position: 'relative' }}>
             <label>Analysis Day</label>
+            <div style={{ 
+                  position: 'absolute', 
+                  top: '-20px', 
+                  right: '-15px',
+                    }}>
+                  <Infobox> 
+                  <p>Select whether to analyze mobility patterns for all days, weekdays, or weekends.</p> 
+                  </Infobox>
+                </div>
+            </div> 
             <Select<weekOption>
               options={WeekOptions}
               onChange={(option: SingleValue<weekOption>) =>
@@ -194,6 +239,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         {/* Include December Switch */}
         <div className="form-container">
           <div className="form-group toggle">
+          <div style={{ position: 'relative' }}>
             <p>
               Include December:{" "}
               <IOSSwitch
@@ -203,6 +249,16 @@ const Sidebar: React.FC<SidebarProps> = ({
                 }
               />
             </p>
+            <div style={{ 
+                position: 'absolute', 
+                top: '-20px', 
+                right: '-15px',
+                }}>
+                <Infobox> 
+                  <p>Exclude or include the respondents surveyed in December from the analysis.</p> 
+                </Infobox>
+            </div>
+          </div>
           </div>
         </div>
       </div>
