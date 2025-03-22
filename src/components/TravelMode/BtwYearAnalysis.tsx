@@ -234,10 +234,8 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
         <SampleSizeTable
           years={sampleSizeTableData.years}
           counts={sampleSizeTableData.counts}
+          infoboxContent= "Number of respondents per year for the selected segment. It is displayed for “All” by default."
         />
-        <Infobox style={{  right : "70px"}}>
-          <p>Number of respondents per year for the selected segment. It is displayed for “All” by default.</p>
-        </Infobox>
         </div>
       </div>
       </div>

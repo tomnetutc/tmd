@@ -3,11 +3,13 @@ import exportFromJSON from "export-from-json";
 import { SampleSizeTableProps } from "./Types";
 import { DSVRowString } from "d3";
 import "./css/sampleSizeTable.css"; // Ensure this path is correct
+import Infobox from './components/InfoBox/InfoBox';
 
 export default function SampleSizeTable({
     years,
     counts,
     crossSegment = false,
+    infoboxContent = "",
 }: SampleSizeTableProps): JSX.Element {
     // Ensure counts include all years, and fill missing years with 0
     counts.forEach((count: any) => {
@@ -64,6 +66,11 @@ export default function SampleSizeTable({
                     ))}
                 </tbody>
             </Table>
+            {infoboxContent && (
+                <Infobox>
+                    <p>{infoboxContent}</p>
+                </Infobox>
+            )}
         </div>
     );
 }

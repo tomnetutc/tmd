@@ -137,7 +137,7 @@ const CrossSegmentTopMenu: React.FC<{
                             Reset
                         </Button>
                     </div>
-                    <Infobox style={{ display: 'flex', position: 'relative', padding: 12, right : 20 }}>
+                    <Infobox style={{ display: 'flex', position: 'relative', padding: 12, right : 23 }}>
                         <p>Select up to three attributes to define and add a specific population segment for comparison purposes. The default view shows data for ‘all’ individuals aged 15 and older.</p>
                     </Infobox>
                 </div>

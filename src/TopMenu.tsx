@@ -145,7 +145,7 @@ const TopMenu: React.FC<{ onOptionChange: (options: Option[]) => void; filterOpt
                         Reset
                     </Button>
                 </div>
-                <Infobox style={{ display: 'flex', position: 'relative', padding: 12, right : 20 }}>
+                <Infobox style={{ display: 'flex', position: 'relative', padding: 12, right : 23 }}>
                     <p>Select up to three attributes to define a specific population segment and limit the analysis to that group. The default view shows data for ‘all’ individuals aged 15 and older.</p>
                 </Infobox>
             </div>

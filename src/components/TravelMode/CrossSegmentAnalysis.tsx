@@ -257,10 +257,8 @@ const CrossSegmentAnalysis: React.FC<CrossSegmentAnalysisProps> = ({
             years={sampleSizeTableData.years}
             counts={sampleSizeTableData.counts}
             crossSegment={true}
+            infoboxContent= "Number of respondents per year for selected segment(s)."
           />
-            <Infobox style={{ right : "70px"}}>
-              <p>Number of respondents per year for selected segment(s).</p>
-            </Infobox>
         </div>
       </div>
     </>
