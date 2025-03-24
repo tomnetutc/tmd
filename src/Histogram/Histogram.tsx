@@ -50,7 +50,7 @@ const HistogramChart: React.FC<HistogramProps> = ({
   // Process each dataset: round each data point to one decimal place
   const finalDatasets = chartData.datasets.map((dataset) => {
     const avgLabel =
-      dataset.average !== -1 ? ` ( \u03BC: ${dataset.average.toFixed(2)})` : "";
+      dataset.average !== -1 ? ` (avg: ${dataset.average.toFixed(1)} min)` : "";
 
     return {
       label: `${dataset.label}${avgLabel}`,
