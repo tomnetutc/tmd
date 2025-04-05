@@ -28,9 +28,7 @@ export function About(): JSX.Element {
                 <Content />
             </Container>
             <Footer 
-                docRefID="globalcounter"
-                page="hasVisitedAboutPage"
-                expiry='aboutExpiry'
+                
                 footerBackgroundcolor="white" />
             
         </>

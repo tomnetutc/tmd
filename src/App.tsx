@@ -7,10 +7,12 @@ import ZeropTripMaking from "./Pages/ZeroTripMaking";
 import { Home } from "./Pages/Home";
 import { About } from "./Pages/About";
 import DayPattern from "./Pages/DayPattern";
+import { PageTracker } from "./components/PageTracker";
 
 function App() {
   return (
     <HashRouter>
+      <PageTracker />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />

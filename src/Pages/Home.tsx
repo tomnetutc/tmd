@@ -29,9 +29,7 @@ export function Home(): JSX.Element {
                 <HomeFeatures />
             </Container>
             <Footer 
-                docRefID="globalcounter"
-                page="hasVisitedAboutPage"
-                expiry='aboutExpiry'
+                
                 footerBackgroundcolor="white" />
         </>
     );

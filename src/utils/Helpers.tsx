@@ -1424,145 +1424,73 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const analytics = getAnalytics(app);
 
-export function tracking(docRefID: string, page: string, expiry: string) {
+export async function tracking(docRefID: string, page: string, expiry: string) {
+  const SITE_VISITOR_KEY = 'TMD_firstVisit';
+  const SESSION_DURATION = 30; // Session duration in minutes
+  
   const websiteDocRef = doc(db, "TMD", docRefID);
 
-  // Debug logging
-  console.log("Tracking initiated for:", { docRefID, page, expiry });
-
-  // Function to safely get DOM elements with retry mechanism
-  const getCounterElements = () => {
-    const unique_counter = document.getElementById("visit-count");
-    const total_counter = document.getElementById("total-count");
-
-    if (!unique_counter || !total_counter) {
-      console.warn("Counter elements not found in DOM, will retry in 500ms");
-      setTimeout(() => {
-        const retryUnique = document.getElementById("visit-count");
-        const retryTotal = document.getElementById("total-count");
-
-        if (retryUnique && retryTotal) {
-          console.log("Counter elements found on retry");
-          updateCounters(retryUnique, retryTotal);
-        } else {
-          console.error("Counter elements still not found after retry");
-        }
-      }, 500);
-      return null;
+  // Ensure counter elements exist
+  const ensureElement = (id: string) => {
+    let element = document.getElementById(id);
+    if (!element) {
+      element = document.createElement('div');
+      element.id = id;
+      element.style.display = 'none';
+      document.body.appendChild(element);
     }
-
-    return { unique_counter, total_counter };
+    return element;
   };
 
-  // Function to update the counters with the data
-  const updateCounters = (uniqueEl: HTMLElement, totalEl: HTMLElement) => {
-    // First check if document exists and create it if it doesn't
-    getDoc(websiteDocRef)
-      .then((docSnap) => {
-        if (!docSnap.exists()) {
-          console.log("Document doesn't exist, creating it...");
-          return setDoc(websiteDocRef, {
-            uniqueCount: 0,
-            totalCount: 0,
-          });
-        }
-        return Promise.resolve();
-      })
-      .then(() => {
-        // Now handle the visit counters
-        handleVisitCounting(uniqueEl, totalEl);
-      })
-      .catch((err) => {
-        console.error("Error initializing document:", err);
+  const unique_counter = ensureElement('visit-count');
+  const total_counter = ensureElement('total-count');
+
+  try {
+    // Initialize document if needed
+    const docSnap = await getDoc(websiteDocRef);
+    if (!docSnap.exists()) {
+      await setDoc(websiteDocRef, {
+        uniqueCount: 0,
+        totalCount: 0,
+        lastUpdated: new Date().toISOString()
       });
-  };
-
-  // Function to handle the visit counting logic
-  const handleVisitCounting = (uniqueEl: HTMLElement, totalEl: HTMLElement) => {
-    const setValue = (element: HTMLElement, label: string, num: number) => {
-      element.innerText = `${label}: ${num}`;
-      console.log(`Updated ${label} to ${num}`);
-    };
-
-    const getUniqueCount = async () => {
-      const docSnap = await getDoc(websiteDocRef);
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        if (data) {
-          setValue(uniqueEl, "Unique visitors", data.uniqueCount || 0);
-        }
-      }
-    };
-
-    const getTotalCount = async () => {
-      const docSnap = await getDoc(websiteDocRef);
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        if (data) {
-          setValue(totalEl, "Total visits", data.totalCount || 0);
-        }
-      }
-    };
-
-    const incrementCountUnique = async () => {
-      try {
-        await updateDoc(websiteDocRef, {
-          uniqueCount: increment(1),
-        });
-        await getUniqueCount();
-      } catch (err) {
-        console.error("Error incrementing unique count:", err);
-      }
-    };
-
-    const incrementCountTotal = async () => {
-      try {
-        await updateDoc(websiteDocRef, {
-          totalCount: increment(1),
-        });
-        await getTotalCount();
-      } catch (err) {
-        console.error("Error incrementing total count:", err);
-      }
-    };
-
-    // Check for unique visits
-    if (localStorage.getItem(page) === null) {
-      console.log("New unique visitor detected");
-      incrementCountUnique()
-        .then(() => {
-          localStorage.setItem(page, "true");
-        })
-        .catch((err) => console.error("Error with unique visitor:", err));
-    } else {
-      console.log("Returning visitor detected");
-      getUniqueCount().catch((err) =>
-        console.error("Error getting unique count:", err)
-      );
     }
 
-    // Check for total visits
-    if (localStorage.getItem(expiry) === null) {
-      console.log("New session detected");
-      incrementCountTotal().then(() => {
-        localStorage.setItem(expiry, (Date.now() + 60000 * 120).toString());
+    // Check for first-time site visitor (not page-specific)
+    const isFirstTimeVisitor = !localStorage.getItem(SITE_VISITOR_KEY);
+    if (isFirstTimeVisitor) {
+      await updateDoc(websiteDocRef, {
+        uniqueCount: increment(1),
+        lastUpdated: new Date().toISOString()
       });
-    } else if (new Date().getTime() > Number(localStorage.getItem(expiry))) {
-      console.log("Session expired, counting new visit");
-      incrementCountTotal().then(() => {
-        localStorage.setItem(expiry, (Date.now() + 60000 * 120).toString());
-      });
-    } else {
-      console.log("Active session detected");
-      getTotalCount().catch((err) =>
-        console.error("Error getting total count:", err)
-      );
+      localStorage.setItem(SITE_VISITOR_KEY, 'true');
     }
-  };
 
-  // Start the counter process
-  const elements = getCounterElements();
-  if (elements) {
-    updateCounters(elements.unique_counter, elements.total_counter);
+    // Check session status for total visits
+    const currentTime = new Date().getTime();
+    const storedExpiry = localStorage.getItem(expiry);
+    const isExpiredSession = storedExpiry && currentTime > Number(storedExpiry);
+
+    if (!storedExpiry || isExpiredSession) {
+      await updateDoc(websiteDocRef, {
+        totalCount: increment(1),
+        lastUpdated: new Date().toISOString()
+      });
+      
+      // Set new expiry time
+      const newExpiryTime = currentTime + (SESSION_DURATION * 60 * 1000);
+      localStorage.setItem(expiry, newExpiryTime.toString());
+    }
+
+    // Update display with latest counts
+    const updatedDoc = await getDoc(websiteDocRef);
+    if (updatedDoc.exists()) {
+      const data = updatedDoc.data();
+      unique_counter.innerText = `Unique visitors: ${data.uniqueCount || 0}`;
+      total_counter.innerText = `Total visits: ${data.totalCount || 0}`;
+    }
+
+  } catch (error) {
+    throw error;
   }
 }
