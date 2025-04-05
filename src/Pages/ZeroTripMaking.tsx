@@ -32,7 +32,7 @@ interface Selections {
 }
 
 export default function ZeroTripMaking(): JSX.Element {
-  useDocumentTitle("Zero Trip Making");
+  useDocumentTitle("Zero-Trip Making");
 
   const [currAnalysisLevel, setCurrAnalaysisLevel] = useState<analysisLevel>(
     AnalysisLevels[0]
