@@ -197,8 +197,5 @@ export interface SegmentProps {
 }
 
 export interface FooterProps {
-  docRefID: string;
-  page: string;
-  expiry: string;
   footerBackgroundcolor?: string; // This is for Home and About page (white background)
 }

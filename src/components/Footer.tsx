@@ -8,10 +8,7 @@ import utAustinLogo from '../images/Logo/utaustin.png';
 import usDotLogo from '../images/Logo/us-dot.png';
 import tomnetLogo from '../images/Logo/tomnet.png';
 
-export default function Footer({ docRefID, page, expiry, footerBackgroundcolor = '' }: FooterProps): JSX.Element {
-    useEffect(() => {
-        tracking(docRefID, page, expiry);
-    }, [docRefID, page, expiry]); // Added dependencies to useEffect
+export default function Footer({  footerBackgroundcolor = '' }: FooterProps): JSX.Element {
 
     const currentYear = new Date().getFullYear();
     return (
