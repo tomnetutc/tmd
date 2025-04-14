@@ -1000,48 +1000,6 @@ export const groupedOptions: GroupedOption[] = [
 ];
 
 // Singleton class for data management
-
-export class DataProvider {
-  private static instance: DataProvider;
-  private data: DSVRowString<string>[] | null = null;
-  private loadingPromise: Promise<DSVRowString<string>[]> | null = null; // Async lock
-
-  private constructor() {}
-
-  public static getInstance(): DataProvider {
-    if (!DataProvider.instance) {
-      DataProvider.instance = new DataProvider();
-    }
-    return DataProvider.instance;
-  }
-
-  public async loadData(): Promise<DSVRowString<string>[]> {
-    if (this.data !== null) {
-      return this.data; // Return the data if it's already loaded
-    }
-    if (this.loadingPromise) {
-      return this.loadingPromise; // Return the existing loading promise if it's already loading
-    }
-    this.loadingPromise = this.loadFromSource().finally(() => {
-      this.loadingPromise = null; // Clear the loading promise after it's done
-    });
-    return this.loadingPromise;
-  }
-
-  private async loadFromSource(): Promise<DSVRowString<string>[]> {
-    try {
-      this.data = await csv(
-        "https://storage.googleapis.com/mobility-dashboard-434821.appspot.com/dataset/df_time_use.csv"
-      );
-    } catch (error) {
-      console.error("Error loading data:", error);
-      throw error;
-    }
-    return this.data;
-  }
-}
-
-// Singleton class for data management
 export class TripLevelDataProvider {
   private static instance: TripLevelDataProvider;
   private data: DSVRowString<string>[] | null = null;
@@ -1058,33 +1016,48 @@ export class TripLevelDataProvider {
 
   public async loadData(): Promise<DSVRowString<string>[]> {
     if (this.data !== null) {
-      return this.data; // Return the data if it's already loaded
+      return this.data;
     }
     if (this.loadingPromise) {
-      return this.loadingPromise; // Return the existing loading promise if it's already loading
+      return this.loadingPromise;
     }
 
-    // Load data and handle async lock
-    this.loadingPromise = this.loadFromSource().finally(() => {
-      this.loadingPromise = null; // Clear the loading promise after it's done
+    this.loadingPromise = this.loadAndMergeDatasets().finally(() => {
+      this.loadingPromise = null;
     });
 
     return this.loadingPromise;
   }
 
-  private async loadFromSource(): Promise<DSVRowString<string>[]> {
+  private async loadAndMergeDatasets(): Promise<DSVRowString<string>[]> {
+    const urls = [
+      "https://raw.githubusercontent.com/tomnetutc/tmd/refs/heads/main/src/datasets/df_act_2003_2011.csv",
+      "https://raw.githubusercontent.com/tomnetutc/tmd/refs/heads/main/src/datasets/df_act_2012_2020.csv",
+      "https://raw.githubusercontent.com/tomnetutc/tmd/refs/heads/main/src/datasets/df_act_2020_onward.csv"
+    ];
+
+    // Helper to drop embedded headers by checking 'year' is numeric
+    const dropHeaderRows = (rows: DSVRowString<string>[]) =>
+      rows.filter(r => !isNaN(Number(r.year)));
+
     try {
-      // Use d3.csv to fetch and parse the CSV file
-      this.data = await csv(
-        "https://storage.googleapis.com/mobility-dashboard-434821.appspot.com/dataset/df_act.csv"
-      );
+      // Load all three concurrently
+      const datasets = await Promise.all(urls.map(url => csv(url)));
+
+      // Clean each, then flatten into one array
+      this.data = datasets
+        .map(dropHeaderRows)
+        .reduce<DSVRowString<string>[]>((acc, curr) => acc.concat(curr), []);
     } catch (error) {
-      console.error("Error loading data:", error);
+      console.error("Error loading datasets:", error);
       throw error;
     }
+
     return this.data;
   }
 }
+
+
 
 // Singleton class for data management
 export class DayPatternDataProvider {
@@ -1136,9 +1109,8 @@ export class DayPatternDataProvider {
     try {
       // Use d3.csv to fetch and parse the CSV file
       this.data = await csv(
-        "https://storage.googleapis.com/mobility-dashboard-434821.appspot.com/dataset/day_pattern.csv"
+        "https://raw.githubusercontent.com/tomnetutc/tmd/refs/heads/main/src/datasets/day_pattern.csv"
       );
-      console.log(this.data)
     } catch (error) {
       console.error("Error loading data:", error);
       throw error;
@@ -1268,7 +1240,7 @@ export class TravelDataProvider {
   private async loadFromSource(): Promise<DSVRowString<string>[]> {
     try {
       this.data = await csv(
-        "https://storage.googleapis.com/mobility-dashboard-434821.appspot.com/dataset/df_travel.csv"
+        "https://raw.githubusercontent.com/tomnetutc/tmd/refs/heads/main/src/datasets/df_travel.csv"
       );
     } catch (error) {
       console.error("Error loading data:", error);
