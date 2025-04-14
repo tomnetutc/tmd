@@ -22,7 +22,7 @@ ChartJS.register(
 );
 
 interface HistogramProps {
-  chartData: TripChartDataProps;
+  chartData: TripChartDataProps | undefined;
   title: string;
   xAxisLabel?: string;
   yAxisLabel?: string;
@@ -42,13 +42,37 @@ const HistogramChart: React.FC<HistogramProps> = ({
 }) => {
   const formatter = new Intl.NumberFormat("en-US");
 
-  // Process labels: if a label is an array, join its items with a comma
-  const finalLabels = chartData.labels.map((lbl) =>
+  // Validate and fallback if any part of chartData is missing
+  const hasValidData =
+    chartData &&
+    Array.isArray(chartData.labels) &&
+    chartData.labels.length > 0 &&
+    Array.isArray(chartData.datasets) &&
+    chartData.datasets.length > 0 &&
+    chartData.datasets.some((ds) => Array.isArray(ds.data) && ds.data.length > 0);
+
+  const safeChartData: TripChartDataProps = hasValidData
+    ? chartData!
+    : {
+        labels: ["No Data"],
+        datasets: [
+          {
+            label: "No Data",
+            data: [0],
+            totalNum: 0,
+            average: -1,
+            backgroundColor: "#d3d3d3",
+            borderColor: "#999999",
+            barThickness: "flex",
+          },
+        ],
+      };
+
+  const finalLabels = safeChartData.labels.map((lbl) =>
     Array.isArray(lbl) ? lbl.join(", ") : lbl
   );
 
-  // Process each dataset: round each data point to one decimal place
-  const finalDatasets = chartData.datasets.map((dataset) => {
+  const finalDatasets = safeChartData.datasets.map((dataset) => {
     const avgLabel =
       dataset.average !== -1 ? ` (avg: ${dataset.average.toFixed(1)} min)` : "";
 
@@ -56,6 +80,8 @@ const HistogramChart: React.FC<HistogramProps> = ({
       label: `${dataset.label}${avgLabel}`,
       data: dataset.data.map((value) => parseFloat(value.toFixed(2))),
       backgroundColor: dataset.backgroundColor,
+      borderColor: dataset.borderColor,
+      barThickness: dataset.barThickness,
     };
   });
 

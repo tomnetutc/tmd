@@ -2,7 +2,7 @@ import { Content } from "../components/About/Content";
 import "../App.css";
 import { Container, Nav } from "react-bootstrap";
 import { HomepageNavbar } from "../HomepageNavbar";
-import { DataProvider, TravelDataProvider, useDocumentTitle } from "../utils/Helpers";
+import { DayPatternDataProvider,TripLevelDataProvider, TravelDataProvider, useDocumentTitle } from "../utils/Helpers";
 import { useEffect } from "react";
 import { Sidebar } from "../components/About/Sidebar"
 import Footer from "../components/Footer"
@@ -15,8 +15,9 @@ export function About(): JSX.Element {
 
     useEffect(() => {
         Promise.all([
-            DataProvider.getInstance().loadData(),
-            TravelDataProvider.getInstance().loadData()
+            TravelDataProvider.getInstance().loadData(),
+            TripLevelDataProvider.getInstance().loadData(),
+            DayPatternDataProvider.getInstance().loadData()
         ]).catch(console.error);
     });
 

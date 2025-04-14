@@ -1138,6 +1138,7 @@ export class DayPatternDataProvider {
       this.data = await csv(
         "https://storage.googleapis.com/mobility-dashboard-434821.appspot.com/dataset/day_pattern.csv"
       );
+      console.log(this.data)
     } catch (error) {
       console.error("Error loading data:", error);
       throw error;

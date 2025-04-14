@@ -63,7 +63,6 @@ const BtwYearAnalysis: React.FC<BtwYearAnalysisProps> = ({
     ).sort((a, b) => a.label.length - b.label.length);
     setDropdownOptions(sortedTripModeOptions);
   }, []);
-  console.log(dropdownOptions);
   const handleDropdownValueChange = (
     selectedOption: MultiValue<DayPatternOption>
   ) => {

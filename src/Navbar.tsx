@@ -26,8 +26,7 @@ export const Navbar: React.FC = () => {
 
   const activeOption = getActiveOption();
 
-  // Function to determine if a main navigation link is active
-  const isActiveLink = (path: string) => location.pathname === path;
+  const isDashboardActive = !["/", "/about"].includes(location.pathname);
 
   const handleOptionClick = (option: string) => {
     switch (option) {
@@ -66,30 +65,26 @@ export const Navbar: React.FC = () => {
           <h4 className="fw-bold mb-0 ml-2 text-dark">
             The Mobility Dashboard
           </h4>
-        </Link>{" "}
+        </Link>
       </div>
       <div className="nav-container d-flex ms-auto">
         {/* Main navigation links */}
         <div className="nav-links">
           <Link
             to="/"
-            className={`nav-link ${isActiveLink("/") ? "active-bold" : ""}`}
+            className={`nav-link ${location.pathname === "/" ? "active-bold" : ""}`}
           >
             Home
           </Link>
           <Link
             to="/about"
-            className={`nav-link ${
-              isActiveLink("/about") ? "active-bold" : ""
-            }`}
+            className={`nav-link ${location.pathname === "/about" ? "active-bold" : ""}`}
           >
             About
           </Link>
           <Link
             to="/trippurpose"
-            className={`nav-link ${
-              isActiveLink("/trippurpose") ? "active-bold" : ""
-            }`}
+            className={`nav-link ${isDashboardActive ? "active-bold" : ""}`}
           >
             Dashboard
           </Link>
@@ -97,22 +92,19 @@ export const Navbar: React.FC = () => {
 
         {/* Dashboard category selection */}
         <div className="nav-options d-flex">
-          {[
-            "Trip Purpose",
-            "Travel Mode",
-            "Zero-Trip Making",
-            "Day Pattern",
-          ].map((option) => (
-            <div
-              key={option}
-              className={`nav-option ${
-                activeOption === option ? "active" : ""
-              }`}
-              onClick={() => handleOptionClick(option)}
-            >
-              {option}
-            </div>
-          ))}
+          {["Trip Purpose", "Travel Mode", "Zero-Trip Making", "Day Pattern"].map(
+            (option) => (
+              <div
+                key={option}
+                className={`nav-option ${
+                  activeOption === option ? "active" : ""
+                }`}
+                onClick={() => handleOptionClick(option)}
+              >
+                {option}
+              </div>
+            )
+          )}
         </div>
       </div>
     </NavbarBs>
