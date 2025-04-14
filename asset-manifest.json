@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/tmd/static/css/main.bbfb38ea.css",
-    "main.js": "/tmd/static/js/main.1fdda95e.js",
+    "main.js": "/tmd/static/js/main.f1440bf8.js",
     "static/js/453.e83714ab.chunk.js": "/tmd/static/js/453.e83714ab.chunk.js",
     "static/media/SVGLogo.svg": "/tmd/static/media/SVGLogo.10877a8d6a8227f615b4eb80df2e7640.svg",
     "static/media/TravelModeLogo.svg": "/tmd/static/media/TravelModeLogo.0fa30e5af4a40090ff8dc87c9f0c5cb7.svg",
@@ -23,17 +23,17 @@
     "static/media/cchen.jpeg": "/tmd/static/media/cchen.4df3ef3eb7b58cf94a65.jpeg",
     "static/media/HowItWorksLogo.svg": "/tmd/static/media/HowItWorksLogo.a6817e85aba56bc567dd17f1b389f60b.svg",
     "static/media/MultiLevelAnalysisLogo.svg": "/tmd/static/media/MultiLevelAnalysisLogo.92a709e2b00079d1626f160f29b73d7c.svg",
-    "static/media/LogoSVG.svg": "/tmd/static/media/LogoSVG.0bec972a3cd0178421f135303ff868dc.svg",
+    "static/media/LogoSVG.svg": "/tmd/static/media/LogoSVG.863fa7aeec55ccc776c724e862f4673f.svg",
     "static/media/CustomizableInsightsLogo.svg": "/tmd/static/media/CustomizableInsightsLogo.101369838f7f151c9e57e5eb2db6fb9f.svg",
     "static/media/ComprehensiveComparisonToolsLogo.svg": "/tmd/static/media/ComprehensiveComparisonToolsLogo.0875c258a4f1599f281fbe46f489fdca.svg",
     "static/media/FeaturesLogo.svg": "/tmd/static/media/FeaturesLogo.16865a86e1f064685a12650c98a3ef95.svg",
     "index.html": "/tmd/index.html",
     "main.bbfb38ea.css.map": "/tmd/static/css/main.bbfb38ea.css.map",
-    "main.1fdda95e.js.map": "/tmd/static/js/main.1fdda95e.js.map",
+    "main.f1440bf8.js.map": "/tmd/static/js/main.f1440bf8.js.map",
     "453.e83714ab.chunk.js.map": "/tmd/static/js/453.e83714ab.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.bbfb38ea.css",
-    "static/js/main.1fdda95e.js"
+    "static/js/main.f1440bf8.js"
   ]
 }
