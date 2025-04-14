@@ -14,6 +14,18 @@
             padding-bottom: 2px;
             flex-grow: 1;
             margin-bottom: 5px;
+
+            /* Flex layout for title and controls */
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
     }
 
@@ -23,5 +35,25 @@
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+
+    .download-btn {
+        background: none;
+        border: none;
+        padding: 4px;
+        margin-left: 8px;
+        cursor: pointer;
+        color: #555;
+        transition: color 0.2s;
+
+        svg {
+            width: 20px;
+            height: 20px;
+            display: block;
+        }
+
+        &:hover {
+            color: #000;
+        }
     }
 }

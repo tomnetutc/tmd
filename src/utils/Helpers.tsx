@@ -1467,3 +1467,22 @@ export async function tracking(docRefID: string, page: string, expiry: string) {
     throw error;
   }
 }
+
+export function chartDataToCSV(
+  labels: (string | number)[],
+  datasets: {
+    label: string;
+    data: number[];
+  }[]
+): string {
+  // Header row: “Label, Dataset A, Dataset B, …”
+  const header = ["Label", ...datasets.map((ds) => ds.label)].join(",");
+
+  // One CSV row per label
+  const rows = labels.map((lbl, i) => {
+    const rowValues = [lbl, ...datasets.map((ds) => ds.data[i])];
+    return rowValues.join(",");
+  });
+
+  return [header, ...rows].join("\n");
+}
