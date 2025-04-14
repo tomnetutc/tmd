@@ -88,9 +88,11 @@ const HistogramChart: React.FC<HistogramProps> = ({
   // Validate & fallback
   const hasValidData =
     chartData &&
+    Array.isArray(chartData.labels) &&
     chartData.labels.length > 0 &&
+    Array.isArray(chartData.datasets) &&
     chartData.datasets.length > 0 &&
-    chartData.datasets.some((ds) => ds.data.length > 0);
+    chartData.datasets.some((ds) => Array.isArray(ds.data) && ds.data.length > 0);
 
   const safeChartData: TripChartDataProps = hasValidData
     ? chartData!

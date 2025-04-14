@@ -60,22 +60,47 @@ const chartDataToCSV = (
 };
 
 const RechartsLineChart: React.FC<{
-  chartData: ChartDataProps;
+  chartData: ChartDataProps | undefined;
   title: string;
   showLegend: boolean;
   yAxisLabel?: string;
 }> = ({ chartData, title, showLegend, yAxisLabel }) => {
+  // Validate & fallback
+  const hasValidData =
+    chartData &&
+    Array.isArray(chartData.labels) &&
+    chartData.labels.length > 0 &&
+    Array.isArray(chartData.datasets) &&
+    chartData.datasets.length > 0 &&
+    chartData.datasets.every((ds) => Array.isArray(ds.data));
+
+  const safeChartData: ChartDataProps = hasValidData
+    ? chartData!
+    : {
+        labels: ["No Data"],
+        datasets: [
+          {
+            label: "No Data",
+            data: [0],
+            backgroundColor: "#d3d3d3", // Added to match ChartDataProps
+            borderColor: "#999999",
+            barThickness: "flex", // Added to match ChartDataProps
+            borderWidth: 1, // Optional, added for completeness
+          },
+        ],
+      };
+
   const transformedData = useMemo(() => {
-    return chartData.labels.map((label, index) => {
+    return safeChartData.labels.map((label, index) => {
       const obj: { [key: string]: string | number } = {
         name: Array.isArray(label) ? label.join(", ") : label,
       };
-      chartData.datasets.forEach((dataset) => {
-        obj[dataset.label] = dataset.data[index];
+      safeChartData.datasets.forEach((dataset) => {
+        obj[dataset.label] = dataset.data[index] ?? 0;
       });
       return obj;
     });
-  }, [chartData]);
+  }, [safeChartData]);
 
   // Define tooltipFormatter inside the component to access yAxisLabel
   const tooltipFormatter = (value: number) => {
@@ -88,7 +113,7 @@ const RechartsLineChart: React.FC<{
   const handleDownload = () => {
     const csv = chartDataToCSV(
       transformedData,
-      chartData.datasets.map((ds) => ({ label: ds.label }))
+      safeChartData.datasets.map((ds) => ({ label: ds.label }))
     );
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
@@ -141,7 +166,7 @@ const RechartsLineChart: React.FC<{
             />
             <Tooltip formatter={tooltipFormatter} />
             {showLegend && <Legend verticalAlign="top" align="right" />}
-            {chartData.datasets.map((dataset, idx) => (
+            {safeChartData.datasets.map((dataset, idx) => (
               <Line
                 key={idx}
                 type="monotone"
