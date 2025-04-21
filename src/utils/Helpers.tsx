@@ -1213,7 +1213,7 @@ export function filterCriteria(
 export class TravelDataProvider {
   private static instance: TravelDataProvider;
   private data: DSVRowString<string>[] | null = null;
-  private loadingPromise: Promise<DSVRowString<string>[]> | null = null; // Async lock
+  private loadingPromise: Promise<DSVRowString<string>[]> | null = null;
 
   private constructor() {}
 
@@ -1226,29 +1226,43 @@ export class TravelDataProvider {
 
   public async loadData(): Promise<DSVRowString<string>[]> {
     if (this.data !== null) {
-      return this.data; // Return the data if it's already loaded
+      return this.data;
     }
     if (this.loadingPromise) {
-      return this.loadingPromise; // Return the existing loading promise if it's already loading
+      return this.loadingPromise;
     }
-    this.loadingPromise = this.loadFromSource().finally(() => {
-      this.loadingPromise = null; // Clear the loading promise after it's done
+
+    this.loadingPromise = this.loadAndMergeDatasets().finally(() => {
+      this.loadingPromise = null;
     });
+
     return this.loadingPromise;
   }
 
-  private async loadFromSource(): Promise<DSVRowString<string>[]> {
+  private async loadAndMergeDatasets(): Promise<DSVRowString<string>[]> {
+    const urls = [
+      "https://raw.githubusercontent.com/tomnetutc/tmd/refs/heads/main/src/datasets/df_travel_2003_2020.csv",
+      "https://raw.githubusercontent.com/tomnetutc/tmd/refs/heads/main/src/datasets/df_travel_2021_onward.csv"
+    ];
+
+    // Remove extra headers that might be embedded mid-file by checking if "year" is a number
+    const dropHeaderRows = (rows: DSVRowString<string>[]) =>
+      rows.filter((r) => !isNaN(Number(r.year)));
+
     try {
-      this.data = await csv(
-        "https://raw.githubusercontent.com/tomnetutc/tmd/refs/heads/main/src/datasets/df_travel.csv"
-      );
+      const datasets = await Promise.all(urls.map((url) => csv(url)));
+      this.data = datasets
+        .map(dropHeaderRows)
+        .reduce<DSVRowString<string>[]>((acc, curr) => acc.concat(curr), []);
     } catch (error) {
-      console.error("Error loading data:", error);
+      console.error("Error loading travel datasets:", error);
       throw error;
     }
+
     return this.data;
   }
 }
+
 
 export const CrossSegmentDataFilter = async (
   dataProvider: { loadData: () => Promise<any[]> },
