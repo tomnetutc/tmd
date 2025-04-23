@@ -41,8 +41,10 @@
     font-family: 'Roboto', fallback-font, sans-serif;
     color: #595959;
     text-align: center;
-    /* This centers the text inside the <p> element */
-    margin-left: center;
-    margin-right: center;
+    width: 100%;
+    max-width: 200px;
+    margin: 0 auto;
+    display: block;
+    height: 60px; /* Fixed height to accommodate different text lengths */
   }
 }
