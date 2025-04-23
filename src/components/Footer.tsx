@@ -91,7 +91,7 @@ export default function Footer({  footerBackgroundcolor = '' }: FooterProps): JS
                 </div>
                 <div style={{ 
                     display: 'flex', 
-                    justifyContent: 'space-between', 
+                    justifyContent: 'space-around', 
                     alignItems: 'center', 
                     padding: '0px 10px', 
                     flexWrap: 'wrap', 
