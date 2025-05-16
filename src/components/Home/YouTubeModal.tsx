@@ -1,29 +1,33 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 
 interface YouTubeModalProps {
   isOpen: boolean;
   onClose: () => void;
-  videoId: string;
+  videoId: "oxMHGDbzhpE";
 }
 
-const YouTubeModal: React.FC<YouTubeModalProps> = ({ isOpen, onClose, videoId }) => {
+const YouTubeModal: React.FC<YouTubeModalProps> = ({
+  isOpen,
+  onClose,
+  videoId,
+}) => {
   const videoSrc = `https://www.youtube.com/embed/${videoId}?autoplay=1&cc_load_policy=1&enablejsapi=1`;
 
   // Close modal if clicked outside the modal content
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
-      const modalContent = document.querySelector('.modal-content');
+      const modalContent = document.querySelector(".modal-content");
       if (modalContent && !modalContent.contains(event.target as Node)) {
         onClose();
       }
     };
 
     if (isOpen) {
-      document.addEventListener('mousedown', handleOutsideClick);
+      document.addEventListener("mousedown", handleOutsideClick);
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleOutsideClick);
+      document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, [isOpen, onClose]);
 
@@ -39,9 +43,11 @@ const YouTubeModal: React.FC<YouTubeModalProps> = ({ isOpen, onClose, videoId })
           title="YouTube video player"
         ></iframe>
       </div>
-      <span className="close" onClick={onClose}>&times;</span>
+      <span className="close" onClick={onClose}>
+        &times;
+      </span>
     </div>
   );
-}
+};
 
 export default YouTubeModal;
