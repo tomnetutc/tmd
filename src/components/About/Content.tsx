@@ -191,9 +191,14 @@ export function Content(): JSX.Element {
               link
             </a>.
           </p>
+          <p className="mt-4">
+            For details on variable definitions and coding, refer to the <a href="tmd_data_dictionary.xlsx" target="_blank" download>
+              data dictionary
+            </a> associated with the datasets used in TMD.
+          </p>
           <p>
             <em>
-              If you would like access to the full data set used in the T3D platform and/or seek collaboration opportunities, please contact Dr. Irfan Batur at<a className="ms-1">ibatur@asu.edu</a>.
+              If you would like access to the full data set used in the TMD platform and/or seek collaboration opportunities, please contact Dr. Irfan Batur at<a className="ms-1">ibatur@asu.edu</a>.
             </em>
           </p>
         </section>
