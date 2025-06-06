@@ -113,13 +113,13 @@ export const TravelModeOptions: TravelModeOption[] = [
     label: "SOV",
     value: "SOV",
     numberTrip: "mode_sov",
-    durationTrips: "mode_sov",
+    durationTrips: "mode_sov_dur",
   },
   {
     label: "HOV",
     value: "HOV",
     numberTrip: "mode_hov",
-    durationTrips: "mode_hov",
+    durationTrips: "mode_hov_dur",
   },
   {
     label: "Transit",

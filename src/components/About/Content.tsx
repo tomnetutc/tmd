@@ -122,7 +122,7 @@ export function Content(): JSX.Element {
               <strong>Non-workers</strong>: This group includes individuals who have indicated that they are not participating in the labor force.
             </li>
             <li className="mt-2">
-              <strong>Workers with zero Work</strong>: This category comprises respondents who reported no work activity in their time use diary.
+              <strong>Workers with zero work</strong>: This category comprises respondents who reported no work activity in their time use diary.
             </li>
             <li className="mt-2">
               <strong>In-home only workers</strong>: These individuals are those who reported working exclusively from home, with no reported out-of-home work activity.
@@ -195,6 +195,12 @@ export function Content(): JSX.Element {
             For details on variable definitions and coding, refer to the <a href="tmd_data_dictionary.xlsx" target="_blank" download>
               data dictionary
             </a> associated with the datasets used in TMD.
+          </p>
+          <p className="mt-4">
+            More details about TMD may be found in this
+            <a className="ps-1" href="https://www.youtube.com/watch?v=WwL2zvZNmb4" target="_blank">
+              webinar
+            </a>.
           </p>
           <p>
             <em>
