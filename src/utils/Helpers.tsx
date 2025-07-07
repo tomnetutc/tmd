@@ -1031,9 +1031,9 @@ export class TripLevelDataProvider {
 
   private async loadAndMergeDatasets(): Promise<DSVRowString<string>[]> {
     const urls = [
-      "https://raw.githubusercontent.com/tomnetutc/tmd/refs/heads/main/src/datasets/df_act_2003_2011.csv",
-      "https://raw.githubusercontent.com/tomnetutc/tmd/refs/heads/main/src/datasets/df_act_2012_2020.csv",
-      "https://raw.githubusercontent.com/tomnetutc/tmd/refs/heads/main/src/datasets/df_act_2020_onward.csv"
+      process.env.PUBLIC_URL + "/df_act_2003_2011.csv",
+      process.env.PUBLIC_URL + "/df_act_2012_2020.csv",
+      process.env.PUBLIC_URL + "/df_act_2021_onward.csv"
     ];
 
     // Helper to drop embedded headers by checking 'year' is numeric
@@ -1109,7 +1109,7 @@ export class DayPatternDataProvider {
     try {
       // Use d3.csv to fetch and parse the CSV file
       this.data = await csv(
-        "https://raw.githubusercontent.com/tomnetutc/tmd/refs/heads/main/src/datasets/day_pattern.csv"
+        process.env.PUBLIC_URL + "/day_pattern.csv"
       );
     } catch (error) {
       console.error("Error loading data:", error);
@@ -1241,8 +1241,8 @@ export class TravelDataProvider {
 
   private async loadAndMergeDatasets(): Promise<DSVRowString<string>[]> {
     const urls = [
-      "https://raw.githubusercontent.com/tomnetutc/tmd/refs/heads/main/src/datasets/df_travel_2003_2020.csv",
-      "https://raw.githubusercontent.com/tomnetutc/tmd/refs/heads/main/src/datasets/df_travel_2021_onward.csv"
+      process.env.PUBLIC_URL + "/df_travel_2003_2020.csv",
+      process.env.PUBLIC_URL + "/df_travel_2021_onward.csv"
     ];
 
     // Remove extra headers that might be embedded mid-file by checking if "year" is a number
@@ -1489,7 +1489,7 @@ export function chartDataToCSV(
     data: number[];
   }[]
 ): string {
-  // Header row: “Label, Dataset A, Dataset B, …”
+  // Header row: "Label, Dataset A, Dataset B, ..."
   const header = ["Label", ...datasets.map((ds) => ds.label)].join(",");
 
   // One CSV row per label
