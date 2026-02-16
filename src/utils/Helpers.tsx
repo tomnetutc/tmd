@@ -679,29 +679,29 @@ export const IncomeOptions: Option[] = [
     groupId: "Income",
   },
   {
-    value: "$35K to $50K",
-    label: "$35K to $50K",
+    value: "≥$35K, <$50K",
+    label: "≥$35K, <$50K",
     id: "inc_35_50",
     val: "1.0",
     groupId: "Income",
   },
   {
-    value: "$50K to $75K",
-    label: "$50K to $75K",
+    value: "≥$50K, <$75K",
+    label: "≥$50K, <$75K",
     id: "inc_50_75",
     val: "1.0",
     groupId: "Income",
   },
   {
-    value: "$75K to $100K",
-    label: "$75K to $100K",
+    value: "≥$75K, <$100K",
+    label: "≥$75K, <$100K",
     id: "inc_75_100",
     val: "1.0",
     groupId: "Income",
   },
   {
-    value: ">$100K",
-    label: ">$100K",
+    value: "≥$100K",
+    label: "≥$100K",
     id: "inc_100p",
     val: "1.0",
     groupId: "Income",
@@ -800,15 +800,15 @@ const CensusDivisionOptions: Option[] = [
 
 const LocationOptions: Option[] = [
   {
-    value: "Urban",
-    label: "Urban",
+    value: "Metropolitan",
+    label: "Metropolitan",
     id: "non_metropolitan",
     val: "0.0",
     groupId: "Location",
   },
   {
-    value: "Not urban",
-    label: "Not urban",
+    value: "Non-metropolitan",
+    label: "Non-metropolitan",
     id: "non_metropolitan",
     val: "1.0",
     groupId: "Location",
@@ -962,10 +962,10 @@ export const groupedOptions: GroupedOption[] = [
     })),
   },
   {
-    label: "Location",
+    label: "Household Location",
     options: LocationOptions.map((obj) => ({
       ...obj,
-      groupName: "Location",
+      groupName: "Household Location",
     })),
   },
   {
