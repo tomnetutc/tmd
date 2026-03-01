@@ -7,6 +7,7 @@ import ZeropTripMaking from "./Pages/ZeroTripMaking";
 import { Home } from "./Pages/Home";
 import { About } from "./Pages/About";
 import DayPattern from "./Pages/DayPattern";
+import SampleComposition from "./Pages/SampleComposition";
 import { PageTracker } from "./components/PageTracker";
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
         <Route path="/travelmode" element={<TravelMode />} />
         <Route path="/zerotripmaking" element={<ZeropTripMaking />} />
         <Route path="/daypattern" element={<DayPattern />} />
+        <Route path="/sample-composition" element={<SampleComposition />} />
         <Route path="*" element={<Navigate to="/tmd" />} />
       </Routes>
     </HashRouter>

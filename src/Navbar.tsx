@@ -19,6 +19,8 @@ export const Navbar: React.FC = () => {
         return "Zero-Trip Making";
       case "/daypattern":
         return "Day Pattern";
+      case "/sample-composition":
+        return "Survey Sample";
       default:
         return "";
     }
@@ -26,7 +28,7 @@ export const Navbar: React.FC = () => {
 
   const activeOption = getActiveOption();
 
-  const isDashboardActive = !["/", "/about"].includes(location.pathname);
+  const isDashboardActive = !["/", "/about", "/sample-composition"].includes(location.pathname);
 
   const handleOptionClick = (option: string) => {
     switch (option) {
@@ -87,6 +89,12 @@ export const Navbar: React.FC = () => {
             className={`nav-link ${isDashboardActive ? "active-bold" : ""}`}
           >
             Dashboard
+          </Link>
+          <Link
+            to="/sample-composition"
+            className={`nav-link ${location.pathname === "/sample-composition" ? "active-bold" : ""}`}
+          >
+            Survey Sample
           </Link>
         </div>
 
