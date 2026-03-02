@@ -28,7 +28,7 @@ export const Navbar: React.FC = () => {
 
   const activeOption = getActiveOption();
 
-  const isDashboardActive = !["/", "/about", "/sample-composition"].includes(location.pathname);
+  const isDashboardActive = !["/", "/about"].includes(location.pathname);
 
   const handleOptionClick = (option: string) => {
     switch (option) {
@@ -43,6 +43,9 @@ export const Navbar: React.FC = () => {
         break;
       case "Day Pattern":
         navigate("/daypattern");
+        break;
+      case "Survey Sample":
+        navigate("/sample-composition");
         break;
       default:
         navigate("/");
@@ -90,17 +93,11 @@ export const Navbar: React.FC = () => {
           >
             Dashboard
           </Link>
-          <Link
-            to="/sample-composition"
-            className={`nav-link ${location.pathname === "/sample-composition" ? "active-bold" : ""}`}
-          >
-            Survey Sample
-          </Link>
         </div>
 
         {/* Dashboard category selection */}
         <div className="nav-options d-flex">
-          {["Trip Purpose", "Travel Mode", "Zero-Trip Making", "Day Pattern"].map(
+          {["Trip Purpose", "Travel Mode", "Zero-Trip Making", "Day Pattern", "Survey Sample"].map(
             (option) => (
               <div
                 key={option}

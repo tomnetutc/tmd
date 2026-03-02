@@ -24,7 +24,7 @@ import { DataRow } from '../Types';
 import DownloadButton from '../components/DownloadButton';
 import InfoBox from '../components/InfoBox/InfoBox';
 import Footer from '../components/Footer';
-import { HomepageNavbar } from '../HomepageNavbar';
+import { Navbar } from '../Navbar';
 import '../css/SampleComposition.scss';
 
 ChartJS.register(
@@ -240,7 +240,7 @@ export default function SampleComposition(): JSX.Element {
     if (loading) {
         return (
             <>
-                <HomepageNavbar />
+                <Navbar />
                 <LoadingOverlay />
             </>
         );
@@ -250,7 +250,7 @@ export default function SampleComposition(): JSX.Element {
 
     return (
         <>
-            <HomepageNavbar />
+            <Navbar />
             <div className="sample-composition-page" style={{ backgroundColor: '#f5f5f5', padding: '20px 20px 20px' }}>
                 <Container fluid className="sc-container">
                     <header className="sc-page-header">

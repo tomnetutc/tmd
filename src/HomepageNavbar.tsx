@@ -54,15 +54,7 @@ export const HomepageNavbar: React.FC = () => {
               >
                 Dashboard
               </NavLink>
-              <NavLink
-                to="/sample-composition"
-                style={({ isActive }) =>
-                  isActive ? { fontWeight: "bold" } : {}
-                }
-                className="nav-link"
-              >
-                Survey Sample
-              </NavLink>
+
             </Nav>
           </NavbarBs.Collapse>
         </Nav>
