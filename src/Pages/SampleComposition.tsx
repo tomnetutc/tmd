@@ -257,7 +257,7 @@ export default function SampleComposition(): JSX.Element {
                         <div>
                             <h4 className="fw-bold sc-page-title">Survey Sample Overview</h4>
                             <p className="sc-page-subtitle">
-                                Explore how the socio-economic and demographic characteristics of the NHTS survey sample vary across and within survey years.
+                                Explore how the socio-economic and demographic characteristics of the ATUS samples vary across and within survey years
                             </p>
                         </div>
                     </header>
@@ -288,7 +288,7 @@ export default function SampleComposition(): JSX.Element {
 
                         <div className="sc-chart-card">
                             <InfoBox>
-                                <p>This chart shows the distribution of the selected attribute across all NHTS survey samples. Each bar represents one year, with categories stacked to total 100%. Values shown are unweighted percentages based on the raw sample composition.</p>
+                                <p>This chart shows the distribution of the selected attribute across all ATUS survey samples. Each bar represents one year, with categories stacked to total 100%. Values shown are unweighted percentages based on the raw sample composition.</p>
                             </InfoBox>
                             <div className="sc-chart-title">
                                 <span>
@@ -331,7 +331,7 @@ export default function SampleComposition(): JSX.Element {
                         <div className="sc-table-container">
                             <InfoBox>
                                 <p>
-                                    This table shows the demographic composition of NHTS survey respondents for the selected year.
+                                    This table shows the demographic composition of ATUS survey respondents for the selected year.
                                     Unweighted %: raw percentage of respondents in each category.
                                     Weighted %: percentages adjusted using survey weights to represent the U.S. population.
                                     Count: number of survey respondents in each category (unweighted sample size).
@@ -380,7 +380,6 @@ export default function SampleComposition(): JSX.Element {
                         </div>
                     </section>
                 </Container>
-                <Footer />
             </div>
         </>
     );
