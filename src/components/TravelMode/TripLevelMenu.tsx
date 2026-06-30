@@ -39,7 +39,7 @@ const TripLevelMenu: React.FC<{
 
   // Load year options from cache or fetch data
   useEffect(() => {
-    const cacheKey = "TripLevelYearDataCache2024";
+    const cacheKey = "TripLevelYearDataCache2025";
     const cachedData = localStorage.getItem(cacheKey);
     const handleDataLoad = async () => {
       const data = await TripLevelDataProvider.getInstance().loadData();

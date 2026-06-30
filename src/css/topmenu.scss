@@ -1,201 +1,491 @@
-/* Top Menu styling */
+/* ============================================================
+   Trigger bar
+   ============================================================ */
 .menu-container {
-    background-color: white;
-    position: fixed;
-    left: 300px; /* Offset to account for the sidebar width */
-    border-top: 2px solid #ccc;
-    border-bottom: 2px solid #ccc;
-    right: 0; /* Extend to the right edge */
-    z-index: 15;
-    padding: 2px 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    max-height: 400px; /* Set a maximum height */
-    overflow-y: auto; /* Enable vertical scrolling */
+  background-color: white;
+  position: fixed;
+  left: 300px;
+  border-top: 2px solid #ccc;
+  border-bottom: 2px solid #ccc;
+  right: 0;
+  z-index: 15;
+  padding: 6px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
 }
 
-/* Menu header styling */
+.fm-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+  min-height: 36px;
+}
+
+.fm-bar__label {
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.fm-bar__trigger {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 13px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #fff;
+  background-color: #507dbc;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.18s;
+  white-space: nowrap;
+
+  &:hover {
+    background-color: #3d6aad;
+  }
+}
+
+.fm-bar__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #507dbc;
+  background: #fff;
+  border-radius: 50%;
+  margin-left: 4px;
+}
+
+.fm-bar__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+}
+
+.fm-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  font-size: 12px;
+  background: #e8eef7;
+  color: #2B2F88;
+  border-radius: 12px;
+  border: 1px solid #c0cfe9;
+  white-space: nowrap;
+
+  &--warn {
+    background: #fdecea;
+    color: #c0392b;
+    border-color: #f5a9a1;
+  }
+}
+
+.fm-chip__remove {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 15px;
+  line-height: 1;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.65;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.fm-bar__reset {
+  padding: 4px 10px;
+  font-size: 12.5px;
+  color: #dc3545;
+  background: none;
+  border: 1px solid #dc3545;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.15s, color 0.15s;
+
+  &:hover {
+    background: #dc3545;
+    color: #fff;
+  }
+}
+
+/* ============================================================
+   Backdrop
+   ============================================================ */
+.fm-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.42);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================================
+   Modal
+   ============================================================ */
+.fm-modal {
+  background: #fff;
+  border-radius: 8px;
+  width: min(980px, 92vw);
+  max-height: 86vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+/* Search row */
+.fm-modal__search-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border-bottom: 1px solid #e5e7eb;
+  flex-shrink: 0;
+}
+
+.fm-modal__search {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: #333;
+  background: transparent;
+
+  &::placeholder {
+    color: #aaa;
+  }
+}
+
+.fm-modal__esc-btn {
+  padding: 2px 8px;
+  font-size: 11px;
+  color: #666;
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+
+  &:hover {
+    background: #e5e7eb;
+  }
+}
+
+/* Dimension grid */
+.fm-modal__grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  padding: 14px 18px;
+  overflow-y: auto;
+  flex: 1;
+
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 600px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Dimension card */
+.fm-dim {
+  background: #f8f9fa;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 9px 11px;
+  min-width: 0;
+
+  &--active {
+    border-color: #507dbc;
+  }
+
+  &--warn {
+    border-color: #e74c3c;
+    background: #fff8f7;
+  }
+}
+
+.fm-dim__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 7px;
+  gap: 4px;
+}
+
+.fm-dim__title {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #507dbc;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+}
+
+.fm-dim__shortcuts {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex-shrink: 0;
+
+  button {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 11px;
+    color: #507dbc;
+    cursor: pointer;
+    text-decoration: underline;
+
+    &:hover {
+      color: #2B2F88;
+    }
+  }
+
+  span {
+    font-size: 11px;
+    color: #ccc;
+  }
+}
+
+.fm-dim__opts {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.fm-opt {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  cursor: pointer;
+  margin: 0;
+
+  input[type='checkbox'] {
+    margin-top: 2px;
+    flex-shrink: 0;
+    accent-color: #507dbc;
+    cursor: pointer;
+    width: 13px;
+    height: 13px;
+  }
+}
+
+.fm-opt__label {
+  font-size: 12.5px;
+  color: #374151;
+  line-height: 1.35;
+  user-select: none;
+}
+
+/* Footer */
+.fm-modal__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 18px;
+  border-top: 1px solid #e5e7eb;
+  flex-shrink: 0;
+  background: #fff;
+}
+
+.fm-modal__count {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.fm-modal__footer-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.fm-btn {
+  padding: 6px 18px;
+  font-size: 13.5px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.15s, color 0.15s, opacity 0.15s;
+
+  &--ghost {
+    background: none;
+    border: 1px solid #d1d5db;
+    color: #374151;
+
+    &:hover {
+      background: #f3f4f6;
+    }
+  }
+
+  &--primary {
+    background: #507dbc;
+    border: 1px solid #507dbc;
+    color: #fff;
+
+    &:hover:not(:disabled) {
+      background: #3d6aad;
+      border-color: #3d6aad;
+    }
+
+    &:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+  }
+}
+
+/* ============================================================
+   CrossSegmentTopMenu — preserved classes
+   ============================================================ */
 .menu-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    width: 100%;
-    gap: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 10px;
 }
 
-/* Between menu header styling */
 .btw-menu-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    flex-wrap: wrap;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
-/* Title and buttons styling */
 .title-and-buttons {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-bottom: 10px; /* Space below the title */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 10px;
 }
 
-/* Title and select styling */
 .title-and-select {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
-/* Adjust the parent container styling */
+
 .options-container {
-    display: flex;
-    align-items: center; /* Align items vertically */
-    gap: 5px; /* Control the gap between the label and the checkbox */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
 }
 
-/* Segment label styling */
 .segment-label {
-    font-size: 16px;
-    padding-top: 3px;
-    align-items: center;
-    font-weight: 600;
-    color: #333;
-    padding-left: 30px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 5px;
+  padding-left: 0;
 }
 
-/* Checkbox container styling */
-.all-select-checkbox {
-    display: flex;
-    align-items: center;
-    margin-right: 0; /* Ensure there is no right margin */
-    font-size: 14px;
-}
-
-/* Segment label styling */
-.segment-label {
-    font-size: 15px;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 5px;
-}
-
-/* Options container styling */
-.options-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px; /* Increase gap for better spacing */
-    flex-wrap: wrap;
-}
-
-/* Buttons container styling */
 .buttons-container {
-    display: flex;
-    gap: 10px;
+  display: flex;
+  gap: 10px;
 }
 
-/* Dropdowns container styling */
 .dropdowns-menu-container {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    align-items: center;
-    margin-top: 5px; /* Add some space above the dropdowns */
-    margin-bottom: 5px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
-/* Dropdown select styling */
+.dropdown-wrapper {
+  display: inline-block;
+}
+
 .dropdown-select {
-    min-height: 36px;
-    min-width: 150px;
-    width: auto;
-    max-width: 100%;
-    border-radius: 4px;
+  min-height: 36px;
+  min-width: 150px;
+  width: auto;
+  max-width: 100%;
+  border-radius: 4px;
 }
 
-/* Dropdown indicator styling */
 .dropdown-indicator {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* All select checkbox styling */
 .all-select-checkbox {
-    display: flex;
-    align-items: center;
-    margin-right: 1rem;
-    font-size: 14px;
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;
+  font-size: 14px;
 }
 
-/* All select label styling */
 .all-select-label {
-    margin-left: 0.5rem;
-    font-size: 14px;
-    color: #666;
+  margin-left: 0.5rem;
+  font-size: 14px;
+  color: #666;
 }
 
-/* Button container styling */
 .button-container {
-    display: flex;
-    gap: 10px;
+  display: flex;
+  gap: 10px;
 
-    .reset-button {
-        padding: 0.4rem 0.8rem;
-        font-size: 0.9rem;
-        line-height: 1.4;
-        border-radius: 0.25rem;
-        color: #fff;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    
-    
+  .reset-button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    border-radius: 0.25rem;
+    color: #fff;
+    cursor: pointer;
+    background-color: #dc3545;
+    border: none;
+    transition: opacity 0.2s;
 
-        &:hover {
-            opacity: 0.9;
-        }
+    &:hover {
+      opacity: 0.88;
     }
-    .reset-button {
-        background-color: #dc3545; /* Red background */
-        border: none;
-    }
+  }
 
-    .submit-button {
-        padding: 0.4rem 0.8rem;
-        font-size: 0.9rem;
-        line-height: 1.4;
-        border-radius: 0.25rem;
-        color: #fff;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    
-    
+  .submit-button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    border-radius: 0.25rem;
+    color: #fff;
+    cursor: pointer;
+    background-color: #198754;
+    border: none;
+    transition: opacity 0.2s;
 
-        &:hover {
-            opacity: 0.9;
-        }
+    &:hover {
+      opacity: 0.88;
     }
-    .submit-button {
-        background-color: #198754; /* Red background */
-        border: none;
-    }
+  }
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
-    .menu-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 15px;
-    }
-
-    .options-container,
-    .dropdowns-container {
-        flex-direction: column;
-        gap: 10px;
-        width: 100%;
-    }
-
-    .button-container {
-        justify-content: flex-start;
-    }
+  .menu-container {
+    left: 0;
+    position: relative;
+  }
 }

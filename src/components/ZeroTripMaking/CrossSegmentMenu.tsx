@@ -43,7 +43,7 @@ const CrossSegmentMenu: React.FC<{
 
   // Load year options from cache or fetch data
   useEffect(() => {
-    const cacheKey = "2023UpdatedYearDataCacheKey";
+    const cacheKey = "2025UpdatedYearDataCacheKey";
     const cachedData = localStorage.getItem(cacheKey);
     const handleDataLoad = async () => {
       const data = await TravelDataProvider.getInstance().loadData();
