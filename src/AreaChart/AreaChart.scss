@@ -35,6 +35,14 @@
         display: flex;
         align-items: center;
         justify-content: center;
+
+        .recharts-legend-wrapper {
+            max-width: 100% !important;
+        }
+
+        .recharts-default-legend {
+            white-space: normal !important;
+        }
     }
 
     .download-btn {

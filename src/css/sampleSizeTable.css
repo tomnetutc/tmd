@@ -23,8 +23,8 @@
 
 /* Table styling */
 .sample-size-table {
-    width: 100%;
-    max-width: auto; /* Ensures it doesn't exceed the parent width */
+    width: max-content;
+    min-width: 100%; /* Fills the container, but grows wider if columns need more room */
     margin-top: 10px;
     table-layout: auto; /* Allows the table to resize according to its content */
     border: none;
