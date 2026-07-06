@@ -325,14 +325,14 @@ export const TripPurposeOptions: TripPurposeOption[] = [
   {
     label: "Religious",
     value: "Religious",
-    numberTrip: "tr_religious",
-    durationTrips: "tr_religious_dur",
+    numberTrip: "tr_rel",
+    durationTrips: "tr_rel_dur",
   },
   {
     label: "Volunteering",
     value: "Volunteering",
-    numberTrip: "tr_volunteer",
-    durationTrips: "tr_volunteer",
+    numberTrip: "tr_vol",
+    durationTrips: "tr_vol_dur",
   },
   {
     label: "Adult or Child care",
