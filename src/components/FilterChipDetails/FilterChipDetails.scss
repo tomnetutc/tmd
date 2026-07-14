@@ -1,0 +1,64 @@
+.filter-chip-details__trigger {
+  display: inline-flex;
+}
+
+.filter-chip-details__tooltip {
+  background-color: #e8eef7 !important;
+  color: #2B2F88 !important;
+  border: 1px solid #c0cfe9;
+  border-radius: 8px;
+  padding: 8px 10px;
+  max-width: 260px;
+  box-shadow: 0 2px 8px rgba(80, 125, 188, .2);
+}
+
+.filter-chip-details__arrow {
+  color: #e8eef7 !important;
+
+  &::before {
+    border: 1px solid #c0cfe9;
+  }
+}
+
+.filter-chip-details {
+  &__title {
+    font-weight: 600;
+    font-size: 12px;
+    margin-bottom: 4px;
+    color: #2B2F88;
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    padding: 2px 0;
+  }
+
+  &__icon {
+    font-size: 15px !important;
+
+    &--checked {
+      color: #507dbc;
+    }
+
+    &--unchecked {
+      color: #c0cfe9;
+    }
+  }
+
+  &__label {
+    color: #333;
+  }
+
+  &__item:hover &__label {
+    color: #3d6aad;
+  }
+}
